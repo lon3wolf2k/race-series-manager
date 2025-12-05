@@ -1,0 +1,627 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: race-series-manager\n"
+"Language: el_GR\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language-Team: Greek (Greece)\n"
+"PO-Revision-Date: 2025-12-05 04:54+0000\n"
+"X-Generator: Loco https://localise.biz/\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-05 04:48+0000\n"
+"Last-Translator: \n"
+"MIME-Version: 1.0\n"
+"X-Loco-Version: 2.8.0; wp-6.9; php-8.2.27"
+
+#: includes/meta-event.php:74
+msgid "1. Race announcement"
+msgstr "1. Προκήρυξη αγώνα"
+
+#: includes/meta-event.php:88
+msgid "2. Rules & regulations"
+msgstr "2. Κανονισμοί & όροι συμμετοχής"
+
+#: includes/meta-event.php:102
+msgid "3. Schedule"
+msgstr "3. Πρόγραμμα"
+
+#: includes/meta-event.php:116
+msgid "4. Race access"
+msgstr "4. Πρόσβαση στον αγώνα"
+
+#: includes/meta-event.php:130
+msgid "5. Travel & accommodation"
+msgstr "5. Μετακίνηση & διαμονή"
+
+#: templates/single-cmt_event.php:87
+msgid "Access"
+msgstr "Πρόσβαση"
+
+#: includes/post-types.php:18 includes/post-types.php:19
+msgid "Add New Event"
+msgstr "Προσθήκη νέας εκδήλωσης"
+
+#: includes/post-types.php:56 includes/post-types.php:57
+msgid "Add New Race"
+msgstr "Προσθήκη νέου αγώνα"
+
+#: includes/meta-race.php:259
+msgid "Aid stations / cut-offs table"
+msgstr "Πίνακας σταθμών & χρονικών ορίων"
+
+#: includes/post-types.php:26
+msgid "All Events"
+msgstr "Όλες οι εκδηλώσεις"
+
+#: includes/post-types.php:64
+msgid "All Races"
+msgstr "Όλοι οι αγώνες"
+
+#: templates/single-cmt_event.php:69
+msgid "Announcement"
+msgstr "Προκήρυξη"
+
+#: includes/admin-shortcode-helper.php:67
+#: includes/admin-shortcode-helper.php:143
+msgid "By ID:"
+msgstr "Με ID:"
+
+#: includes/admin-shortcode-helper.php:56
+#: includes/admin-shortcode-helper.php:132
+msgid "By slug:"
+msgstr "Με slug:"
+
+#: includes/meta-race.php:283 includes/meta-race.php:299
+#: includes/meta-race.php:375 includes/meta-race.php:411
+msgid "Change image"
+msgstr "Αλλαγή εικόνας"
+
+#: includes/meta-event.php:59 includes/meta-event.php:177
+msgid "Change logo"
+msgstr "Αλλαγή λογότυπου"
+
+#: includes/meta-race.php:161
+msgid ""
+"Choose images from the Media Library; they will appear in a grid with "
+"lightbox on the race page."
+msgstr ""
+"Επιλέξτε εικόνες από τη Βιβλιοθήκη Πολυμέσων· θα εμφανίζονται σε πλέγμα με "
+"lightbox στη σελίδα του αγώνα."
+
+#: race-series-manager.php:61
+msgid "Close image"
+msgstr "Κλείσιμο εικόνας"
+
+#: includes/pdf-booklet.php:391
+msgid "Contact details"
+msgstr "Στοιχεία επικοινωνίας"
+
+#: includes/meta-event.php:144
+msgid "Contact details (PDF only)"
+msgstr "Στοιχεία επικοινωνίας (μόνο για PDF)"
+
+#: includes/admin-shortcode-helper.php:52
+msgid ""
+"Copy this shortcode and paste it into any page or post to display the races "
+"of this event."
+msgstr ""
+"Αντιγράψτε αυτό το shortcode και επικολλήστε το σε οποιαδήποτε σελίδα ή άρθρο "
+"για να εμφανιστούν οι αγώνες αυτής της εκδήλωσης."
+
+#: includes/pdf-booklet.php:325 includes/pdf-booklet.php:359
+#: templates/single-cmt_race.php:149 templates/single-cmt_race.php:177
+msgid "Cut-off"
+msgstr "Χρονικό όριο"
+
+#: includes/meta-race.php:246
+msgid "Cut-off (hours)"
+msgstr "Χρονικό όριο (ώρες)"
+
+#: includes/pdf-booklet.php:351 templates/single-cmt_race.php:165
+msgid "Cut-off times & aid stations"
+msgstr "Χρονικά όρια & σταθμοί τροφοδοσίας"
+
+#: templates/single-cmt_race.php:300
+msgid "Cut-off:"
+msgstr "Χρονικό όριο:"
+
+#: includes/pdf-booklet.php:357 templates/single-cmt_race.php:175
+msgid "D+"
+msgstr "D+ (θετική υψομετρική)"
+
+#: includes/pdf-booklet.php:358 templates/single-cmt_race.php:176
+msgid "D-"
+msgstr "D- (αρνητική υψομετρική)"
+
+#: includes/shortcodes.php:92
+msgid "Date"
+msgstr "Ημερομηνία"
+
+#: includes/meta-race.php:93 includes/pdf-booklet.php:311
+#: includes/shortcodes.php:90 templates/single-cmt_race.php:133
+msgid "Distance"
+msgstr "Απόσταση"
+
+#: templates/single-cmt_race.php:313
+msgid "Distance:"
+msgstr "Απόσταση:"
+
+#: includes/pdf-booklet.php:68
+msgid ""
+"Dompdf PDF library is not loaded. Check that /lib/dompdf/autoload.inc.php "
+"exists and is readable."
+msgstr ""
+"Η βιβλιοθήκη Dompdf δεν φορτώθηκε. Ελέγξτε ότι το /lib/dompdf/autoload.inc.php "
+"υπάρχει και είναι προσβάσιμο."
+
+#: templates/single-cmt_race.php:352
+msgid "Download GPX / Route"
+msgstr "Κατεβάστε το GPX / Διαδρομή"
+
+#: includes/post-types.php:20
+msgid "Edit Event"
+msgstr "Επεξεργασία εκδήλωσης"
+
+#: includes/post-types.php:58
+msgid "Edit Race"
+msgstr "Επεξεργασία αγώνα"
+
+#: includes/shortcodes.php:91
+msgid "Elevation"
+msgstr "Υψόμετρο"
+
+#: includes/meta-race.php:103
+msgid "Elevation gain"
+msgstr "Υψομετρική ανάβαση"
+
+#: includes/pdf-booklet.php:344
+msgid "Elevation profile"
+msgstr "Υψομετρικό προφίλ"
+
+#: includes/meta-race.php:296
+msgid "Elevation profile image (for PDF)"
+msgstr "Εικόνα υψομετρικού προφίλ (για PDF)"
+
+#: includes/meta-event.php:145
+msgid ""
+"Email, phone, website or social links for the booklet footer. This field is "
+"only used in the generated PDF, not on the event page."
+msgstr ""
+"E-mail, τηλέφωνο, ιστοσελίδα ή σύνδεσμοι κοινωνικών δικτύων για το υποσέλιδο "
+"του φυλλαδίου. Το πεδίο χρησιμοποιείται μόνο στο παραγόμενο PDF."
+
+#: includes/meta-race.php:236 includes/pdf-booklet.php:323
+#: includes/shortcodes.php:95
+msgid "Entry fee"
+msgstr "Κόστος συμμετοχής"
+
+#: templates/single-cmt_race.php:293
+msgid "Entry fee:"
+msgstr "Κόστος συμμετοχής:"
+
+#: includes/meta-race.php:79 includes/post-types.php:17
+#: includes/post-types.php:28
+msgid "Event"
+msgstr "Εκδήλωση"
+
+#: includes/meta-event.php:53
+msgid "Event logo (for PDFs and branding)"
+msgstr "Λογότυπο εκδήλωσης (για PDF και branding)"
+
+#: templates/single-cmt_event.php:180
+msgid "Event races"
+msgstr "Αγώνες εκδήλωσης"
+
+#: includes/meta-event.php:13
+msgid "Event Sections"
+msgstr "Ενότητες εκδήλωσης"
+
+#: includes/post-types.php:16 includes/post-types.php:27
+msgid "Events"
+msgstr "Εκδηλώσεις"
+
+#: includes/meta-race.php:226
+msgid "Finish location"
+msgstr "Τοποθεσία τερματισμού"
+
+#: includes/pdf-booklet.php:319
+msgid "Finish point"
+msgstr "Σημείο τερματισμού"
+
+#: templates/single-cmt_race.php:286
+msgid "Finish point:"
+msgstr "Σημείο τερματισμού:"
+
+#: includes/meta-race.php:143
+msgid "Gallery images"
+msgstr "Εικόνες γκαλερί"
+
+#: templates/single-cmt_event.php:50 templates/single-cmt_race.php:107
+msgid "Home"
+msgstr "Αρχική"
+
+#: includes/pdf-booklet.php:326 templates/single-cmt_race.php:305
+msgid "hours"
+msgstr "ώρες"
+
+#: includes/meta-event.php:131
+msgid ""
+"How to get to the island/region, accommodation suggestions and local info."
+msgstr ""
+"Πώς να φτάσετε στην περιοχή, προτάσεις διαμονής και χρήσιμες τοπικές πληροφορίες."
+
+#: includes/meta-event.php:117
+msgid "How to reach the start area, transport routes, parking, shuttles."
+msgstr ""
+"Πώς να φτάσετε στην περιοχή εκκίνησης, διαδρομές μεταφοράς, χώρους στάθμευσης και λεωφορεία."
+
+#: includes/meta-race.php:174
+msgid "If empty, the booklet is generated automatically."
+msgstr "Αν παραμείνει κενό, το φυλλάδιο θα δημιουργηθεί αυτόματα."
+
+#: templates/single-cmt_event.php:64
+msgid "Info"
+msgstr "Πληροφορίες"
+
+#: includes/meta-event.php:75
+msgid "Introductory text, general info and highlights of the event."
+msgstr ""
+"Εισαγωγικό κείμενο, γενικές πληροφορίες και βασικά σημεία της εκδήλωσης."
+
+#: templates/single-cmt_race.php:343
+msgid "ITRA"
+msgstr "ITRA"
+
+#: includes/meta-race.php:178
+msgid "ITRA race page URL"
+msgstr "URL σελίδας αγώνα στο ITRA"
+
+#: includes/pdf-booklet.php:356 templates/single-cmt_race.php:174
+msgid "KM"
+msgstr "Χλμ"
+
+msgid ""
+"Manage trail running events, races, maps, media and details, inspired by "
+"Corfu Mountain Trail."
+msgstr ""
+"Διαχείριση εκδηλώσεων και αγώνων trail running, χαρτών, πολυμέσων και λεπτομερειών, "
+"εμπνευσμένο από το Corfu Mountain Trail."
+
+#: includes/post-types.php:21
+msgid "New Event"
+msgstr "Νέα εκδήλωση"
+
+#: includes/post-types.php:59
+msgid "New Race"
+msgstr "Νέος αγώνας"
+
+#. Author of the plugin
+msgid "Nikos"
+msgstr "Νίκος"
+
+#: includes/post-types.php:24
+msgid "No events found"
+msgstr "Δεν βρέθηκαν εκδηλώσεις"
+
+#: includes/post-types.php:25
+msgid "No events found in Trash"
+msgstr "Δεν βρέθηκαν εκδηλώσεις στον Κάδο"
+
+#: templates/single-cmt_event.php:211
+msgid "No races are linked to this event yet."
+msgstr "Δεν έχουν συνδεθεί ακόμη αγώνες με αυτή την εκδήλωση."
+
+#: includes/shortcodes.php:124
+msgid "No races defined for this event yet."
+msgstr "Δεν έχουν οριστεί ακόμη αγώνες για αυτή την εκδήλωση."
+
+#: includes/post-types.php:62
+msgid "No races found"
+msgstr "Δεν βρέθηκαν αγώνες"
+
+#: includes/post-types.php:63
+msgid "No races found in Trash"
+msgstr "Δεν βρέθηκαν αγώνες στον Κάδο"
+
+#: includes/meta-event.php:89
+msgid "Official rules, mandatory equipment, terms and conditions."
+msgstr "Επίσημοι κανονισμοί, υποχρεωτικός εξοπλισμός, όροι και προϋποθέσεις."
+
+#: includes/meta-race.php:267
+msgid ""
+"One station per line. Use “|” (pipe) as separator: Station|KM|D+|D-|Cut-off."
+msgstr "Ένας σταθμός ανά γραμμή. Χρησιμοποιήστε το “|” ως διαχωριστικό: Σταθμός|Χλμ|D+|D-|Χρονικό όριο."
+
+#: includes/meta-race.php:129
+msgid "Paste the full Plotaroute (or other) embed HTML here."
+msgstr "Επικολλήστε εδώ τον πλήρη κώδικα ενσωμάτωσης Plotaroute (ή άλλης υπηρεσίας)."
+
+#: includes/meta-race.php:139
+msgid "Paste the YouTube (or other) iframe embed code here."
+msgstr "Επικολλήστε εδώ τον κώδικα ενσωμάτωσης YouTube (iframe)."
+
+#: templates/single-cmt_event.php:81
+msgid "Program"
+msgstr "Πρόγραμμα"
+
+#: includes/post-types.php:55 includes/post-types.php:66
+#: includes/shortcodes.php:89
+msgid "Race"
+msgstr "Αγώνας"
+
+#: includes/pdf-booklet.php:384 templates/single-cmt_event.php:150
+msgid "Race access"
+msgstr "Πρόσβαση στον αγώνα"
+
+#: templates/single-cmt_event.php:108
+msgid "Race announcement"
+msgstr "Ανακοίνωση αγώνα"
+
+#: templates/single-cmt_race.php:366
+msgid "Race booklet"
+msgstr "Φυλλάδιο αγώνα"
+
+#: includes/meta-race.php:167
+msgid "Race booklet URL (optional override)"
+msgstr "URL φυλλαδίου αγώνα (προαιρετική αντικατάσταση)"
+
+#: includes/meta-race.php:200
+msgid "Race date"
+msgstr "Ημερομηνία αγώνα"
+
+#: includes/meta-race.php:13
+msgid "Race Details"
+msgstr "Λεπτομέρειες αγώνα"
+
+#: templates/single-cmt_race.php:228
+msgid "Race gallery"
+msgstr "Γκαλερί αγώνα"
+
+#: includes/pdf-booklet.php:77
+msgid "Race not found for PDF generation."
+msgstr "Ο αγώνας δεν βρέθηκε για δημιουργία PDF."
+
+#: includes/pdf-booklet.php:377
+msgid "Race schedule"
+msgstr "Πρόγραμμα αγώνα"
+
+msgid "Race Series Manager"
+msgstr "Race Series Manager"
+
+#: templates/single-cmt_race.php:254
+msgid "Race summary"
+msgstr "Σύνοψη αγώνα"
+
+#: templates/single-cmt_race.php:214
+msgid "Race video"
+msgstr "Βίντεο αγώνα"
+
+#: includes/meta-event.php:103
+msgid "Race weekend schedule, registrations, briefings, bus departures, etc."
+msgstr ""
+"Πρόγραμμα αγωνιστικού σαββατοκύριακου, εγγραφές, ενημερώσεις, αναχωρήσεις λεωφορείων κ.λπ."
+
+#: includes/post-types.php:54 includes/post-types.php:65
+msgid "Races"
+msgstr "Αγώνες"
+
+#: templates/single-cmt_race.php:334
+msgid "Registration"
+msgstr "Εγγραφή"
+
+#: includes/meta-race.php:188
+msgid "Registration URL"
+msgstr "URL εγγραφής"
+
+#: includes/meta-event.php:62 includes/meta-race.php:286
+#: includes/meta-race.php:302
+msgid "Remove"
+msgstr "Αφαίρεση"
+
+#: includes/pdf-booklet.php:330
+msgid "Route / GPX"
+msgstr "Διαδρομή / GPX"
+
+#: includes/meta-race.php:113
+msgid "Route / GPX URL"
+msgstr "URL διαδρομής / GPX"
+
+#: includes/pdf-booklet.php:337 templates/single-cmt_race.php:199
+msgid "Route map"
+msgstr "Χάρτης διαδρομής"
+
+#: includes/meta-race.php:123
+msgid "Route map embed code (HTML)"
+msgstr "Κώδικας ενσωμάτωσης χάρτη διαδρομής (HTML)"
+
+#: templates/single-cmt_event.php:75
+msgid "Rules"
+msgstr "Κανόνες"
+
+#: templates/single-cmt_event.php:122
+msgid "Rules & regulations"
+msgstr "Κανόνες & κανονισμοί"
+
+#: includes/admin-shortcode-helper.php:77
+msgid "Save the event first to generate a shortcode."
+msgstr "Αποθηκεύστε πρώτα την εκδήλωση για να δημιουργηθεί το shortcode."
+
+#: templates/single-cmt_event.php:136
+msgid "Schedule"
+msgstr "Πρόγραμμα"
+
+#: includes/post-types.php:23
+msgid "Search Events"
+msgstr "Αναζήτηση εκδηλώσεων"
+
+#: includes/post-types.php:61
+msgid "Search Races"
+msgstr "Αναζήτηση αγώνων"
+
+#: includes/meta-race.php:146
+msgid "Select / Edit gallery"
+msgstr "Επιλογή / Επεξεργασία γκαλερί"
+
+#: includes/meta-race.php:399
+msgid "Select elevation profile image"
+msgstr "Επιλογή εικόνας υψομετρικού προφίλ"
+
+#: includes/meta-race.php:81
+msgid "Select event"
+msgstr "Επιλογή εκδήλωσης"
+
+#: includes/meta-event.php:165
+msgid "Select event logo"
+msgstr "Επιλογή λογότυπου εκδήλωσης"
+
+#: includes/meta-race.php:325
+msgid "Select gallery images"
+msgstr "Επιλογή εικόνων γκαλερί"
+
+#: includes/meta-race.php:283 includes/meta-race.php:299
+#: includes/meta-race.php:386 includes/meta-race.php:422
+msgid "Select image"
+msgstr "Επιλογή εικόνας"
+
+#: includes/meta-event.php:59 includes/meta-event.php:188
+msgid "Select logo"
+msgstr "Επιλογή λογότυπου"
+
+#: includes/meta-race.php:363
+msgid "Select static route map image"
+msgstr "Επιλογή στατικής εικόνας χάρτη διαδρομής"
+
+#: includes/admin-shortcode-helper.php:14
+#: includes/admin-shortcode-helper.php:24
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: includes/meta-race.php:216 includes/shortcodes.php:94
+msgid "Start location"
+msgstr "Τοποθεσία εκκίνησης"
+
+#: includes/pdf-booklet.php:317
+msgid "Start point"
+msgstr "Σημείο εκκίνησης"
+
+#: templates/single-cmt_race.php:279
+msgid "Start point:"
+msgstr "Σημείο εκκίνησης:"
+
+#: includes/meta-race.php:208 includes/shortcodes.php:93
+msgid "Start time"
+msgstr "Ώρα εκκίνησης"
+
+#: templates/single-cmt_race.php:260
+msgid "Start:"
+msgstr "Εκκίνηση:"
+
+#: includes/meta-race.php:276
+msgid "Static images for PDF only"
+msgstr "Στατικές εικόνες μόνο για PDF"
+
+#: includes/meta-race.php:280
+msgid "Static route map image (for PDF)"
+msgstr "Στατική εικόνα χάρτη διαδρομής (για PDF)"
+
+#: includes/pdf-booklet.php:355 templates/single-cmt_race.php:173
+msgid "Station"
+msgstr "Σταθμός"
+
+#: includes/admin-shortcode-helper.php:100
+msgid "The linked event could not be found."
+msgstr "Η συνδεδεμένη εκδήλωση δεν βρέθηκε."
+
+#: includes/meta-race.php:277
+msgid ""
+"These images are used in the generated PDF booklet only and are NOT shown on "
+"the race page."
+msgstr ""
+"Οι εικόνες αυτές χρησιμοποιούνται μόνο στο παραγόμενο PDF φυλλάδιο και "
+"ΔΕΝ εμφανίζονται στη σελίδα του αγώνα."
+
+#: includes/meta-event.php:50
+msgid ""
+"These sections are additional rich-text blocks for the event page, separate "
+"from the main content editor."
+msgstr ""
+"Αυτές οι ενότητες αποτελούν επιπλέον μπλοκ εμπλουτισμένου κειμένου, ξεχωριστά "
+"από τον κύριο επεξεργαστή περιεχομένου."
+
+#: includes/pdf-booklet.php:398
+msgid ""
+"This booklet is automatically generated from the race information on the "
+"website. Always consult the official briefing for last-minute changes."
+msgstr ""
+"Το φυλλάδιο δημιουργείται αυτόματα από τις πληροφορίες του αγώνα στην "
+"ιστοσελίδα. Να συμβουλεύεστε πάντα το επίσημο briefing για αλλαγές "
+"τελευταίας στιγμής."
+
+#: includes/meta-event.php:54
+msgid ""
+"This logo will be used in generated PDFs. It will not automatically appear "
+"on the event page."
+msgstr ""
+"Το λογότυπο αυτό θα χρησιμοποιείται στα παραγόμενα PDF και δεν θα εμφανίζεται "
+"αυτόματα στη σελίδα της εκδήλωσης."
+
+#. %s: event title
+#: includes/admin-shortcode-helper.php:122
+#, php-format
+msgid "This race belongs to event: %s"
+msgstr "Αυτός ο αγώνας ανήκει στην εκδήλωση: %s"
+
+#: includes/admin-shortcode-helper.php:92
+msgid ""
+"This race is not linked to an event yet. Select an event in the Race Details "
+"box, save, and the shortcode will appear here."
+msgstr ""
+"Ο αγώνας δεν έχει ακόμη συνδεθεί με εκδήλωση. Επιλέξτε εκδήλωση στο πλαίσιο "
+"‘Λεπτομέρειες αγώνα’, αποθηκεύστε, και θα εμφανιστεί εδώ το shortcode."
+
+#: includes/pdf-booklet.php:313 templates/single-cmt_race.php:141
+msgid "Total ascent"
+msgstr "Συνολική ανάβαση"
+
+#: templates/single-cmt_race.php:320
+msgid "Total ascent:"
+msgstr "Συνολική ανάβαση:"
+
+#: templates/single-cmt_event.php:164
+msgid "Travel & accommodation"
+msgstr "Μετακίνηση & διαμονή"
+
+#: templates/single-cmt_event.php:93
+msgid "Travel & stay"
+msgstr "Ταξίδι & διαμονή"
+
+#: includes/meta-race.php:326
+msgid "Use these images"
+msgstr "Χρήση αυτών των εικόνων"
+
+#: includes/meta-race.php:364 includes/meta-race.php:400
+msgid "Use this image"
+msgstr "Χρήση αυτής της εικόνας"
+
+#: includes/meta-event.php:166
+msgid "Use this logo"
+msgstr "Χρήση αυτού του λογότυπου"
+
+#: includes/admin-shortcode-helper.php:128
+msgid "Use this shortcode to show all races of that event on a page."
+msgstr ""
+"Χρησιμοποιήστε αυτό το shortcode για να εμφανίσετε όλους τους αγώνες της "
+"εκδήλωσης σε μία σελίδα."
+
+#: includes/meta-race.php:133
+msgid "Video embed code (HTML)"
+msgstr "Κώδικας ενσωμάτωσης βίντεο (HTML)"
+
+#: includes/post-types.php:22
+msgid "View Event"
+msgstr "Προβολή εκδήλωσης"
+
+#: includes/post-types.php:60
+msgid "View Race"
+msgstr "Προβολή αγώνα"
