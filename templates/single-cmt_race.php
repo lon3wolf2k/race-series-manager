@@ -12,39 +12,80 @@ get_header();
 while ( have_posts() ) :
     the_post();
 
-    $race_id          = get_the_ID();
+    $race_id = get_the_ID();
 
-    // Meta.
-    $event_id         = get_post_meta( $race_id, '_rsm_race_event_id', true );
-    $distance         = get_post_meta( $race_id, '_rsm_race_distance', true );
-    $elevation        = get_post_meta( $race_id, '_rsm_race_elevation', true );
-    $route_url        = get_post_meta( $race_id, '_rsm_race_route_url', true );
-    $route_embed_code = get_post_meta( $race_id, '_rsm_race_route_embed_code', true );
-    $video_embed_code = get_post_meta( $race_id, '_rsm_race_video_embed_code', true );
-    $gallery_ids_raw  = get_post_meta( $race_id, '_rsm_race_gallery_ids', true );
-    $booklet_url      = get_post_meta( $race_id, '_rsm_race_booklet_url', true );
+    // Βασικά meta
+    $distance       = get_post_meta( $race_id, '_rsm_race_distance', true );
+    $elevation      = get_post_meta( $race_id, '_rsm_race_elevation', true );
+    $cutoff_hours   = get_post_meta( $race_id, '_rsm_race_cutoff_hours', true );
+    $start_datetime = get_post_meta( $race_id, '_rsm_race_date', true );
+    $start_time     = get_post_meta( $race_id, '_rsm_race_start_time', true );
+    $start_point    = get_post_meta( $race_id, '_rsm_race_start_location', true );
+    $finish_point   = get_post_meta( $race_id, '_rsm_race_finish_location', true );
+    $fee            = get_post_meta( $race_id, '_rsm_race_fee', true );
+
+    // Buttons
+    $registration_url = get_post_meta( $race_id, '_rsm_race_registration_url', true );
     $itra_url         = get_post_meta( $race_id, '_rsm_race_itra_url', true );
-    $reg_url          = get_post_meta( $race_id, '_rsm_race_registration_url', true );
-    $race_date        = get_post_meta( $race_id, '_rsm_race_date', true );
-    $start_time       = get_post_meta( $race_id, '_rsm_race_start_time', true );
-    $start_loc        = get_post_meta( $race_id, '_rsm_race_start_location', true );
-    $finish_loc       = get_post_meta( $race_id, '_rsm_race_finish_location', true );
-    $fee              = get_post_meta( $race_id, '_rsm_race_fee', true );
-    $cutoff_hours     = get_post_meta( $race_id, '_rsm_race_cutoff_hours', true );
-    $aid_stations_raw = get_post_meta( $race_id, '_rsm_race_aid_stations', true );
+    $gpx_url          = get_post_meta( $race_id, '_rsm_race_route_url', true );
+    $booklet_url      = add_query_arg( 'rsm_booklet', '1', get_permalink( $race_id ) );
 
-    $event_title      = $event_id ? get_the_title( $event_id ) : '';
+    // Plotaroute / route embed
+    $plot_embed = get_post_meta( $race_id, '_rsm_race_plot_embed', true );
+    if ( ! $plot_embed ) {
+        $plot_embed = get_post_meta( $race_id, '_rsm_race_plotaroute_embed', true );
+    }
+    if ( ! $plot_embed ) {
+        $plot_embed = get_post_meta( $race_id, '_rsm_race_route_embed', true );
+    }
 
-    // Format date dd-mm-yyyy.
+    // Video embed
+    $video_embed = get_post_meta( $race_id, '_rsm_race_video_embed', true );
+    if ( ! $video_embed ) {
+        $video_embed = get_post_meta( $race_id, '_rsm_race_youtube_embed', true );
+    }
+
+    // Gallery (image IDs)
+    $gallery_meta = get_post_meta( $race_id, '_rsm_race_gallery_ids', true );
+    $gallery_ids  = array();
+
+    if ( is_array( $gallery_meta ) ) {
+        $gallery_ids = $gallery_meta;
+    } elseif ( is_string( $gallery_meta ) && '' !== trim( $gallery_meta ) ) {
+        $parts = array_filter( array_map( 'trim', explode( ',', $gallery_meta ) ) );
+        foreach ( $parts as $p ) {
+            $id = intval( $p );
+            if ( $id ) {
+                $gallery_ids[] = $id;
+            }
+        }
+    }
+
+    // Aid stations (table)
+    $aid_stations = get_post_meta( $race_id, '_rsm_race_aid_stations', true );
+
+    // Elevation image (static, για PDF & page)
+    $elev_chart_id = get_post_meta( $race_id, '_rsm_race_elev_chart_id', true );
+
+    // Συνδεδεμένο event για breadcrumbs + results
+    $event_id    = get_post_meta( $race_id, '_rsm_race_event_id', true );
+    $event_link  = $event_id ? get_permalink( $event_id ) : '';
+    $event_title = $event_id ? get_the_title( $event_id ) : '';
+
+    // URL για Event Results, αν υπάρχει event και helper
+    $results_url = '';
+    if ( $event_id && function_exists( 'rsm_get_results_page_url' ) ) {
+        $results_url = rsm_get_results_page_url( $event_id );
+    }
+
+    // Ημερομηνία / ώρα αγώνα
     $race_date_formatted = '';
-    if ( $race_date ) {
-        $ts = strtotime( $race_date );
+    if ( $start_datetime ) {
+        $ts = strtotime( $start_datetime );
         if ( $ts ) {
             $race_date_formatted = date_i18n( 'd-m-Y', $ts );
         }
     }
-
-    // Format time with site format.
     $start_time_formatted = '';
     if ( $start_time ) {
         $ts = strtotime( $start_time );
@@ -53,46 +94,12 @@ while ( have_posts() ) :
         }
     }
 
-    // Gallery IDs.
-    $gallery_ids = array();
-    if ( ! empty( $gallery_ids_raw ) ) {
-        $gallery_ids = array_filter( array_map( 'intval', explode( ',', $gallery_ids_raw ) ) );
-    }
-
-    // Parse aid stations into array of rows.
-    $aid_rows = array();
-    if ( ! empty( $aid_stations_raw ) ) {
-        $lines = preg_split( '/\r\n|\r|\n/', $aid_stations_raw );
-        foreach ( $lines as $line ) {
-            $line = trim( $line );
-            if ( '' === $line ) {
-                continue;
-            }
-            $parts    = array_map( 'trim', explode( '|', $line ) );
-            $station  = $parts[0] ?? '';
-            $km       = $parts[1] ?? '';
-            $d_plus   = $parts[2] ?? '';
-            $d_minus  = $parts[3] ?? '';
-            $cutoff   = $parts[4] ?? '';
-
-            if ( '' === $station && '' === $km ) {
-                continue;
-            }
-
-            $aid_rows[] = array(
-                'station' => $station,
-                'km'      => $km,
-                'dplus'   => $d_plus,
-                'dminus'  => $d_minus,
-                'cutoff'  => $cutoff,
-            );
-        }
-    }
     ?>
 
 <div class="rsm-race-wrapper">
     <div class="rsm-race-layout">
 
+        <!-- MAIN -->
         <main class="rsm-race-main">
 
             <!-- HERO IMAGE -->
@@ -104,10 +111,12 @@ while ( have_posts() ) :
 
             <!-- BREADCRUMB -->
             <nav class="rsm-breadcrumb">
-                <a href="<?php echo esc_url( home_url() ); ?>"><?php esc_html_e( 'Home', 'race-series-manager' ); ?></a>
-                <?php if ( $event_title ) : ?>
+                <a href="<?php echo esc_url( home_url() ); ?>">
+                    <?php esc_html_e( 'Home', 'race-series-manager' ); ?>
+                </a>
+                <?php if ( $event_link && $event_title ) : ?>
                     <span class="rsm-breadcrumb-sep">/</span>
-                    <a href="<?php echo esc_url( get_permalink( $event_id ) ); ?>">
+                    <a href="<?php echo esc_url( $event_link ); ?>">
                         <?php echo esc_html( $event_title ); ?>
                     </a>
                 <?php endif; ?>
@@ -115,56 +124,62 @@ while ( have_posts() ) :
                 <span><?php the_title(); ?></span>
             </nav>
 
-            <!-- TITLE + STATS -->
-            <header class="rsm-race-header">
-
-                <?php if ( $event_title ) : ?>
-                    <p class="rsm-race-event"><?php echo esc_html( $event_title ); ?></p>
-                <?php endif; ?>
-
-                <h1 class="rsm-race-title"><?php the_title(); ?></h1>
-
-                <div class="rsm-race-stats-row">
-
-                    <?php if ( $distance ) : ?>
-                        <div class="rsm-race-stat-card rsm-race-stat-card--primary">
-                            <div class="rsm-race-stat-icon">🏃‍♂️</div>
-                            <div class="rsm-race-stat-value"><?php echo esc_html( $distance ); ?></div>
-                            <div class="rsm-race-stat-label"><?php esc_html_e( 'Distance', 'race-series-manager' ); ?></div>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ( $elevation ) : ?>
-                        <div class="rsm-race-stat-card">
-                            <div class="rsm-race-stat-icon">⛰️</div>
-                            <div class="rsm-race-stat-value"><?php echo esc_html( $elevation ); ?></div>
-                            <div class="rsm-race-stat-label"><?php esc_html_e( 'Total ascent', 'race-series-manager' ); ?></div>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ( $cutoff_hours ) : ?>
-                        <div class="rsm-race-stat-card">
-                            <div class="rsm-race-stat-icon">⏱️</div>
-                            <div class="rsm-race-stat-value"><?php echo esc_html( $cutoff_hours ); ?>h</div>
-                            <div class="rsm-race-stat-label"><?php esc_html_e( 'Cut-off', 'race-series-manager' ); ?></div>
-                        </div>
-                    <?php endif; ?>
-
+            <!-- EVENT NAME ABOVE TITLE (small) -->
+            <?php if ( $event_title ) : ?>
+                <div class="rsm-race-event-label">
+                    <?php echo esc_html( $event_title ); ?>
                 </div>
+            <?php endif; ?>
+
+            <!-- TITLE -->
+            <header class="rsm-race-header">
+                <h1 class="rsm-race-title"><?php the_title(); ?></h1>
             </header>
 
-            <!-- DESCRIPTION -->
-            <section class="rsm-race-section rsm-race-section--content">
-                <?php the_content(); ?>
+            <!-- 1. TOP STATS CARDS -->
+            <section class="rsm-race-stats">
+                <div class="rsm-race-stat-card">
+                    <div class="rsm-race-stat-label">
+                        <?php esc_html_e( 'Distance', 'race-series-manager' ); ?>
+                    </div>
+                    <div class="rsm-race-stat-value">
+                        <?php echo esc_html( $distance ); ?>
+                    </div>
+                </div>
+                <div class="rsm-race-stat-card">
+                    <div class="rsm-race-stat-label">
+                        <?php esc_html_e( 'Total ascent', 'race-series-manager' ); ?>
+                    </div>
+                    <div class="rsm-race-stat-value">
+                        <?php echo esc_html( $elevation ); ?>
+                    </div>
+                </div>
+                <div class="rsm-race-stat-card">
+                    <div class="rsm-race-stat-label">
+                        <?php esc_html_e( 'Cut-off time', 'race-series-manager' ); ?>
+                    </div>
+                    <div class="rsm-race-stat-value">
+                        <?php echo $cutoff_hours ? esc_html( $cutoff_hours ) . ' ' . esc_html__( 'hours', 'race-series-manager' ) : '—'; ?>
+                    </div>
+                </div>
             </section>
 
-            <!-- AID STATIONS TABLE -->
-            <?php if ( ! empty( $aid_rows ) ) : ?>
+            <!-- 2. RACE DESCRIPTION -->
+            <section class="rsm-race-section rsm-race-section--description">
+                <h2 class="rsm-section-title">
+                    <?php esc_html_e( 'Race description', 'race-series-manager' ); ?>
+                </h2>
+                <div class="rsm-race-description">
+                    <?php the_content(); ?>
+                </div>
+            </section>
+
+            <!-- 3. AID STATIONS -->
+            <?php if ( ! empty( $aid_stations ) ) : ?>
                 <section class="rsm-race-section rsm-race-section--aid">
                     <h2 class="rsm-section-title">
                         <?php esc_html_e( 'Cut-off times & aid stations', 'race-series-manager' ); ?>
                     </h2>
-                    <hr class="rsm-section-divider" />
 
                     <div class="rsm-aid-table-wrapper">
                         <table class="rsm-aid-table">
@@ -178,13 +193,26 @@ while ( have_posts() ) :
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ( $aid_rows as $row ) : ?>
+                                <?php
+                                $lines = preg_split( '/\r\n|\r|\n/', $aid_stations );
+                                foreach ( $lines as $line ) :
+                                    $line = trim( $line );
+                                    if ( '' === $line ) {
+                                        continue;
+                                    }
+                                    $parts   = array_map( 'trim', explode( '|', $line ) );
+                                    $station = $parts[0] ?? '';
+                                    $km      = $parts[1] ?? '';
+                                    $d_plus  = $parts[2] ?? '';
+                                    $d_minus = $parts[3] ?? '';
+                                    $cutoff  = $parts[4] ?? '';
+                                    ?>
                                     <tr>
-                                        <td><?php echo esc_html( $row['station'] ); ?></td>
-                                        <td><?php echo esc_html( $row['km'] ); ?></td>
-                                        <td><?php echo esc_html( $row['dplus'] ); ?></td>
-                                        <td><?php echo esc_html( $row['dminus'] ); ?></td>
-                                        <td><?php echo esc_html( $row['cutoff'] ); ?></td>
+                                        <td><?php echo esc_html( $station ); ?></td>
+                                        <td><?php echo esc_html( $km ); ?></td>
+                                        <td><?php echo esc_html( $d_plus ); ?></td>
+                                        <td><?php echo esc_html( $d_minus ); ?></td>
+                                        <td><?php echo esc_html( $cutoff ); ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -193,51 +221,70 @@ while ( have_posts() ) :
                 </section>
             <?php endif; ?>
 
-            <!-- ROUTE MAP -->
-            <?php if ( $route_embed_code ) : ?>
-                <section class="rsm-race-section rsm-race-section--map">
-                    <h2 class="rsm-section-title"><?php esc_html_e( 'Route map', 'race-series-manager' ); ?></h2>
-                    <hr class="rsm-section-divider" />
+            <!-- 4. ROUTE MAP -->
+            <section class="rsm-race-section rsm-race-section--map">
+                <h2 class="rsm-section-title">
+                    <?php esc_html_e( 'Route map', 'race-series-manager' ); ?>
+                </h2>
 
+                <?php if ( ! empty( $plot_embed ) ) : ?>
                     <div class="rsm-race-map-embed">
                         <?php
-                        // Full embed HTML (iframe etc.) saved in meta.
-                        echo $route_embed_code; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                        echo $plot_embed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         ?>
                     </div>
-                </section>
-            <?php endif; ?>
+                <?php else : ?>
+                    <p style="font-size:13px;color:#888;">
+                        <?php esc_html_e( 'No route map embed has been set for this race yet.', 'race-series-manager' ); ?>
+                    </p>
+                <?php endif; ?>
+            </section>
 
-            <!-- VIDEO -->
-            <?php if ( $video_embed_code ) : ?>
-                <section class="rsm-race-section rsm-race-section--video">
-                    <h2 class="rsm-section-title"><?php esc_html_e( 'Race video', 'race-series-manager' ); ?></h2>
-                    <hr class="rsm-section-divider" />
-
-                    <div class="rsm-race-video-embed">
+            <!-- 5. ELEVATION PROFILE IMAGE -->
+            <?php if ( $elev_chart_id ) : ?>
+                <section class="rsm-race-section rsm-race-section--elev">
+                    <h2 class="rsm-section-title">
+                        <?php esc_html_e( 'Elevation profile', 'race-series-manager' ); ?>
+                    </h2>
+                    <div class="rsm-booklet-image-block">
                         <?php
-                        echo $video_embed_code; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                        echo wp_get_attachment_image( $elev_chart_id, 'large', false, array(
+                            'style' => 'max-width:100%;height:auto;border-radius:18px;box-shadow:0 10px 26px rgba(0,0,0,0.10);',
+                        ) );
                         ?>
                     </div>
                 </section>
             <?php endif; ?>
 
-            <!-- GALLERY -->
+            <!-- 6. RACE VIDEO -->
+            <?php if ( ! empty( $video_embed ) ) : ?>
+                <section class="rsm-race-section rsm-race-section--video">
+                    <h2 class="rsm-section-title">
+                        <?php esc_html_e( 'Race video', 'race-series-manager' ); ?>
+                    </h2>
+                    <div class="rsm-race-video-embed">
+                        <?php echo $video_embed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                    </div>
+                </section>
+            <?php endif; ?>
+
+            <!-- 7. RACE GALLERY -->
             <?php if ( ! empty( $gallery_ids ) ) : ?>
                 <section class="rsm-race-section rsm-race-section--gallery">
-                    <h2 class="rsm-section-title"><?php esc_html_e( 'Race gallery', 'race-series-manager' ); ?></h2>
-                    <hr class="rsm-section-divider" />
-
-                    <div class="rsm-gallery-grid">
-                        <?php foreach ( $gallery_ids as $aid ) : ?>
-                            <?php
-                            $full  = wp_get_attachment_image_src( $aid, 'large' );
-                            $thumb = wp_get_attachment_image_src( $aid, 'medium' );
+                    <h2 class="rsm-section-title">
+                        <?php esc_html_e( 'Race gallery', 'race-series-manager' ); ?>
+                    </h2>
+                    <div class="rsm-race-gallery">
+                        <?php foreach ( $gallery_ids as $img_id ) :
+                            $full  = wp_get_attachment_image_src( $img_id, 'large' );
+                            $thumb = wp_get_attachment_image_src( $img_id, 'medium' );
                             if ( ! $full || ! $thumb ) {
                                 continue;
                             }
                             ?>
-                            <a href="<?php echo esc_url( $full[0] ); ?>" class="rsm-gallery-item">
+                            <a href="<?php echo esc_url( $full[0] ); ?>"
+                               class="rsm-race-gallery-item"
+                               data-rsm-lightbox="race-gallery">
                                 <img src="<?php echo esc_url( $thumb[0] ); ?>" alt="">
                             </a>
                         <?php endforeach; ?>
@@ -247,18 +294,19 @@ while ( have_posts() ) :
 
         </main>
 
-        <!-- SIDEBAR -->
+        <!-- SIDEBAR / SUMMARY -->
         <aside class="rsm-race-sidebar">
-            <div class="rsm-race-sidebar-inner">
+            <div class="rsm-race-summary">
 
-                <h2 class="rsm-sidebar-title"><?php esc_html_e( 'Race summary', 'race-series-manager' ); ?></h2>
+                <h2 class="rsm-summary-title">
+                    <?php esc_html_e( 'Race summary', 'race-series-manager' ); ?>
+                </h2>
 
-                <ul class="rsm-race-summary-list">
-
+                <dl class="rsm-summary-list">
                     <?php if ( $race_date_formatted || $start_time_formatted ) : ?>
-                        <li>
-                            <strong><?php esc_html_e( 'Start:', 'race-series-manager' ); ?></strong>
-                            <span>
+                        <div class="rsm-summary-row">
+                            <dt><?php esc_html_e( 'Start', 'race-series-manager' ); ?>:</dt>
+                            <dd>
                                 <?php
                                 if ( $race_date_formatted ) {
                                     echo esc_html( $race_date_formatted );
@@ -270,102 +318,98 @@ while ( have_posts() ) :
                                     echo esc_html( $start_time_formatted );
                                 }
                                 ?>
-                            </span>
-                        </li>
+                            </dd>
+                        </div>
                     <?php endif; ?>
 
-                    <?php if ( $start_loc ) : ?>
-                        <li>
-                            <strong><?php esc_html_e( 'Start point:', 'race-series-manager' ); ?></strong>
-                            <span><?php echo esc_html( $start_loc ); ?></span>
-                        </li>
+                    <?php if ( $start_point ) : ?>
+                        <div class="rsm-summary-row">
+                            <dt><?php esc_html_e( 'Start point', 'race-series-manager' ); ?>:</dt>
+                            <dd><?php echo esc_html( $start_point ); ?></dd>
+                        </div>
                     <?php endif; ?>
 
-                    <?php if ( $finish_loc ) : ?>
-                        <li>
-                            <strong><?php esc_html_e( 'Finish point:', 'race-series-manager' ); ?></strong>
-                            <span><?php echo esc_html( $finish_loc ); ?></span>
-                        </li>
+                    <?php if ( $finish_point ) : ?>
+                        <div class="rsm-summary-row">
+                            <dt><?php esc_html_e( 'Finish point', 'race-series-manager' ); ?>:</dt>
+                            <dd><?php echo esc_html( $finish_point ); ?></dd>
+                        </div>
                     <?php endif; ?>
 
                     <?php if ( $fee ) : ?>
-                        <li>
-                            <strong><?php esc_html_e( 'Entry fee:', 'race-series-manager' ); ?></strong>
-                            <span><?php echo esc_html( $fee ); ?></span>
-                        </li>
+                        <div class="rsm-summary-row">
+                            <dt><?php esc_html_e( 'Entry fee', 'race-series-manager' ); ?>:</dt>
+                            <dd><?php echo esc_html( $fee ); ?></dd>
+                        </div>
                     <?php endif; ?>
 
                     <?php if ( $cutoff_hours ) : ?>
-                        <li>
-                            <strong><?php esc_html_e( 'Cut-off:', 'race-series-manager' ); ?></strong>
-                            <span>
-                                <?php
-                                echo esc_html( $cutoff_hours );
-                                echo ' ';
-                                esc_html_e( 'hours', 'race-series-manager' );
-                                ?>
-                            </span>
-                        </li>
+                        <div class="rsm-summary-row">
+                            <dt><?php esc_html_e( 'Cut-off', 'race-series-manager' ); ?>:</dt>
+                            <dd><?php echo esc_html( $cutoff_hours ) . ' ' . esc_html__( 'hours', 'race-series-manager' ); ?></dd>
+                        </div>
                     <?php endif; ?>
 
                     <?php if ( $distance ) : ?>
-                        <li>
-                            <strong><?php esc_html_e( 'Distance:', 'race-series-manager' ); ?></strong>
-                            <span><?php echo esc_html( $distance ); ?></span>
-                        </li>
+                        <div class="rsm-summary-row">
+                            <dt><?php esc_html_e( 'Distance', 'race-series-manager' ); ?>:</dt>
+                            <dd><?php echo esc_html( $distance ); ?></dd>
+                        </div>
                     <?php endif; ?>
 
                     <?php if ( $elevation ) : ?>
-                        <li>
-                            <strong><?php esc_html_e( 'Total ascent:', 'race-series-manager' ); ?></strong>
-                            <span><?php echo esc_html( $elevation ); ?></span>
-                        </li>
+                        <div class="rsm-summary-row">
+                            <dt><?php esc_html_e( 'Total ascent', 'race-series-manager' ); ?>:</dt>
+                            <dd><?php echo esc_html( $elevation ); ?></dd>
+                        </div>
                     <?php endif; ?>
+                </dl>
 
-                </ul>
-
-                <div class="rsm-race-sidebar-actions">
-
-                    <?php if ( $reg_url ) : ?>
-                        <a href="<?php echo esc_url( $reg_url ); ?>"
+                <div class="rsm-summary-buttons">
+                    <?php if ( $registration_url ) : ?>
+                        <a href="<?php echo esc_url( $registration_url ); ?>"
+                           class="rsm-summary-btn"
                            target="_blank"
-                           rel="noopener"
-                           class="rsm-button">
+                           rel="noopener">
                             <?php esc_html_e( 'Registration', 'race-series-manager' ); ?>
                         </a>
                     <?php endif; ?>
 
                     <?php if ( $itra_url ) : ?>
                         <a href="<?php echo esc_url( $itra_url ); ?>"
+                           class="rsm-summary-btn"
                            target="_blank"
-                           rel="noopener"
-                           class="rsm-button rsm-button--secondary">
+                           rel="noopener">
                             <?php esc_html_e( 'ITRA', 'race-series-manager' ); ?>
                         </a>
                     <?php endif; ?>
 
-                    <?php if ( $route_url ) : ?>
-                        <a href="<?php echo esc_url( $route_url ); ?>"
+                    <?php if ( $gpx_url ) : ?>
+                        <a href="<?php echo esc_url( $gpx_url ); ?>"
+                           class="rsm-summary-btn"
                            target="_blank"
-                           rel="noopener"
-                           class="rsm-button rsm-button--secondary">
+                           rel="noopener">
                             <?php esc_html_e( 'Download GPX / Route', 'race-series-manager' ); ?>
                         </a>
                     <?php endif; ?>
 
-                    <?php
-                    // Booklet button: manual URL if provided, otherwise auto-generated PDF (?rsm_booklet=1).
-                    $booklet_link = $booklet_url
-                        ? $booklet_url
-                        : add_query_arg( 'rsm_booklet', '1', get_permalink( $race_id ) );
-                    ?>
-                    <a href="<?php echo esc_url( $booklet_link ); ?>"
-                       target="_blank"
-                       rel="noopener"
-                       class="rsm-button">
-                        <?php esc_html_e( 'Race booklet', 'race-series-manager' ); ?>
-                    </a>
+                    <?php if ( $booklet_url ) : ?>
+                        <a href="<?php echo esc_url( $booklet_url ); ?>"
+                           class="rsm-summary-btn"
+                           target="_blank"
+                           rel="noopener">
+                            <?php esc_html_e( 'Race booklet', 'race-series-manager' ); ?>
+                        </a>
+                    <?php endif; ?>
 
+                    <?php if ( $results_url ) : ?>
+                        <a href="<?php echo esc_url( $results_url ); ?>"
+                           class="rsm-summary-btn rsm-event-results-btn"
+                           target="_blank"
+                           rel="noopener">
+                            <?php esc_html_e( 'Results', 'race-series-manager' ); ?>
+                        </a>
+                    <?php endif; ?>
                 </div>
 
             </div>

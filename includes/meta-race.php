@@ -394,7 +394,9 @@ function rsm_race_media_meta_box_callback( $post ) {
  */
 function rsm_save_race_meta( $post_id ) {
 
+    // -----------------------------------------------------------------
     // Details
+    // -----------------------------------------------------------------
     if ( isset( $_POST['rsm_race_details_nonce'] ) &&
          wp_verify_nonce( $_POST['rsm_race_details_nonce'], 'rsm_save_race_details' ) ) {
 
@@ -437,7 +439,9 @@ function rsm_save_race_meta( $post_id ) {
         update_post_meta( $post_id, '_rsm_race_aid_stations',      $aid );
     }
 
+    // -----------------------------------------------------------------
     // Media
+    // -----------------------------------------------------------------
     if ( isset( $_POST['rsm_race_media_nonce'] ) &&
          wp_verify_nonce( $_POST['rsm_race_media_nonce'], 'rsm_save_race_media' ) ) {
 
@@ -453,12 +457,25 @@ function rsm_save_race_meta( $post_id ) {
             return;
         }
 
-        $plot_embed   = isset( $_POST['rsm_race_plotaroute_embed'] ) ? wp_kses_post( $_POST['rsm_race_plotaroute_embed'] ) : '';
-        $route_url    = isset( $_POST['rsm_race_route_url'] ) ? esc_url_raw( $_POST['rsm_race_route_url'] ) : '';
-        $video_embed  = isset( $_POST['rsm_race_video_embed'] ) ? wp_kses_post( $_POST['rsm_race_video_embed'] ) : '';
-        $gallery_ids  = isset( $_POST['rsm_race_gallery_ids'] ) ? sanitize_text_field( $_POST['rsm_race_gallery_ids'] ) : '';
-        $static_map   = isset( $_POST['rsm_race_static_map_id'] ) ? intval( $_POST['rsm_race_static_map_id'] ) : 0;
-        $elev_chart   = isset( $_POST['rsm_race_elev_chart_id'] ) ? intval( $_POST['rsm_race_elev_chart_id'] ) : 0;
+        // ΠΡΟΣΟΧΗ: Εδώ ΔΕΝ κάνουμε wp_kses_post, για να μην κόβονται τα iframes
+        $plot_embed  = isset( $_POST['rsm_race_plotaroute_embed'] )
+            ? wp_unslash( $_POST['rsm_race_plotaroute_embed'] )
+            : '';
+
+        $route_url   = isset( $_POST['rsm_race_route_url'] )
+            ? esc_url_raw( $_POST['rsm_race_route_url'] )
+            : '';
+
+        $video_embed = isset( $_POST['rsm_race_video_embed'] )
+            ? wp_unslash( $_POST['rsm_race_video_embed'] )
+            : '';
+
+        $gallery_ids = isset( $_POST['rsm_race_gallery_ids'] )
+            ? sanitize_text_field( $_POST['rsm_race_gallery_ids'] )
+            : '';
+
+        $static_map  = isset( $_POST['rsm_race_static_map_id'] ) ? intval( $_POST['rsm_race_static_map_id'] ) : 0;
+        $elev_chart  = isset( $_POST['rsm_race_elev_chart_id'] ) ? intval( $_POST['rsm_race_elev_chart_id'] ) : 0;
 
         $gallery_array = array();
         if ( ! empty( $gallery_ids ) ) {
