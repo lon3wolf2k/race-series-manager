@@ -26,6 +26,11 @@ while ( have_posts() ) :
     $part_url      = get_post_meta( $event_id, '_rsm_event_participants_url', true );
     $live_url      = get_post_meta( $event_id, '_rsm_event_live_url', true );
 
+    // Iframe codes:
+    $reg_iframe    = get_post_meta( $event_id, '_rsm_event_registration_iframe', true );
+    $part_iframe   = get_post_meta( $event_id, '_rsm_event_participants_iframe', true );
+    $live_iframe   = get_post_meta( $event_id, '_rsm_event_live_iframe', true );
+
     // Fetch linked races for sidebar list.
     $linked_races = new WP_Query( array(
         'post_type'      => 'cmt_race',
@@ -40,6 +45,37 @@ while ( have_posts() ) :
     $results_url = '';
     if ( function_exists( 'rsm_get_results_page_url' ) ) {
         $results_url = rsm_get_results_page_url( $event_id );
+    }
+
+    // Helper: buttons target/URL logic
+    $reg_btn_url   = '';
+    $reg_btn_attr  = '';
+    if ( ! empty( $reg_iframe ) ) {
+        $reg_btn_url  = get_permalink( $event_id ) . '#event-registration';
+        $reg_btn_attr = ''; // scroll on same page
+    } elseif ( ! empty( $reg_url ) ) {
+        $reg_btn_url  = $reg_url;
+        $reg_btn_attr = 'target="_blank" rel="noopener"';
+    }
+
+    $part_btn_url  = '';
+    $part_btn_attr = '';
+    if ( ! empty( $part_iframe ) ) {
+        $part_btn_url  = get_permalink( $event_id ) . '#event-participants';
+        $part_btn_attr = '';
+    } elseif ( ! empty( $part_url ) ) {
+        $part_btn_url  = $part_url;
+        $part_btn_attr = 'target="_blank" rel="noopener"';
+    }
+
+    $live_btn_url  = '';
+    $live_btn_attr = '';
+    if ( ! empty( $live_iframe ) ) {
+        $live_btn_url  = get_permalink( $event_id ) . '#event-live';
+        $live_btn_attr = '';
+    } elseif ( ! empty( $live_url ) ) {
+        $live_btn_url  = $live_url;
+        $live_btn_attr = 'target="_blank" rel="noopener"';
     }
     ?>
 
@@ -102,6 +138,24 @@ while ( have_posts() ) :
                 <?php if ( ! empty( $travel ) ) : ?>
                     <a href="#event-travel" class="rsm-event-tab">
                         <?php esc_html_e( 'Travel & stay', 'race-series-manager' ); ?>
+                    </a>
+                <?php endif; ?>
+
+                <?php if ( ! empty( $reg_iframe ) ) : ?>
+                    <a href="#event-registration" class="rsm-event-tab">
+                        <?php esc_html_e( 'Registration', 'race-series-manager' ); ?>
+                    </a>
+                <?php endif; ?>
+
+                <?php if ( ! empty( $part_iframe ) ) : ?>
+                    <a href="#event-participants" class="rsm-event-tab">
+                        <?php esc_html_e( 'Participants', 'race-series-manager' ); ?>
+                    </a>
+                <?php endif; ?>
+
+                <?php if ( ! empty( $live_iframe ) ) : ?>
+                    <a href="#event-live" class="rsm-event-tab">
+                        <?php esc_html_e( 'Live', 'race-series-manager' ); ?>
                     </a>
                 <?php endif; ?>
             </nav>
@@ -181,6 +235,48 @@ while ( have_posts() ) :
                 </section>
             <?php endif; ?>
 
+            <!-- 6. REGISTRATION IFRAME -->
+            <?php if ( ! empty( $reg_iframe ) ) : ?>
+                <section id="event-registration" class="rsm-race-section rsm-event-section rsm-event-section--registration">
+                    <h2 class="rsm-section-title rsm-event-section-title rsm-event-section-title--registration">
+                        <span class="rsm-event-section-icon">📝</span>
+                        <span><?php esc_html_e( 'Registration', 'race-series-manager' ); ?></span>
+                    </h2>
+                    <hr class="rsm-section-divider" />
+                    <div class="rsm-event-section-body rsm-event-iframe-wrapper">
+                        <?php echo $reg_iframe; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                    </div>
+                </section>
+            <?php endif; ?>
+
+            <!-- 7. PARTICIPANTS IFRAME -->
+            <?php if ( ! empty( $part_iframe ) ) : ?>
+                <section id="event-participants" class="rsm-race-section rsm-event-section rsm-event-section--participants">
+                    <h2 class="rsm-section-title rsm-event-section-title rsm-event-section-title--participants">
+                        <span class="rsm-event-section-icon">👥</span>
+                        <span><?php esc_html_e( 'Participants', 'race-series-manager' ); ?></span>
+                    </h2>
+                    <hr class="rsm-section-divider" />
+                    <div class="rsm-event-section-body rsm-event-iframe-wrapper">
+                        <?php echo $part_iframe; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                    </div>
+                </section>
+            <?php endif; ?>
+
+            <!-- 8. LIVE IFRAME -->
+            <?php if ( ! empty( $live_iframe ) ) : ?>
+                <section id="event-live" class="rsm-race-section rsm-event-section rsm-event-section--live">
+                    <h2 class="rsm-section-title rsm-event-section-title rsm-event-section-title--live">
+                        <span class="rsm-event-section-icon">📡</span>
+                        <span><?php esc_html_e( 'Live', 'race-series-manager' ); ?></span>
+                    </h2>
+                    <hr class="rsm-section-divider" />
+                    <div class="rsm-event-section-body rsm-event-iframe-wrapper">
+                        <?php echo $live_iframe; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                    </div>
+                </section>
+            <?php endif; ?>
+
         </main>
 
         <!-- SIDEBAR -->
@@ -189,29 +285,27 @@ while ( have_posts() ) :
 
                 <!-- ACTION BUTTONS -->
                 <div class="rsm-event-sidebar-actions" style="margin-bottom:16px;">
-                    <?php if ( $reg_url ) : ?>
-                        <a href="<?php echo esc_url( $reg_url ); ?>"
+
+                    <?php if ( $reg_btn_url ) : ?>
+                        <a href="<?php echo esc_url( $reg_btn_url ); ?>"
                            class="rsm-summary-btn"
-                           target="_blank"
-                           rel="noopener">
+                           <?php echo $reg_btn_attr; ?>>
                             <?php esc_html_e( 'Registration', 'race-series-manager' ); ?>
                         </a>
                     <?php endif; ?>
 
-                    <?php if ( $part_url ) : ?>
-                        <a href="<?php echo esc_url( $part_url ); ?>"
+                    <?php if ( $part_btn_url ) : ?>
+                        <a href="<?php echo esc_url( $part_btn_url ); ?>"
                            class="rsm-summary-btn"
-                           target="_blank"
-                           rel="noopener">
+                           <?php echo $part_btn_attr; ?>>
                             <?php esc_html_e( 'Participants', 'race-series-manager' ); ?>
                         </a>
                     <?php endif; ?>
 
-                    <?php if ( $live_url ) : ?>
-                        <a href="<?php echo esc_url( $live_url ); ?>"
+                    <?php if ( $live_btn_url ) : ?>
+                        <a href="<?php echo esc_url( $live_btn_url ); ?>"
                            class="rsm-summary-btn"
-                           target="_blank"
-                           rel="noopener">
+                           <?php echo $live_btn_attr; ?>>
                             <?php esc_html_e( 'Live', 'race-series-manager' ); ?>
                         </a>
                     <?php endif; ?>
@@ -283,11 +377,9 @@ while ( have_posts() ) :
 
             e.preventDefault();
 
-            // Set active tab
             tabs.forEach(function(t) { t.classList.remove('is-active'); });
             this.classList.add('is-active');
 
-            // Smooth scroll to section
             section.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     });

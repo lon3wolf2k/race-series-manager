@@ -31,13 +31,13 @@ while ( have_posts() ) :
     $gpx_url        = get_post_meta( $race_id, '_rsm_race_route_url', true );
 
     // Booklet URL
-    $booklet_url      = add_query_arg( 'rsm_booklet', '1', get_permalink( $race_id ) );
+    $booklet_url    = add_query_arg( 'rsm_booklet', '1', get_permalink( $race_id ) );
 
     // Plotaroute / route embed
-    $plot_embed = get_post_meta( $race_id, '_rsm_race_plotaroute_embed', true );
+    $plot_embed     = get_post_meta( $race_id, '_rsm_race_plotaroute_embed', true );
 
     // Video embed
-    $video_embed = get_post_meta( $race_id, '_rsm_race_video_embed', true );
+    $video_embed    = get_post_meta( $race_id, '_rsm_race_video_embed', true );
 
     // Gallery (image IDs)
     $gallery_meta = get_post_meta( $race_id, '_rsm_race_gallery_ids', true );
@@ -66,15 +66,50 @@ while ( have_posts() ) :
     $event_link  = $event_id ? get_permalink( $event_id ) : '';
     $event_title = $event_id ? get_the_title( $event_id ) : '';
 
-    // Event-level registration / participants / live URLs
-    $event_reg_url  = $event_id ? get_post_meta( $event_id, '_rsm_event_registration_url', true ) : '';
-    $event_part_url = $event_id ? get_post_meta( $event_id, '_rsm_event_participants_url', true ) : '';
-    $event_live_url = $event_id ? get_post_meta( $event_id, '_rsm_event_live_url', true ) : '';
+    // Event-level registration / participants / live URLs + iframes
+    $event_reg_url   = $event_id ? get_post_meta( $event_id, '_rsm_event_registration_url', true ) : '';
+    $event_part_url  = $event_id ? get_post_meta( $event_id, '_rsm_event_participants_url', true ) : '';
+    $event_live_url  = $event_id ? get_post_meta( $event_id, '_rsm_event_live_url', true ) : '';
+
+    $event_reg_iframe  = $event_id ? get_post_meta( $event_id, '_rsm_event_registration_iframe', true ) : '';
+    $event_part_iframe = $event_id ? get_post_meta( $event_id, '_rsm_event_participants_iframe', true ) : '';
+    $event_live_iframe = $event_id ? get_post_meta( $event_id, '_rsm_event_live_iframe', true ) : '';
 
     // URL για Event Results
     $results_url = '';
     if ( $event_id && function_exists( 'rsm_get_results_page_url' ) ) {
         $results_url = rsm_get_results_page_url( $event_id );
+    }
+
+    // Buttons logic (registration/participants/live)
+    $reg_btn_url   = '';
+    $reg_btn_attr  = '';
+    if ( $event_id && ! empty( $event_reg_iframe ) && $event_link ) {
+        $reg_btn_url  = $event_link . '#event-registration';
+        $reg_btn_attr = ''; // same page (event)
+    } elseif ( ! empty( $event_reg_url ) ) {
+        $reg_btn_url  = $event_reg_url;
+        $reg_btn_attr = 'target="_blank" rel="noopener"';
+    }
+
+    $part_btn_url  = '';
+    $part_btn_attr = '';
+    if ( $event_id && ! empty( $event_part_iframe ) && $event_link ) {
+        $part_btn_url  = $event_link . '#event-participants';
+        $part_btn_attr = '';
+    } elseif ( ! empty( $event_part_url ) ) {
+        $part_btn_url  = $event_part_url;
+        $part_btn_attr = 'target="_blank" rel="noopener"';
+    }
+
+    $live_btn_url  = '';
+    $live_btn_attr = '';
+    if ( $event_id && ! empty( $event_live_iframe ) && $event_link ) {
+        $live_btn_url  = $event_link . '#event-live';
+        $live_btn_attr = '';
+    } elseif ( ! empty( $event_live_url ) ) {
+        $live_btn_url  = $event_live_url;
+        $live_btn_attr = 'target="_blank" rel="noopener"';
     }
 
     // Ημερομηνία / ώρα αγώνα
@@ -228,9 +263,7 @@ while ( have_posts() ) :
 
                 <?php if ( ! empty( $plot_embed ) ) : ?>
                     <div class="rsm-race-map-embed">
-                        <?php
-                        echo $plot_embed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-                        ?>
+                        <?php echo $plot_embed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                     </div>
                 <?php else : ?>
                     <p style="font-size:13px;color:#888;">
@@ -366,29 +399,26 @@ while ( have_posts() ) :
 
                 <div class="rsm-summary-buttons">
 
-                    <?php if ( $event_reg_url ) : ?>
-                        <a href="<?php echo esc_url( $event_reg_url ); ?>"
+                    <?php if ( $reg_btn_url ) : ?>
+                        <a href="<?php echo esc_url( $reg_btn_url ); ?>"
                            class="rsm-summary-btn"
-                           target="_blank"
-                           rel="noopener">
+                           <?php echo $reg_btn_attr; ?>>
                             <?php esc_html_e( 'Registration', 'race-series-manager' ); ?>
                         </a>
                     <?php endif; ?>
 
-                    <?php if ( $event_part_url ) : ?>
-                        <a href="<?php echo esc_url( $event_part_url ); ?>"
+                    <?php if ( $part_btn_url ) : ?>
+                        <a href="<?php echo esc_url( $part_btn_url ); ?>"
                            class="rsm-summary-btn"
-                           target="_blank"
-                           rel="noopener">
+                           <?php echo $part_btn_attr; ?>>
                             <?php esc_html_e( 'Participants', 'race-series-manager' ); ?>
                         </a>
                     <?php endif; ?>
 
-                    <?php if ( $event_live_url ) : ?>
-                        <a href="<?php echo esc_url( $event_live_url ); ?>"
+                    <?php if ( $live_btn_url ) : ?>
+                        <a href="<?php echo esc_url( $live_btn_url ); ?>"
                            class="rsm-summary-btn"
-                           target="_blank"
-                           rel="noopener">
+                           <?php echo $live_btn_attr; ?>>
                             <?php esc_html_e( 'Live', 'race-series-manager' ); ?>
                         </a>
                     <?php endif; ?>
