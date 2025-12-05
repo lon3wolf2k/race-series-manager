@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Register custom post types: Event (cmt_event) and Race (cmt_race)
+ * Register custom post types: Event (cmt_event), Race (cmt_race), Results (cmt_result)
  */
 
 function rsm_register_post_types() {
@@ -89,5 +89,39 @@ function rsm_register_post_types() {
     );
 
     register_post_type( 'cmt_race', $race_args );
+
+    // ---------------------------------------------------------------------
+    // Results  (backend-only, για διαχείριση αποτελεσμάτων)
+    // ---------------------------------------------------------------------
+    $results_labels = array(
+        'name'                  => esc_html__( 'Results', 'race-series-manager' ),
+        'singular_name'         => esc_html__( 'Result', 'race-series-manager' ),
+        'menu_name'             => esc_html__( 'Results', 'race-series-manager' ),
+        'name_admin_bar'        => esc_html__( 'Result', 'race-series-manager' ),
+        'add_new'               => esc_html__( 'Add New', 'race-series-manager' ),
+        'add_new_item'          => esc_html__( 'Add New Result', 'race-series-manager' ),
+        'edit_item'             => esc_html__( 'Edit Result', 'race-series-manager' ),
+        'new_item'              => esc_html__( 'New Result', 'race-series-manager' ),
+        'view_item'             => esc_html__( 'View Result', 'race-series-manager' ),
+        'view_items'            => esc_html__( 'View Results', 'race-series-manager' ),
+        'search_items'          => esc_html__( 'Search Results', 'race-series-manager' ),
+        'not_found'             => esc_html__( 'No results found.', 'race-series-manager' ),
+        'not_found_in_trash'    => esc_html__( 'No results found in Trash.', 'race-series-manager' ),
+        'all_items'             => esc_html__( 'All Results', 'race-series-manager' ),
+        'archives'              => esc_html__( 'Result archives', 'race-series-manager' ),
+    );
+
+    $results_args = array(
+        'labels'             => $results_labels,
+        'public'             => false,             // δεν χρειάζονται public URLs
+        'show_ui'            => true,
+        'show_in_menu'       => true,              // ξεχωριστό menu στο backend
+        'show_in_rest'       => false,
+        'supports'           => array( 'title' ),  // τίτλος π.χ. “CMT 2023 – Rain Trail 44km”
+        'menu_icon'          => 'dashicons-analytics',
+        'capability_type'    => 'post',
+    );
+
+    register_post_type( 'cmt_result', $results_args );
 }
 add_action( 'init', 'rsm_register_post_types' );

@@ -12,7 +12,7 @@ get_header();
 while ( have_posts() ) :
     the_post();
 
-    $event_id      = get_the_ID();
+    $event_id = get_the_ID();
 
     // Extra event sections from meta:
     $announcement  = get_post_meta( $event_id, '_rsm_event_announcement', true );
@@ -30,6 +30,11 @@ while ( have_posts() ) :
         'orderby'        => 'title',
         'order'          => 'ASC',
     ) );
+
+    // Results page URL (αν έχει δημιουργηθεί η σελίδα event-results και υπάρχει helper).
+    $results_url = function_exists( 'rsm_get_results_page_url' )
+        ? rsm_get_results_page_url( $event_id )
+        : '';
     ?>
 
 <div class="rsm-race-wrapper rsm-event-wrapper">
@@ -179,6 +184,15 @@ while ( have_posts() ) :
                 <h2 class="rsm-sidebar-title">
                     <?php esc_html_e( 'Event races', 'race-series-manager' ); ?>
                 </h2>
+
+                <?php if ( $results_url ) : ?>
+                    <div class="rsm-event-sidebar-actions" style="margin-bottom:12px;">
+                        <a href="<?php echo esc_url( $results_url ); ?>"
+                           class="rsm-summary-btn rsm-summary-btn-outline rsm-event-results-btn">
+                            <?php esc_html_e( 'Results', 'race-series-manager' ); ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
 
                 <?php if ( $linked_races->have_posts() ) : ?>
                     <ul class="rsm-event-races-list">
