@@ -66,14 +66,10 @@ while ( have_posts() ) :
     $event_link  = $event_id ? get_permalink( $event_id ) : '';
     $event_title = $event_id ? get_the_title( $event_id ) : '';
 
-    // Event-level registration / participants / live URLs + iframes
+    // Event-level registration / participants / live URLs (ΜΟΝΟ URLs)
     $event_reg_url   = $event_id ? get_post_meta( $event_id, '_rsm_event_registration_url', true ) : '';
     $event_part_url  = $event_id ? get_post_meta( $event_id, '_rsm_event_participants_url', true ) : '';
     $event_live_url  = $event_id ? get_post_meta( $event_id, '_rsm_event_live_url', true ) : '';
-
-    $event_reg_iframe  = $event_id ? get_post_meta( $event_id, '_rsm_event_registration_iframe', true ) : '';
-    $event_part_iframe = $event_id ? get_post_meta( $event_id, '_rsm_event_participants_iframe', true ) : '';
-    $event_live_iframe = $event_id ? get_post_meta( $event_id, '_rsm_event_live_iframe', true ) : '';
 
     // URL για Event Results
     $results_url = '';
@@ -81,36 +77,10 @@ while ( have_posts() ) :
         $results_url = rsm_get_results_page_url( $event_id );
     }
 
-    // Buttons logic (registration/participants/live)
-    $reg_btn_url   = '';
-    $reg_btn_attr  = '';
-    if ( $event_id && ! empty( $event_reg_iframe ) && $event_link ) {
-        $reg_btn_url  = $event_link . '#event-registration';
-        $reg_btn_attr = ''; // same page (event)
-    } elseif ( ! empty( $event_reg_url ) ) {
-        $reg_btn_url  = $event_reg_url;
-        $reg_btn_attr = 'target="_blank" rel="noopener"';
-    }
-
-    $part_btn_url  = '';
-    $part_btn_attr = '';
-    if ( $event_id && ! empty( $event_part_iframe ) && $event_link ) {
-        $part_btn_url  = $event_link . '#event-participants';
-        $part_btn_attr = '';
-    } elseif ( ! empty( $event_part_url ) ) {
-        $part_btn_url  = $event_part_url;
-        $part_btn_attr = 'target="_blank" rel="noopener"';
-    }
-
-    $live_btn_url  = '';
-    $live_btn_attr = '';
-    if ( $event_id && ! empty( $event_live_iframe ) && $event_link ) {
-        $live_btn_url  = $event_link . '#event-live';
-        $live_btn_attr = '';
-    } elseif ( ! empty( $event_live_url ) ) {
-        $live_btn_url  = $event_live_url;
-        $live_btn_attr = 'target="_blank" rel="noopener"';
-    }
+    // Buttons logic (registration/participants/live) - μόνο URLs, same tab
+    $reg_btn_url   = $event_reg_url ? $event_reg_url : '';
+    $part_btn_url  = $event_part_url ? $event_part_url : '';
+    $live_btn_url  = $event_live_url ? $event_live_url : '';
 
     // Ημερομηνία / ώρα αγώνα
     $race_date_formatted = '';
@@ -401,24 +371,21 @@ while ( have_posts() ) :
 
                     <?php if ( $reg_btn_url ) : ?>
                         <a href="<?php echo esc_url( $reg_btn_url ); ?>"
-                           class="rsm-summary-btn"
-                           <?php echo $reg_btn_attr; ?>>
+                           class="rsm-summary-btn">
                             <?php esc_html_e( 'Registration', 'race-series-manager' ); ?>
                         </a>
                     <?php endif; ?>
 
                     <?php if ( $part_btn_url ) : ?>
                         <a href="<?php echo esc_url( $part_btn_url ); ?>"
-                           class="rsm-summary-btn"
-                           <?php echo $part_btn_attr; ?>>
+                           class="rsm-summary-btn">
                             <?php esc_html_e( 'Participants', 'race-series-manager' ); ?>
                         </a>
                     <?php endif; ?>
 
                     <?php if ( $live_btn_url ) : ?>
                         <a href="<?php echo esc_url( $live_btn_url ); ?>"
-                           class="rsm-summary-btn"
-                           <?php echo $live_btn_attr; ?>>
+                           class="rsm-summary-btn">
                             <?php esc_html_e( 'Live', 'race-series-manager' ); ?>
                         </a>
                     <?php endif; ?>

@@ -21,15 +21,10 @@ while ( have_posts() ) :
     $access        = get_post_meta( $event_id, '_rsm_event_access', true );
     $travel        = get_post_meta( $event_id, '_rsm_event_travel', true );
 
-    // Registration / live URLs:
+    // Registration / live URLs (ΜΟΝΟ URLs)
     $reg_url       = get_post_meta( $event_id, '_rsm_event_registration_url', true );
     $part_url      = get_post_meta( $event_id, '_rsm_event_participants_url', true );
     $live_url      = get_post_meta( $event_id, '_rsm_event_live_url', true );
-
-    // Iframe codes:
-    $reg_iframe    = get_post_meta( $event_id, '_rsm_event_registration_iframe', true );
-    $part_iframe   = get_post_meta( $event_id, '_rsm_event_participants_iframe', true );
-    $live_iframe   = get_post_meta( $event_id, '_rsm_event_live_iframe', true );
 
     // Fetch linked races for sidebar list.
     $linked_races = new WP_Query( array(
@@ -45,37 +40,6 @@ while ( have_posts() ) :
     $results_url = '';
     if ( function_exists( 'rsm_get_results_page_url' ) ) {
         $results_url = rsm_get_results_page_url( $event_id );
-    }
-
-    // Helper: buttons target/URL logic
-    $reg_btn_url   = '';
-    $reg_btn_attr  = '';
-    if ( ! empty( $reg_iframe ) ) {
-        $reg_btn_url  = get_permalink( $event_id ) . '#event-registration';
-        $reg_btn_attr = ''; // scroll on same page
-    } elseif ( ! empty( $reg_url ) ) {
-        $reg_btn_url  = $reg_url;
-        $reg_btn_attr = 'target="_blank" rel="noopener"';
-    }
-
-    $part_btn_url  = '';
-    $part_btn_attr = '';
-    if ( ! empty( $part_iframe ) ) {
-        $part_btn_url  = get_permalink( $event_id ) . '#event-participants';
-        $part_btn_attr = '';
-    } elseif ( ! empty( $part_url ) ) {
-        $part_btn_url  = $part_url;
-        $part_btn_attr = 'target="_blank" rel="noopener"';
-    }
-
-    $live_btn_url  = '';
-    $live_btn_attr = '';
-    if ( ! empty( $live_iframe ) ) {
-        $live_btn_url  = get_permalink( $event_id ) . '#event-live';
-        $live_btn_attr = '';
-    } elseif ( ! empty( $live_url ) ) {
-        $live_btn_url  = $live_url;
-        $live_btn_attr = 'target="_blank" rel="noopener"';
     }
     ?>
 
@@ -140,24 +104,6 @@ while ( have_posts() ) :
                         <?php esc_html_e( 'Travel & stay', 'race-series-manager' ); ?>
                     </a>
                 <?php endif; ?>
-
-                <?php if ( ! empty( $reg_iframe ) ) : ?>
-                    <a href="#event-registration" class="rsm-event-tab">
-                        <?php esc_html_e( 'Registration', 'race-series-manager' ); ?>
-                    </a>
-                <?php endif; ?>
-
-                <?php if ( ! empty( $part_iframe ) ) : ?>
-                    <a href="#event-participants" class="rsm-event-tab">
-                        <?php esc_html_e( 'Participants', 'race-series-manager' ); ?>
-                    </a>
-                <?php endif; ?>
-
-                <?php if ( ! empty( $live_iframe ) ) : ?>
-                    <a href="#event-live" class="rsm-event-tab">
-                        <?php esc_html_e( 'Live', 'race-series-manager' ); ?>
-                    </a>
-                <?php endif; ?>
             </nav>
 
             <!-- MAIN EVENT CONTENT (WordPress editor) -->
@@ -174,8 +120,9 @@ while ( have_posts() ) :
                     </h2>
                     <hr class="rsm-section-divider" />
                     <div class="rsm-event-section-body">
-                        <?php echo wp_kses_post( wpautop( $announcement ) ); ?>
-                    </div>
+    <?php echo wp_kses_post( wpautop( $announcement ) ); ?>
+</div>
+
                 </section>
             <?php endif; ?>
 
@@ -188,8 +135,8 @@ while ( have_posts() ) :
                     </h2>
                     <hr class="rsm-section-divider" />
                     <div class="rsm-event-section-body">
-                        <?php echo wp_kses_post( wpautop( $rules ) ); ?>
-                    </div>
+    <?php echo wp_kses_post( wpautop( $rules ) ); ?>
+</div>
                 </section>
             <?php endif; ?>
 
@@ -202,8 +149,9 @@ while ( have_posts() ) :
                     </h2>
                     <hr class="rsm-section-divider" />
                     <div class="rsm-event-section-body">
-                        <?php echo wp_kses_post( wpautop( $schedule ) ); ?>
-                    </div>
+    <?php echo wp_kses_post( wpautop( $schedule ) ); ?>
+</div>
+
                 </section>
             <?php endif; ?>
 
@@ -216,8 +164,9 @@ while ( have_posts() ) :
                     </h2>
                     <hr class="rsm-section-divider" />
                     <div class="rsm-event-section-body">
-                        <?php echo wp_kses_post( wpautop( $access ) ); ?>
-                    </div>
+    <?php echo wp_kses_post( wpautop( $access ) ); ?>
+</div>
+
                 </section>
             <?php endif; ?>
 
@@ -230,50 +179,8 @@ while ( have_posts() ) :
                     </h2>
                     <hr class="rsm-section-divider" />
                     <div class="rsm-event-section-body">
-                        <?php echo wp_kses_post( wpautop( $travel ) ); ?>
-                    </div>
-                </section>
-            <?php endif; ?>
-
-            <!-- 6. REGISTRATION IFRAME -->
-            <?php if ( ! empty( $reg_iframe ) ) : ?>
-                <section id="event-registration" class="rsm-race-section rsm-event-section rsm-event-section--registration">
-                    <h2 class="rsm-section-title rsm-event-section-title rsm-event-section-title--registration">
-                        <span class="rsm-event-section-icon">📝</span>
-                        <span><?php esc_html_e( 'Registration', 'race-series-manager' ); ?></span>
-                    </h2>
-                    <hr class="rsm-section-divider" />
-                    <div class="rsm-event-section-body rsm-event-iframe-wrapper">
-                        <?php echo $reg_iframe; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                    </div>
-                </section>
-            <?php endif; ?>
-
-            <!-- 7. PARTICIPANTS IFRAME -->
-            <?php if ( ! empty( $part_iframe ) ) : ?>
-                <section id="event-participants" class="rsm-race-section rsm-event-section rsm-event-section--participants">
-                    <h2 class="rsm-section-title rsm-event-section-title rsm-event-section-title--participants">
-                        <span class="rsm-event-section-icon">👥</span>
-                        <span><?php esc_html_e( 'Participants', 'race-series-manager' ); ?></span>
-                    </h2>
-                    <hr class="rsm-section-divider" />
-                    <div class="rsm-event-section-body rsm-event-iframe-wrapper">
-                        <?php echo $part_iframe; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                    </div>
-                </section>
-            <?php endif; ?>
-
-            <!-- 8. LIVE IFRAME -->
-            <?php if ( ! empty( $live_iframe ) ) : ?>
-                <section id="event-live" class="rsm-race-section rsm-event-section rsm-event-section--live">
-                    <h2 class="rsm-section-title rsm-event-section-title rsm-event-section-title--live">
-                        <span class="rsm-event-section-icon">📡</span>
-                        <span><?php esc_html_e( 'Live', 'race-series-manager' ); ?></span>
-                    </h2>
-                    <hr class="rsm-section-divider" />
-                    <div class="rsm-event-section-body rsm-event-iframe-wrapper">
-                        <?php echo $live_iframe; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                    </div>
+    <?php echo wp_kses_post( wpautop( $travel ) ); ?>
+</div>
                 </section>
             <?php endif; ?>
 
@@ -286,26 +193,23 @@ while ( have_posts() ) :
                 <!-- ACTION BUTTONS -->
                 <div class="rsm-event-sidebar-actions" style="margin-bottom:16px;">
 
-                    <?php if ( $reg_btn_url ) : ?>
-                        <a href="<?php echo esc_url( $reg_btn_url ); ?>"
-                           class="rsm-summary-btn"
-                           <?php echo $reg_btn_attr; ?>>
+                    <?php if ( $reg_url ) : ?>
+                        <a href="<?php echo esc_url( $reg_url ); ?>"
+                           class="rsm-summary-btn">
                             <?php esc_html_e( 'Registration', 'race-series-manager' ); ?>
                         </a>
                     <?php endif; ?>
 
-                    <?php if ( $part_btn_url ) : ?>
-                        <a href="<?php echo esc_url( $part_btn_url ); ?>"
-                           class="rsm-summary-btn"
-                           <?php echo $part_btn_attr; ?>>
+                    <?php if ( $part_url ) : ?>
+                        <a href="<?php echo esc_url( $part_url ); ?>"
+                           class="rsm-summary-btn">
                             <?php esc_html_e( 'Participants', 'race-series-manager' ); ?>
                         </a>
                     <?php endif; ?>
 
-                    <?php if ( $live_btn_url ) : ?>
-                        <a href="<?php echo esc_url( $live_btn_url ); ?>"
-                           class="rsm-summary-btn"
-                           <?php echo $live_btn_attr; ?>>
+                    <?php if ( $live_url ) : ?>
+                        <a href="<?php echo esc_url( $live_url ); ?>"
+                           class="rsm-summary-btn">
                             <?php esc_html_e( 'Live', 'race-series-manager' ); ?>
                         </a>
                     <?php endif; ?>

@@ -30,7 +30,7 @@ function rsm_add_event_meta_boxes() {
         'default'
     );
 
-    // Registration / Participants / Live
+    // Registration / Participants / Live (ΜΟΝΟ URLs)
     add_meta_box(
         'rsm_event_registration',
         esc_html__( 'Registration, participants & live', 'race-series-manager' ),
@@ -44,6 +44,7 @@ add_action( 'add_meta_boxes', 'rsm_add_event_meta_boxes' );
 
 /**
  * Content meta box (announcement, rules, schedule, access, travel)
+ * Τώρα με wp_editor αντί για textarea
  */
 function rsm_event_content_meta_box_callback( $post ) {
 
@@ -54,34 +55,77 @@ function rsm_event_content_meta_box_callback( $post ) {
     $schedule     = get_post_meta( $post->ID, '_rsm_event_schedule', true );
     $access       = get_post_meta( $post->ID, '_rsm_event_access', true );
     $travel       = get_post_meta( $post->ID, '_rsm_event_travel', true );
+
     ?>
-    <p>
-        <label for="rsm_event_announcement"><strong><?php esc_html_e( 'Race announcement', 'race-series-manager' ); ?></strong></label>
-        <textarea name="rsm_event_announcement" id="rsm_event_announcement" rows="4" class="large-text"><?php echo esc_textarea( $announcement ); ?></textarea>
-    </p>
-
-    <p>
-        <label for="rsm_event_rules"><strong><?php esc_html_e( 'Rules & regulations', 'race-series-manager' ); ?></strong></label>
-        <textarea name="rsm_event_rules" id="rsm_event_rules" rows="4" class="large-text"><?php echo esc_textarea( $rules ); ?></textarea>
-    </p>
-
-    <p>
-        <label for="rsm_event_schedule"><strong><?php esc_html_e( 'Schedule / program', 'race-series-manager' ); ?></strong></label>
-        <textarea name="rsm_event_schedule" id="rsm_event_schedule" rows="4" class="large-text"><?php echo esc_textarea( $schedule ); ?></textarea>
-        <span class="description"><?php esc_html_e( 'This schedule is also used in the PDF race booklet.', 'race-series-manager' ); ?></span>
-    </p>
-
-    <p>
-        <label for="rsm_event_access"><strong><?php esc_html_e( 'Race access', 'race-series-manager' ); ?></strong></label>
-        <textarea name="rsm_event_access" id="rsm_event_access" rows="4" class="large-text"><?php echo esc_textarea( $access ); ?></textarea>
-        <span class="description"><?php esc_html_e( 'Access info is also used in the PDF race booklet.', 'race-series-manager' ); ?></span>
-    </p>
-
-    <p>
-        <label for="rsm_event_travel"><strong><?php esc_html_e( 'Travel & accommodation', 'race-series-manager' ); ?></strong></label>
-        <textarea name="rsm_event_travel" id="rsm_event_travel" rows="4" class="large-text"><?php echo esc_textarea( $travel ); ?></textarea>
-    </p>
+    <p><strong><?php esc_html_e( 'Race announcement', 'race-series-manager' ); ?></strong></p>
     <?php
+    wp_editor(
+        $announcement,
+        'rsm_event_announcement_editor',
+        array(
+            'textarea_name' => 'rsm_event_announcement',
+            'textarea_rows' => 8,
+            'media_buttons' => true,
+        )
+    );
+
+    ?>
+    <p style="margin-top:1.5em;"><strong><?php esc_html_e( 'Rules & regulations', 'race-series-manager' ); ?></strong></p>
+    <?php
+    wp_editor(
+        $rules,
+        'rsm_event_rules_editor',
+        array(
+            'textarea_name' => 'rsm_event_rules',
+            'textarea_rows' => 8,
+            'media_buttons' => true,
+        )
+    );
+
+    ?>
+    <p style="margin-top:1.5em;"><strong><?php esc_html_e( 'Schedule / program', 'race-series-manager' ); ?></strong></p>
+    <?php
+    wp_editor(
+        $schedule,
+        'rsm_event_schedule_editor',
+        array(
+            'textarea_name' => 'rsm_event_schedule',
+            'textarea_rows' => 8,
+            'media_buttons' => true,
+        )
+    );
+    ?>
+    <p class="description">
+        <?php esc_html_e( 'This schedule is also used in the PDF race booklet.', 'race-series-manager' ); ?>
+    </p>
+
+    <p style="margin-top:1.5em;"><strong><?php esc_html_e( 'Race access', 'race-series-manager' ); ?></strong></p>
+    <?php
+    wp_editor(
+        $access,
+        'rsm_event_access_editor',
+        array(
+            'textarea_name' => 'rsm_event_access',
+            'textarea_rows' => 8,
+            'media_buttons' => true,
+        )
+    );
+    ?>
+    <p class="description">
+        <?php esc_html_e( 'Access info is also used in the PDF race booklet.', 'race-series-manager' ); ?>
+    </p>
+
+    <p style="margin-top:1.5em;"><strong><?php esc_html_e( 'Travel & accommodation', 'race-series-manager' ); ?></strong></p>
+    <?php
+    wp_editor(
+        $travel,
+        'rsm_event_travel_editor',
+        array(
+            'textarea_name' => 'rsm_event_travel',
+            'textarea_rows' => 8,
+            'media_buttons' => true,
+        )
+    );
 }
 
 /**
@@ -170,68 +214,44 @@ function rsm_event_logo_contact_meta_box_callback( $post ) {
 
 /**
  * Registration / Participants / Live meta box
+ * ΜΟΝΟ URLs – καμία λογική για iframe πια
  */
 function rsm_event_registration_meta_box_callback( $post ) {
 
     wp_nonce_field( 'rsm_save_event_registration', 'rsm_event_registration_nonce' );
 
-    $reg_url      = get_post_meta( $post->ID, '_rsm_event_registration_url', true );
-    $part_url     = get_post_meta( $post->ID, '_rsm_event_participants_url', true );
-    $live_url     = get_post_meta( $post->ID, '_rsm_event_live_url', true );
-
-    $reg_iframe   = get_post_meta( $post->ID, '_rsm_event_registration_iframe', true );
-    $part_iframe  = get_post_meta( $post->ID, '_rsm_event_participants_iframe', true );
-    $live_iframe  = get_post_meta( $post->ID, '_rsm_event_live_iframe', true );
+    $reg_url   = get_post_meta( $post->ID, '_rsm_event_registration_url', true );
+    $part_url  = get_post_meta( $post->ID, '_rsm_event_participants_url', true );
+    $live_url  = get_post_meta( $post->ID, '_rsm_event_live_url', true );
     ?>
-    <h4><?php esc_html_e( 'Registration', 'race-series-manager' ); ?></h4>
+    <h4><?php esc_html_e( 'Registration page', 'race-series-manager' ); ?></h4>
     <p>
         <label for="rsm_event_registration_url"><strong><?php esc_html_e( 'Registration URL', 'race-series-manager' ); ?></strong></label><br>
         <input type="url" name="rsm_event_registration_url" id="rsm_event_registration_url" class="regular-text" value="<?php echo esc_attr( $reg_url ); ?>">
         <span class="description">
-            <?php esc_html_e( 'If no iframe is set, this link is used for the Registration button (opens external site).', 'race-series-manager' ); ?>
-        </span>
-    </p>
-    <p>
-        <label for="rsm_event_registration_iframe"><strong><?php esc_html_e( 'Registration iframe code', 'race-series-manager' ); ?></strong></label><br>
-        <textarea name="rsm_event_registration_iframe" id="rsm_event_registration_iframe" rows="4" class="large-text code"><?php echo esc_textarea( $reg_iframe ); ?></textarea>
-        <span class="description">
-            <?php esc_html_e( 'Paste an iframe embed code (e.g. registration form). If present, it will be embedded on the event page and race buttons will scroll to it.', 'race-series-manager' ); ?>
+            <?php esc_html_e( 'Link to your registration page. The Registration button will open this URL in the same tab.', 'race-series-manager' ); ?>
         </span>
     </p>
 
     <hr>
 
-    <h4><?php esc_html_e( 'Participants', 'race-series-manager' ); ?></h4>
+    <h4><?php esc_html_e( 'Participants page', 'race-series-manager' ); ?></h4>
     <p>
         <label for="rsm_event_participants_url"><strong><?php esc_html_e( 'Participants URL', 'race-series-manager' ); ?></strong></label><br>
         <input type="url" name="rsm_event_participants_url" id="rsm_event_participants_url" class="regular-text" value="<?php echo esc_attr( $part_url ); ?>">
         <span class="description">
-            <?php esc_html_e( 'If no iframe is set, this link is used for the Participants button (external list page).', 'race-series-manager' ); ?>
-        </span>
-    </p>
-    <p>
-        <label for="rsm_event_participants_iframe"><strong><?php esc_html_e( 'Participants iframe code', 'race-series-manager' ); ?></strong></label><br>
-        <textarea name="rsm_event_participants_iframe" id="rsm_event_participants_iframe" rows="4" class="large-text code"><?php echo esc_textarea( $part_iframe ); ?></textarea>
-        <span class="description">
-            <?php esc_html_e( 'Paste an iframe embed code for participants list, if available.', 'race-series-manager' ); ?>
+            <?php esc_html_e( 'Link to your participants list page.', 'race-series-manager' ); ?>
         </span>
     </p>
 
     <hr>
 
-    <h4><?php esc_html_e( 'Live tracking', 'race-series-manager' ); ?></h4>
+    <h4><?php esc_html_e( 'Live tracking page', 'race-series-manager' ); ?></h4>
     <p>
         <label for="rsm_event_live_url"><strong><?php esc_html_e( 'Live tracking URL', 'race-series-manager' ); ?></strong></label><br>
         <input type="url" name="rsm_event_live_url" id="rsm_event_live_url" class="regular-text" value="<?php echo esc_attr( $live_url ); ?>">
         <span class="description">
-            <?php esc_html_e( 'If no iframe is set, this link is used for the Live button (external live timing).', 'race-series-manager' ); ?>
-        </span>
-    </p>
-    <p>
-        <label for="rsm_event_live_iframe"><strong><?php esc_html_e( 'Live iframe code', 'race-series-manager' ); ?></strong></label><br>
-        <textarea name="rsm_event_live_iframe" id="rsm_event_live_iframe" rows="4" class="large-text code"><?php echo esc_textarea( $live_iframe ); ?></textarea>
-        <span class="description">
-            <?php esc_html_e( 'Paste an iframe embed code for live timing / tracking, if available.', 'race-series-manager' ); ?>
+            <?php esc_html_e( 'Link to your live timing / tracking page.', 'race-series-manager' ); ?>
         </span>
     </p>
     <?php
@@ -254,7 +274,7 @@ function rsm_save_event_meta( $post_id ) {
         return;
     }
 
-    // Content sections
+    // Content sections (wp_editor πεδία)
     if ( isset( $_POST['rsm_event_content_nonce'] ) &&
          wp_verify_nonce( $_POST['rsm_event_content_nonce'], 'rsm_save_event_content' ) ) {
 
@@ -282,7 +302,7 @@ function rsm_save_event_meta( $post_id ) {
         update_post_meta( $post_id, '_rsm_event_contact', $contact );
     }
 
-    // Registration / Live URLs + IFAMES
+    // Registration / Participants / Live URLs
     if ( isset( $_POST['rsm_event_registration_nonce'] ) &&
          wp_verify_nonce( $_POST['rsm_event_registration_nonce'], 'rsm_save_event_registration' ) ) {
 
@@ -290,16 +310,9 @@ function rsm_save_event_meta( $post_id ) {
         $part_url = isset( $_POST['rsm_event_participants_url'] ) ? esc_url_raw( $_POST['rsm_event_participants_url'] ) : '';
         $live_url = isset( $_POST['rsm_event_live_url'] ) ? esc_url_raw( $_POST['rsm_event_live_url'] ) : '';
 
-        $reg_iframe  = isset( $_POST['rsm_event_registration_iframe'] ) ? wp_unslash( $_POST['rsm_event_registration_iframe'] ) : '';
-        $part_iframe = isset( $_POST['rsm_event_participants_iframe'] ) ? wp_unslash( $_POST['rsm_event_participants_iframe'] ) : '';
-        $live_iframe = isset( $_POST['rsm_event_live_iframe'] ) ? wp_unslash( $_POST['rsm_event_live_iframe'] ) : '';
-
-        update_post_meta( $post_id, '_rsm_event_registration_url',   $reg_url );
-        update_post_meta( $post_id, '_rsm_event_participants_url',   $part_url );
-        update_post_meta( $post_id, '_rsm_event_live_url',           $live_url );
-        update_post_meta( $post_id, '_rsm_event_registration_iframe',$reg_iframe );
-        update_post_meta( $post_id, '_rsm_event_participants_iframe',$part_iframe );
-        update_post_meta( $post_id, '_rsm_event_live_iframe',        $live_iframe );
+        update_post_meta( $post_id, '_rsm_event_registration_url', $reg_url );
+        update_post_meta( $post_id, '_rsm_event_participants_url', $part_url );
+        update_post_meta( $post_id, '_rsm_event_live_url',         $live_url );
     }
 }
 add_action( 'save_post_cmt_event', 'rsm_save_event_meta' );
