@@ -24,26 +24,20 @@ while ( have_posts() ) :
     $finish_point   = get_post_meta( $race_id, '_rsm_race_finish_location', true );
     $fee            = get_post_meta( $race_id, '_rsm_race_fee', true );
 
-    // Buttons
-    $registration_url = get_post_meta( $race_id, '_rsm_race_registration_url', true );
-    $itra_url         = get_post_meta( $race_id, '_rsm_race_itra_url', true );
-    $gpx_url          = get_post_meta( $race_id, '_rsm_race_route_url', true );
+    // Race-level ITRA link
+    $itra_link      = get_post_meta( $race_id, '_rsm_race_itra_link', true );
+
+    // GPX / route download
+    $gpx_url        = get_post_meta( $race_id, '_rsm_race_route_url', true );
+
+    // Booklet URL
     $booklet_url      = add_query_arg( 'rsm_booklet', '1', get_permalink( $race_id ) );
 
     // Plotaroute / route embed
-    $plot_embed = get_post_meta( $race_id, '_rsm_race_plot_embed', true );
-    if ( ! $plot_embed ) {
-        $plot_embed = get_post_meta( $race_id, '_rsm_race_plotaroute_embed', true );
-    }
-    if ( ! $plot_embed ) {
-        $plot_embed = get_post_meta( $race_id, '_rsm_race_route_embed', true );
-    }
+    $plot_embed = get_post_meta( $race_id, '_rsm_race_plotaroute_embed', true );
 
     // Video embed
     $video_embed = get_post_meta( $race_id, '_rsm_race_video_embed', true );
-    if ( ! $video_embed ) {
-        $video_embed = get_post_meta( $race_id, '_rsm_race_youtube_embed', true );
-    }
 
     // Gallery (image IDs)
     $gallery_meta = get_post_meta( $race_id, '_rsm_race_gallery_ids', true );
@@ -64,15 +58,20 @@ while ( have_posts() ) :
     // Aid stations (table)
     $aid_stations = get_post_meta( $race_id, '_rsm_race_aid_stations', true );
 
-    // Elevation image (static, για PDF & page)
+    // Elevation image (static)
     $elev_chart_id = get_post_meta( $race_id, '_rsm_race_elev_chart_id', true );
 
-    // Συνδεδεμένο event για breadcrumbs + results
+    // Συνδεδεμένο event
     $event_id    = get_post_meta( $race_id, '_rsm_race_event_id', true );
     $event_link  = $event_id ? get_permalink( $event_id ) : '';
     $event_title = $event_id ? get_the_title( $event_id ) : '';
 
-    // URL για Event Results, αν υπάρχει event και helper
+    // Event-level registration / participants / live URLs
+    $event_reg_url  = $event_id ? get_post_meta( $event_id, '_rsm_event_registration_url', true ) : '';
+    $event_part_url = $event_id ? get_post_meta( $event_id, '_rsm_event_participants_url', true ) : '';
+    $event_live_url = $event_id ? get_post_meta( $event_id, '_rsm_event_live_url', true ) : '';
+
+    // URL για Event Results
     $results_url = '';
     if ( $event_id && function_exists( 'rsm_get_results_page_url' ) ) {
         $results_url = rsm_get_results_page_url( $event_id );
@@ -366,8 +365,9 @@ while ( have_posts() ) :
                 </dl>
 
                 <div class="rsm-summary-buttons">
-                    <?php if ( $registration_url ) : ?>
-                        <a href="<?php echo esc_url( $registration_url ); ?>"
+
+                    <?php if ( $event_reg_url ) : ?>
+                        <a href="<?php echo esc_url( $event_reg_url ); ?>"
                            class="rsm-summary-btn"
                            target="_blank"
                            rel="noopener">
@@ -375,8 +375,26 @@ while ( have_posts() ) :
                         </a>
                     <?php endif; ?>
 
-                    <?php if ( $itra_url ) : ?>
-                        <a href="<?php echo esc_url( $itra_url ); ?>"
+                    <?php if ( $event_part_url ) : ?>
+                        <a href="<?php echo esc_url( $event_part_url ); ?>"
+                           class="rsm-summary-btn"
+                           target="_blank"
+                           rel="noopener">
+                            <?php esc_html_e( 'Participants', 'race-series-manager' ); ?>
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if ( $event_live_url ) : ?>
+                        <a href="<?php echo esc_url( $event_live_url ); ?>"
+                           class="rsm-summary-btn"
+                           target="_blank"
+                           rel="noopener">
+                            <?php esc_html_e( 'Live', 'race-series-manager' ); ?>
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if ( $itra_link ) : ?>
+                        <a href="<?php echo esc_url( $itra_link ); ?>"
                            class="rsm-summary-btn"
                            target="_blank"
                            rel="noopener">
