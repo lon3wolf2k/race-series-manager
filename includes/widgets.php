@@ -59,8 +59,9 @@ function rsm_get_event_next_race_datetime( $event_id ) {
         $time_format = 'H:i';
     }
 
-    $event_date = get_post_meta( $event_id, '_rsm_event_date', true );
-    $event_time = get_post_meta( $event_id, '_rsm_event_time', true );
+    $event_date       = get_post_meta( $event_id, '_rsm_event_date', true );
+    $event_time       = get_post_meta( $event_id, '_rsm_event_time', true );
+    $display_override = get_post_meta( $event_id, '_rsm_event_display_date', true );
 
     if ( $event_date ) {
         $timestamp = strtotime( trim( $event_date . ' ' . $event_time ) );
@@ -77,6 +78,10 @@ function rsm_get_event_next_race_datetime( $event_id ) {
             }
 
             $result['iso'] = wp_date( 'c', $timestamp );
+
+            if ( $display_override ) {
+                $result['display'] = $display_override;
+            }
 
             return $result;
         }
@@ -139,6 +144,10 @@ function rsm_get_event_next_race_datetime( $event_id ) {
         $result['display'] = wp_date( $date_format, $fallback );
         $result['iso']     = wp_date( 'c', $fallback );
         $result['race_id'] = $fallback_id;
+    }
+
+    if ( $display_override ) {
+        $result['display'] = $display_override;
     }
 
     return $result;
