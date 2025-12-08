@@ -20,121 +20,53 @@ function rsm_register_help_submenu() {
 add_action( 'admin_menu', 'rsm_register_help_submenu' );
 
 /**
- * Convert a subset of Markdown formatting to HTML for display in the admin help page.
- */
-function rsm_markdown_to_html( $markdown ) {
-    $content = str_replace( array( "\r\n", "\r" ), "\n", $markdown );
-
-    // Preserve fenced code blocks while other formatting runs.
-    $code_blocks = array();
-    $content     = preg_replace_callback(
-        '/```(.*?)```/s',
-        function ( $matches ) use ( &$code_blocks ) {
-            $placeholder                        = '%%RSM_CODE_' . count( $code_blocks ) . '%%';
-            $code_blocks[ $placeholder ] = '<pre><code>' . esc_html( trim( $matches[1] ) ) . '</code></pre>';
-            return $placeholder;
-        },
-        $content
-    );
-
-    // Inline styles.
-    $content = preg_replace_callback(
-        '/\*\*(.+?)\*\*/s',
-        function ( $matches ) {
-            return '<strong>' . esc_html( $matches[1] ) . '</strong>';
-        },
-        $content
-    );
-
-    $content = preg_replace_callback(
-        '/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/s',
-        function ( $matches ) {
-            return '<em>' . esc_html( $matches[1] ) . '</em>';
-        },
-        $content
-    );
-
-    $content = preg_replace_callback(
-        '/`([^`]+)`/',
-        function ( $matches ) {
-            return '<code>' . esc_html( $matches[1] ) . '</code>';
-        },
-        $content
-    );
-
-    // Headings.
-    for ( $level = 6; $level >= 2; $level-- ) {
-        $pattern = '/^' . str_repeat( '#', $level ) . '\s+(.+)$/m';
-        $content = preg_replace_callback(
-            $pattern,
-            function ( $matches ) use ( $level ) {
-                return sprintf( '<h%d>%s</h%d>', $level, esc_html( trim( $matches[1] ) ), $level );
-            },
-            $content
-        );
-    }
-
-    $content = preg_replace_callback(
-        '/^#\s+(.+)$/m',
-        function ( $matches ) {
-            return '<h1>' . esc_html( trim( $matches[1] ) ) . '</h1>';
-        },
-        $content
-    );
-
-    // Lists.
-    $content = preg_replace_callback(
-        '/(^- .+(?:\n- .+)*)/m',
-        function ( $matches ) {
-            $lines = explode( "\n", trim( $matches[1] ) );
-            $items = '';
-            foreach ( $lines as $line ) {
-                $items .= '<li>' . esc_html( trim( substr( $line, 2 ) ) ) . '</li>';
-            }
-            return '<ul>' . $items . '</ul>';
-        },
-        $content
-    );
-
-    $content = preg_replace_callback(
-        '/(^\d+\. .+(?:\n\d+\. .+)*)/m',
-        function ( $matches ) {
-            $lines = explode( "\n", trim( $matches[1] ) );
-            $items = '';
-            foreach ( $lines as $line ) {
-                $items .= '<li>' . esc_html( trim( preg_replace( '/^\d+\.\s+/', '', $line ) ) ) . '</li>';
-            }
-            return '<ol>' . $items . '</ol>';
-        },
-        $content
-    );
-
-    $content = wpautop( $content );
-
-    if ( $code_blocks ) {
-        foreach ( $code_blocks as $placeholder => $code_html ) {
-            $content = str_replace( $placeholder, $code_html, $content );
-        }
-    }
-
-    return wp_kses_post( $content );
-}
-
-/**
- * Render the backend help page populated from ADMIN_HELP.md.
+ * Render the backend help page populated with inline guidance.
  */
 function rsm_render_help_page() {
     if ( ! current_user_can( 'edit_posts' ) ) {
         return;
     }
+    $content  = '<h2>' . esc_html__( 'Getting Started', 'race-series-manager' ) . '</h2>';
+    $content .= '<p>' . esc_html__( 'Use the RS Manager menu to create Events and Races, attach races to their parent event, and publish when ready. Page Attributes let you set a numeric “Order” that controls manual ordering in admin lists.', 'race-series-manager' ) . '</p>';
 
-    $help_file = RSM_PLUGIN_DIR . 'ADMIN_HELP.md';
-    $content   = '';
+    $content .= '<h2>' . esc_html__( 'Shortcodes', 'race-series-manager' ) . '</h2>';
+    $content .= '<ul>';
+    $content .= '<li><code>[rsm_event_overview event_slug="my-event" show_excerpt="true"]</code> ' . esc_html__( 'shows an event with its races, action buttons, race dates/times, and optional excerpts. Use event_id as an alternative parameter.', 'race-series-manager' ) . '</li>';
+    $content .= '<li><code>[rsm_event_link id="123"]</code> ' . esc_html__( 'outputs a link to a specific event.', 'race-series-manager' ) . '</li>';
+    $content .= '<li><code>[rsm_race_link id="456"]</code> ' . esc_html__( 'outputs a link to a specific race.', 'race-series-manager' ) . '</li>';
+    $content .= '</ul>';
+    $content .= '<p>' . esc_html__( 'Event and Race edit screens include a “Shortcodes” box with copy-to-clipboard buttons you can paste into pages or posts.', 'race-series-manager' ) . '</p>';
 
-    if ( file_exists( $help_file ) && is_readable( $help_file ) ) {
-        $markdown = file_get_contents( $help_file );
-        $content  = rsm_markdown_to_html( $markdown );
-    }
+    $content .= '<h2>' . esc_html__( 'Settings', 'race-series-manager' ) . '</h2>';
+    $content .= '<ul>';
+    $content .= '<li>' . esc_html__( 'Customize event overview button labels (Registration, Participants, Live, Results).', 'race-series-manager' ) . '</li>';
+    $content .= '<li>' . esc_html__( 'Toggle showing event excerpts in the overview table.', 'race-series-manager' ) . '</li>';
+    $content .= '<li>' . esc_html__( 'Choose whether action links open in a new tab.', 'race-series-manager' ) . '</li>';
+    $content .= '<li>' . esc_html__( 'Review the “PDF Generator Status” panel to confirm the bundled Dompdf library is available.', 'race-series-manager' ) . '</li>';
+    $content .= '</ul>';
+
+    $content .= '<h2>' . esc_html__( 'Admin Lists & Ordering', 'race-series-manager' ) . '</h2>';
+    $content .= '<ul>';
+    $content .= '<li>' . esc_html__( 'ID and Order columns appear on Events, Races, and Results list tables and can be sorted.', 'race-series-manager' ) . '</li>';
+    $content .= '<li>' . esc_html__( 'Set the Order value via Page Attributes when editing a post to control manual ordering.', 'race-series-manager' ) . '</li>';
+    $content .= '<li>' . esc_html__( 'Clone row actions let you duplicate Events or Races as drafts, including metadata and taxonomies.', 'race-series-manager' ) . '</li>';
+    $content .= '</ul>';
+
+    $content .= '<h2>' . esc_html__( 'Race & Event Pages', 'race-series-manager' ) . '</h2>';
+    $content .= '<ul>';
+    $content .= '<li>' . esc_html__( 'Race galleries open in a lightbox with previous/next navigation and keyboard support.', 'race-series-manager' ) . '</li>';
+    $content .= '<li>' . esc_html__( 'Event overview tables show races with dates, times, and configured action buttons that honor settings.', 'race-series-manager' ) . '</li>';
+    $content .= '</ul>';
+
+    $content .= '<h2>' . esc_html__( 'PDF Booklet', 'race-series-manager' ) . '</h2>';
+    $content .= '<p>' . esc_html__( 'The PDF generator relies on the bundled Dompdf library. If generation fails, check the status panel in settings and reinstall the /lib/dompdf directory if needed.', 'race-series-manager' ) . '</p>';
+
+    $content .= '<h2>' . esc_html__( 'Troubleshooting', 'race-series-manager' ) . '</h2>';
+    $content .= '<ul>';
+    $content .= '<li>' . esc_html__( 'If shortcodes render blank, verify the Event or Race slug/ID is correct and published.', 'race-series-manager' ) . '</li>';
+    $content .= '<li>' . esc_html__( 'If buttons disappear, confirm the link fields are filled on the event edit screen and saved.', 'race-series-manager' ) . '</li>';
+    $content .= '<li>' . esc_html__( 'For Dompdf errors, ensure /lib/dompdf/autoload.inc.php exists and is readable.', 'race-series-manager' ) . '</li>';
+    $content .= '</ul>';
     ?>
     <div class="wrap rsm-help-wrap">
         <h1><?php esc_html_e( 'RS Manager Help', 'race-series-manager' ); ?></h1>
@@ -144,7 +76,7 @@ function rsm_render_help_page() {
             </div>
         <?php else : ?>
             <div class="notice notice-warning inline">
-                <p><?php esc_html_e( 'The admin help guide could not be loaded. Make sure ADMIN_HELP.md exists in the plugin directory.', 'race-series-manager' ); ?></p>
+                <p><?php esc_html_e( 'Help content is unavailable.', 'race-series-manager' ); ?></p>
             </div>
         <?php endif; ?>
     </div>
