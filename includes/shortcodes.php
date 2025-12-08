@@ -235,6 +235,53 @@ function rsm_event_overview_shortcode( $atts ) {
 add_shortcode( 'rsm_event_overview', 'rsm_event_overview_shortcode' );
 
 /**
+ * SHORTCODE: [rsm_race_showcase event="123" count="4" title="Featured races"]
+ *
+ * Outputs the same grid used by the homepage widget.
+ */
+function rsm_race_showcase_shortcode( $atts ) {
+    $atts = shortcode_atts(
+        array(
+            'event' => '',
+            'count' => 4,
+            'title' => '',
+        ),
+        $atts,
+        'rsm_race_showcase'
+    );
+
+    $event_id = rsm_resolve_event_id( $atts['event'] );
+
+    if ( ! $event_id ) {
+        return '<p>' . esc_html__( 'No event selected (invalid event attribute).', 'race-series-manager' ) . '</p>';
+    }
+
+    $race_count = min( 12, max( 1, absint( $atts['count'] ) ) );
+
+    wp_enqueue_style(
+        'rsm-styles',
+        RSM_PLUGIN_URL . 'assets/css/rsm-styles.css',
+        array(),
+        '0.4.0'
+    );
+
+    ob_start();
+
+    echo '<div class="rsm-race-showcase-shortcode">';
+
+    if ( ! empty( $atts['title'] ) ) {
+        echo '<h2 class="rsm-race-showcase-heading">' . esc_html( $atts['title'] ) . '</h2>';
+    }
+
+    echo rsm_get_race_showcase_markup( $event_id, $race_count );
+
+    echo '</div>';
+
+    return ob_get_clean();
+}
+add_shortcode( 'rsm_race_showcase', 'rsm_race_showcase_shortcode' );
+
+/**
  * SHORTCODE: [rsm_event_link event="123" label="Custom text"]
  */
 function rsm_event_link_shortcode( $atts ) {

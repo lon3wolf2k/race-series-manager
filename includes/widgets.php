@@ -4,44 +4,92 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Race showcase widget for highlighting races from a selected event.
+ * Retrieve races for the selected event.
+ *
+ * @param int $event_id
+ * @param int $limit
+ *
+ * @return array
  */
-class RSM_Race_Showcase_Widget extends WP_Widget {
+function rsm_get_race_showcase_races( $event_id, $limit ) {
+    $args = array(
+        'post_type'      => 'cmt_race',
+        'posts_per_page' => $limit,
+        'orderby'        => 'menu_order title',
+        'order'          => 'ASC',
+    );
 
-    public function __construct() {
-        parent::__construct(
-            'rsm_race_showcase_widget',
-            __( 'RS Manager: Race Showcase', 'race-series-manager' ),
+    if ( $event_id ) {
+        $args['meta_query'] = array(
             array(
-                'description' => __( 'Display a set of races from a specific event with their key details.', 'race-series-manager' ),
-            )
+                'key'   => '_rsm_race_event_id',
+                'value' => $event_id,
+            ),
         );
     }
 
-    /**
-     * Render the widget.
-     *
-     * @param array $args
-     * @param array $instance
-     */
-    public function widget( $args, $instance ) {
-        $event_id  = isset( $instance['event_id'] ) ? absint( $instance['event_id'] ) : 0;
-        $race_count = isset( $instance['race_count'] ) ? absint( $instance['race_count'] ) : 4;
+    return get_posts( $args );
+}
 
-        echo $args['before_widget'];
+/**
+ * Format a race date for the badge.
+ *
+ * @param string $start_datetime
+ *
+ * @return string
+ */
+function rsm_format_race_showcase_date( $start_datetime ) {
+    if ( empty( $start_datetime ) ) {
+        return '';
+    }
 
-        if ( ! empty( $instance['title'] ) ) {
-            echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
+    $ts = strtotime( $start_datetime );
+
+    if ( ! $ts ) {
+        return '';
+    }
+
+    return date_i18n( 'j M Y', $ts );
+}
+
+/**
+ * Get the image URL for a race, falling back to an inline placeholder if needed.
+ *
+ * @param int $race_id
+ *
+ * @return string
+ */
+function rsm_get_race_showcase_image_url( $race_id ) {
+    $thumb_id = get_post_thumbnail_id( $race_id );
+
+    if ( $thumb_id ) {
+        $thumb_src = wp_get_attachment_image_src( $thumb_id, 'large' );
+        if ( $thumb_src ) {
+            return $thumb_src[0];
         }
+    }
 
-        $races = $this->get_races( $event_id, $race_count );
+    $placeholder_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360" role="img" aria-label="Race placeholder"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="%23f05a24"/><stop offset="100%" stop-color="%2328457a"/></linearGradient></defs><rect width="600" height="360" fill="url(%23g)"/><text x="50%" y="50%" fill="white" font-size="42" font-family="Arial, sans-serif" text-anchor="middle">Race</text></svg>';
 
-        if ( empty( $races ) ) {
-            echo '<p>' . esc_html__( 'No races found for this event yet.', 'race-series-manager' ) . '</p>';
-            echo $args['after_widget'];
-            return;
-        }
+    return 'data:image/svg+xml;utf8,' . rawurlencode( $placeholder_svg );
+}
 
+/**
+ * Render the race showcase cards markup.
+ *
+ * @param int $event_id
+ * @param int $race_count
+ *
+ * @return string
+ */
+function rsm_get_race_showcase_markup( $event_id, $race_count ) {
+    $races = rsm_get_race_showcase_races( $event_id, $race_count );
+
+    ob_start();
+
+    if ( empty( $races ) ) {
+        echo '<p>' . esc_html__( 'No races found for this event yet.', 'race-series-manager' ) . '</p>';
+    } else {
         ?>
         <div class="rsm-race-showcase">
             <div class="rsm-race-showcase-grid">
@@ -49,8 +97,8 @@ class RSM_Race_Showcase_Widget extends WP_Widget {
                     $distance       = get_post_meta( $race->ID, '_rsm_race_distance', true );
                     $elevation      = get_post_meta( $race->ID, '_rsm_race_elevation', true );
                     $start_datetime = get_post_meta( $race->ID, '_rsm_race_date', true );
-                    $race_date      = $this->format_race_date( $start_datetime );
-                    $thumb_url      = $this->get_race_image_url( $race->ID );
+                    $race_date      = rsm_format_race_showcase_date( $start_datetime );
+                    $thumb_url      = rsm_get_race_showcase_image_url( $race->ID );
                     ?>
                     <article class="rsm-race-card">
                         <a class="rsm-race-card__link" href="<?php echo esc_url( get_permalink( $race ) ); ?>">
@@ -81,6 +129,43 @@ class RSM_Race_Showcase_Widget extends WP_Widget {
             </div>
         </div>
         <?php
+    }
+
+    return ob_get_clean();
+}
+
+/**
+ * Race showcase widget for highlighting races from a selected event.
+ */
+class RSM_Race_Showcase_Widget extends WP_Widget {
+
+    public function __construct() {
+        parent::__construct(
+            'rsm_race_showcase_widget',
+            __( 'RS Manager: Race Showcase', 'race-series-manager' ),
+            array(
+                'description' => __( 'Display a set of races from a specific event with their key details.', 'race-series-manager' ),
+            )
+        );
+    }
+
+    /**
+     * Render the widget.
+     *
+     * @param array $args
+     * @param array $instance
+     */
+    public function widget( $args, $instance ) {
+        $event_id  = isset( $instance['event_id'] ) ? absint( $instance['event_id'] ) : 0;
+        $race_count = isset( $instance['race_count'] ) ? absint( $instance['race_count'] ) : 4;
+
+        echo $args['before_widget'];
+
+        if ( ! empty( $instance['title'] ) ) {
+            echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
+        }
+
+        echo rsm_get_race_showcase_markup( $event_id, $race_count );
 
         echo $args['after_widget'];
     }
@@ -148,76 +233,6 @@ class RSM_Race_Showcase_Widget extends WP_Widget {
         <?php
     }
 
-    /**
-     * Retrieve races for the selected event.
-     *
-     * @param int $event_id
-     * @param int $limit
-     *
-     * @return array
-     */
-    private function get_races( $event_id, $limit ) {
-        $args = array(
-            'post_type'      => 'cmt_race',
-            'posts_per_page' => $limit,
-            'orderby'        => 'menu_order title',
-            'order'          => 'ASC',
-        );
-
-        if ( $event_id ) {
-            $args['meta_query'] = array(
-                array(
-                    'key'   => '_rsm_race_event_id',
-                    'value' => $event_id,
-                ),
-            );
-        }
-
-        return get_posts( $args );
-    }
-
-    /**
-     * Format a race date for the badge.
-     *
-     * @param string $start_datetime
-     *
-     * @return string
-     */
-    private function format_race_date( $start_datetime ) {
-        if ( empty( $start_datetime ) ) {
-            return '';
-        }
-
-        $ts = strtotime( $start_datetime );
-
-        if ( ! $ts ) {
-            return '';
-        }
-
-        return date_i18n( 'j M Y', $ts );
-    }
-
-    /**
-     * Get the image URL for a race, falling back to an inline placeholder if needed.
-     *
-     * @param int $race_id
-     *
-     * @return string
-     */
-    private function get_race_image_url( $race_id ) {
-        $thumb_id = get_post_thumbnail_id( $race_id );
-
-        if ( $thumb_id ) {
-            $thumb_src = wp_get_attachment_image_src( $thumb_id, 'large' );
-            if ( $thumb_src ) {
-                return $thumb_src[0];
-            }
-        }
-
-        $placeholder_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360" role="img" aria-label="Race placeholder"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="%23f05a24"/><stop offset="100%" stop-color="%2328457a"/></linearGradient></defs><rect width="600" height="360" fill="url(%23g)"/><text x="50%" y="50%" fill="white" font-size="42" font-family="Arial, sans-serif" text-anchor="middle">Race</text></svg>';
-
-        return 'data:image/svg+xml;utf8,' . rawurlencode( $placeholder_svg );
-    }
 }
 
 /**

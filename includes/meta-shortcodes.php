@@ -33,6 +33,10 @@ function rsm_render_event_shortcode_box( $post ) {
             'code'  => sprintf( '[rsm_event_overview event="%d"]', $event_id ),
         ),
         array(
+            'label' => esc_html__( 'Race showcase', 'race-series-manager' ),
+            'code'  => sprintf( '[rsm_race_showcase event="%d" count="4"]', $event_id ),
+        ),
+        array(
             'label' => esc_html__( 'Event link', 'race-series-manager' ),
             'code'  => sprintf( '[rsm_event_link event="%d"]', $event_id ),
         ),
@@ -55,6 +59,10 @@ function rsm_render_race_shortcode_box( $post ) {
         $shortcodes[] = array(
             'label' => esc_html__( 'Event overview for this race\'s event', 'race-series-manager' ),
             'code'  => sprintf( '[rsm_event_overview event="%d"]', $event_id ),
+        );
+        $shortcodes[] = array(
+            'label' => esc_html__( 'Race showcase for this race\'s event', 'race-series-manager' ),
+            'code'  => sprintf( '[rsm_race_showcase event="%d" count="4"]', $event_id ),
         );
     }
 

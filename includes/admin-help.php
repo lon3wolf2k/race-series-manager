@@ -34,6 +34,7 @@ function rsm_render_help_page() {
     $content .= '<li><code>[rsm_event_overview event_slug="my-event" show_excerpt="true"]</code> ' . esc_html__( 'shows an event with its races, action buttons, race dates/times, and optional excerpts. Use event_id as an alternative parameter.', 'race-series-manager' ) . '</li>';
     $content .= '<li><code>[rsm_event_link id="123"]</code> ' . esc_html__( 'outputs a link to a specific event.', 'race-series-manager' ) . '</li>';
     $content .= '<li><code>[rsm_race_link id="456"]</code> ' . esc_html__( 'outputs a link to a specific race.', 'race-series-manager' ) . '</li>';
+    $content .= '<li><code>[rsm_race_showcase event="123" count="4" title="Featured races"]</code> ' . esc_html__( 'embeds the race showcase grid used by the widget so you can drop it onto any page.', 'race-series-manager' ) . '</li>';
     $content .= '</ul>';
     $content .= '<p>' . esc_html__( 'Event and Race edit screens include a “Shortcodes” box with copy-to-clipboard buttons you can paste into pages or posts.', 'race-series-manager' ) . '</p>';
 
@@ -64,6 +65,7 @@ function rsm_render_help_page() {
     $content .= '<li>' . esc_html__( 'Add the “RS Manager: Race Showcase” widget in Appearance → Widgets to highlight races on your front page.', 'race-series-manager' ) . '</li>';
     $content .= '<li>' . esc_html__( 'Choose the parent Event from the dropdown and the number of races to show; races follow your manual order.', 'race-series-manager' ) . '</li>';
     $content .= '<li>' . esc_html__( 'Race cards reuse each race’s featured image (or the default race image) and show distance, elevation, and a details link.', 'race-series-manager' ) . '</li>';
+    $content .= '<li>' . esc_html__( 'Use the [rsm_race_showcase] shortcode with the same attributes (event, count, optional title) anywhere a widget is not available.', 'race-series-manager' ) . '</li>';
     $content .= '</ul>';
 
     $content .= '<h2>' . esc_html__( 'PDF Booklet', 'race-series-manager' ) . '</h2>';
