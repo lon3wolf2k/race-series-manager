@@ -68,9 +68,11 @@ function rsm_event_overview_shortcode( $atts ) {
         return '<p>' . esc_html__( 'Event not found.', 'race-series-manager' ) . '</p>';
     }
 
-    $reg_url  = get_post_meta( $event_id, '_rsm_event_registration_url', true );
-    $part_url = get_post_meta( $event_id, '_rsm_event_participants_url', true );
-    $live_url = get_post_meta( $event_id, '_rsm_event_live_url', true );
+    $reg_url     = get_post_meta( $event_id, '_rsm_event_registration_url', true );
+    $part_url    = get_post_meta( $event_id, '_rsm_event_participants_url', true );
+    $live_url    = get_post_meta( $event_id, '_rsm_event_live_url', true );
+    $open_tab    = ! empty( $settings['overview_action_new_tab'] );
+    $target_attr = $open_tab ? ' target="_blank" rel="noopener"' : '';
 
     $results_url = '';
     if ( function_exists( 'rsm_get_results_page_url' ) ) {
@@ -110,28 +112,26 @@ function rsm_event_overview_shortcode( $atts ) {
             <?php if ( $reg_url || $part_url || $live_url || $results_url ) : ?>
                 <div class="rsm-event-overview-actions">
                     <?php if ( $reg_url ) : ?>
-                        <a class="rsm-summary-btn" href="<?php echo esc_url( $reg_url ); ?>">
+                        <a class="rsm-summary-btn" href="<?php echo esc_url( $reg_url ); ?>"<?php echo $target_attr; ?>>
                             <?php echo esc_html( $settings['overview_registration_label'] ); ?>
                         </a>
                     <?php endif; ?>
 
                     <?php if ( $part_url ) : ?>
-                        <a class="rsm-summary-btn" href="<?php echo esc_url( $part_url ); ?>">
+                        <a class="rsm-summary-btn" href="<?php echo esc_url( $part_url ); ?>"<?php echo $target_attr; ?>>
                             <?php echo esc_html( $settings['overview_participants_label'] ); ?>
                         </a>
                     <?php endif; ?>
 
                     <?php if ( $live_url ) : ?>
-                        <a class="rsm-summary-btn" href="<?php echo esc_url( $live_url ); ?>">
+                        <a class="rsm-summary-btn" href="<?php echo esc_url( $live_url ); ?>"<?php echo $target_attr; ?>>
                             <?php echo esc_html( $settings['overview_live_label'] ); ?>
                         </a>
                     <?php endif; ?>
 
                     <?php if ( $results_url ) : ?>
                         <a class="rsm-summary-btn rsm-event-results-btn"
-                           href="<?php echo esc_url( $results_url ); ?>"
-                           target="_blank"
-                           rel="noopener">
+                           href="<?php echo esc_url( $results_url ); ?>"<?php echo $target_attr; ?>>
                             <?php echo esc_html( $settings['overview_results_label'] ); ?>
                         </a>
                     <?php endif; ?>

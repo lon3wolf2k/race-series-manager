@@ -14,6 +14,7 @@ function rsm_get_settings_defaults() {
         'overview_live_label'         => esc_html__( 'Live', 'race-series-manager' ),
         'overview_results_label'      => esc_html__( 'Results', 'race-series-manager' ),
         'overview_show_excerpt'       => 1,
+        'overview_action_new_tab'     => 1,
     );
 }
 
@@ -55,6 +56,8 @@ function rsm_sanitize_settings( $input ) {
         : $defaults['overview_results_label'];
 
     $output['overview_show_excerpt'] = empty( $input['overview_show_excerpt'] ) ? 0 : 1;
+
+    $output['overview_action_new_tab'] = empty( $input['overview_action_new_tab'] ) ? 0 : 1;
 
     return $output;
 }
@@ -139,6 +142,18 @@ function rsm_register_settings() {
         array(
             'name'        => 'overview_show_excerpt',
             'description' => esc_html__( 'Display the event excerpt when present to introduce the race list.', 'race-series-manager' ),
+        )
+    );
+
+    add_settings_field(
+        'overview_action_new_tab',
+        esc_html__( 'Open action links in new tab', 'race-series-manager' ),
+        'rsm_render_checkbox_setting_field',
+        'rsm-settings',
+        'rsm_overview_settings',
+        array(
+            'name'        => 'overview_action_new_tab',
+            'description' => esc_html__( 'Open event-level action buttons (registration, participants, live, results) in a new tab.', 'race-series-manager' ),
         )
     );
 }

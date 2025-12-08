@@ -38,6 +38,6 @@ The plugin provides a single shortcode to list all races of an event with action
 - If buttons are missing, verify the corresponding event URLs are set in **Registration, participants & live**.
 
 ## Configuration
-- Go to **RS Manager → Settings** to adjust the button labels used above the race table and to toggle whether the event excerpt shows above the list.
+- Go to **RS Manager → Settings** to adjust the button labels used above the race table, control whether action buttons open in a new tab, and toggle whether the event excerpt shows above the list.
 - Save changes to immediately update all pages using the shortcode.
 - The settings page also includes a **PDF Generator Status** panel that checks whether the bundled Dompdf library is present and readable for race booklet exports.
