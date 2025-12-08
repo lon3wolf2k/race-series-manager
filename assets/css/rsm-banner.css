@@ -53,11 +53,19 @@
     color: rgba(255,255,255,0.9);
 }
 
+.rsm-event-banner__time {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
 .rsm-countdown {
     display: flex;
     gap: 12px;
     align-items: center;
-    margin-top: 8px;
+    margin-top: 0;
 }
 
 .rsm-countdown__segment {

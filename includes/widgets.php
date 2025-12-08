@@ -272,28 +272,32 @@ function rsm_get_event_banner_markup( $event_id, $title = '' ) {
             <div class="rsm-event-banner__info">
                 <span class="rsm-event-banner__eyebrow"><?php esc_html_e( 'Upcoming event', 'race-series-manager' ); ?></span>
                 <h3 class="rsm-event-banner__title"><?php echo esc_html( $heading ); ?></h3>
-                <?php if ( $datetime['display'] ) : ?>
-                    <p class="rsm-event-banner__date"><?php echo esc_html( $datetime['display'] ); ?></p>
-                <?php endif; ?>
+                <?php if ( $datetime['display'] || $datetime['iso'] ) : ?>
+                    <div class="rsm-event-banner__time">
+                        <?php if ( $datetime['display'] ) : ?>
+                            <p class="rsm-event-banner__date"><?php echo esc_html( $datetime['display'] ); ?></p>
+                        <?php endif; ?>
 
-                <?php if ( $datetime['iso'] ) : ?>
-                    <div class="rsm-countdown" data-rsm-countdown="<?php echo esc_attr( $datetime['iso'] ); ?>" aria-live="polite">
-                        <div class="rsm-countdown__segment">
-                            <span class="rsm-countdown__number" data-countdown-unit="days">--</span>
-                            <span class="rsm-countdown__label"><?php esc_html_e( 'Days', 'race-series-manager' ); ?></span>
-                        </div>
-                        <div class="rsm-countdown__segment">
-                            <span class="rsm-countdown__number" data-countdown-unit="hours">--</span>
-                            <span class="rsm-countdown__label"><?php esc_html_e( 'Hours', 'race-series-manager' ); ?></span>
-                        </div>
-                        <div class="rsm-countdown__segment">
-                            <span class="rsm-countdown__number" data-countdown-unit="minutes">--</span>
-                            <span class="rsm-countdown__label"><?php esc_html_e( 'Minutes', 'race-series-manager' ); ?></span>
-                        </div>
-                        <span class="rsm-countdown__status"></span>
+                        <?php if ( $datetime['iso'] ) : ?>
+                            <div class="rsm-countdown" data-rsm-countdown="<?php echo esc_attr( $datetime['iso'] ); ?>" aria-live="polite">
+                                <div class="rsm-countdown__segment">
+                                    <span class="rsm-countdown__number" data-countdown-unit="days">--</span>
+                                    <span class="rsm-countdown__label"><?php esc_html_e( 'Days', 'race-series-manager' ); ?></span>
+                                </div>
+                                <div class="rsm-countdown__segment">
+                                    <span class="rsm-countdown__number" data-countdown-unit="hours">--</span>
+                                    <span class="rsm-countdown__label"><?php esc_html_e( 'Hours', 'race-series-manager' ); ?></span>
+                                </div>
+                                <div class="rsm-countdown__segment">
+                                    <span class="rsm-countdown__number" data-countdown-unit="minutes">--</span>
+                                    <span class="rsm-countdown__label"><?php esc_html_e( 'Minutes', 'race-series-manager' ); ?></span>
+                                </div>
+                                <span class="rsm-countdown__status"></span>
+                            </div>
+                        <?php else : ?>
+                            <p class="rsm-countdown__status"><?php esc_html_e( 'Countdown unavailable', 'race-series-manager' ); ?></p>
+                        <?php endif; ?>
                     </div>
-                <?php else : ?>
-                    <p class="rsm-countdown__status"><?php esc_html_e( 'Countdown unavailable', 'race-series-manager' ); ?></p>
                 <?php endif; ?>
             </div>
 
