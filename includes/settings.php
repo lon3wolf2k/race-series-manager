@@ -376,6 +376,7 @@ function rsm_render_settings_page() {
     ?>
     <div class="wrap">
         <h1><?php esc_html_e( 'RS Manager Settings', 'race-series-manager' ); ?></h1>
+        <?php settings_errors( 'rsm_settings' ); ?>
         <form action="options.php" method="post">
             <?php
             settings_fields( 'rsm_settings' );
@@ -383,7 +384,92 @@ function rsm_render_settings_page() {
             submit_button();
             ?>
         </form>
+        <hr />
+        <h2><?php esc_html_e( 'Export / Import', 'race-series-manager' ); ?></h2>
+        <p><?php esc_html_e( 'Back up your RS Manager settings or import them from another site.', 'race-series-manager' ); ?></p>
+        <div class="rsm-export-import">
+            <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+                <?php wp_nonce_field( 'rsm_export_settings' ); ?>
+                <input type="hidden" name="action" value="rsm_export_settings" />
+                <?php submit_button( esc_html__( 'Export settings', 'race-series-manager' ), 'secondary', 'submit', false ); ?>
+            </form>
+            <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" enctype="multipart/form-data">
+                <?php wp_nonce_field( 'rsm_import_settings' ); ?>
+                <input type="hidden" name="action" value="rsm_import_settings" />
+                <label for="rsm_settings_import" class="screen-reader-text"><?php esc_html_e( 'Import settings file', 'race-series-manager' ); ?></label>
+                <input type="file" name="rsm_settings_import" id="rsm_settings_import" accept="application/json" />
+                <?php submit_button( esc_html__( 'Import settings', 'race-series-manager' ), 'secondary', 'submit', false ); ?>
+            </form>
+        </div>
         <?php rsm_render_dompdf_status_panel(); ?>
     </div>
     <?php
 }
+
+/**
+ * Handle exporting settings as JSON.
+ */
+function rsm_handle_settings_export() {
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_die( esc_html__( 'You do not have permission to export settings.', 'race-series-manager' ) );
+    }
+
+    check_admin_referer( 'rsm_export_settings' );
+
+    $settings  = rsm_get_settings();
+    $filename  = 'rsm-settings-' . gmdate( 'Y-m-d' ) . '.json';
+    $json_data = wp_json_encode( $settings, JSON_PRETTY_PRINT );
+
+    if ( false === $json_data ) {
+        wp_die( esc_html__( 'Unable to export settings.', 'race-series-manager' ) );
+    }
+
+    nocache_headers();
+    header( 'Content-Type: application/json; charset=utf-8' );
+    header( 'Content-Disposition: attachment; filename=' . $filename );
+    echo $json_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    exit;
+}
+add_action( 'admin_post_rsm_export_settings', 'rsm_handle_settings_export' );
+
+/**
+ * Handle importing settings from JSON upload.
+ */
+function rsm_handle_settings_import() {
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_die( esc_html__( 'You do not have permission to import settings.', 'race-series-manager' ) );
+    }
+
+    check_admin_referer( 'rsm_import_settings' );
+
+    $errors = array();
+
+    if ( empty( $_FILES['rsm_settings_import'] ) || UPLOAD_ERR_OK !== $_FILES['rsm_settings_import']['error'] ) {
+        $errors[] = esc_html__( 'Upload failed. Please choose a JSON file to import.', 'race-series-manager' );
+    } else {
+        $tmp_name = $_FILES['rsm_settings_import']['tmp_name'];
+        $contents = file_get_contents( $tmp_name );
+        $data     = json_decode( $contents, true );
+
+        if ( null === $data || ! is_array( $data ) ) {
+            $errors[] = esc_html__( 'Invalid JSON file. Please export settings from RS Manager and try again.', 'race-series-manager' );
+        } else {
+            $sanitized = rsm_sanitize_settings( $data );
+            update_option( 'rsm_settings', $sanitized );
+        }
+    }
+
+    if ( empty( $errors ) ) {
+        add_settings_error( 'rsm_settings', 'rsm_settings_imported', esc_html__( 'Settings imported successfully.', 'race-series-manager' ), 'updated' );
+    } else {
+        foreach ( $errors as $error ) {
+            add_settings_error( 'rsm_settings', 'rsm_settings_import_error', $error, 'error' );
+        }
+    }
+
+    set_transient( 'settings_errors', get_settings_errors(), 30 );
+
+    wp_safe_redirect( add_query_arg( 'page', 'rsm-settings', admin_url( 'admin.php' ) ) );
+    exit;
+}
+add_action( 'admin_post_rsm_import_settings', 'rsm_handle_settings_import' );
