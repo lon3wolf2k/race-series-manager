@@ -202,6 +202,7 @@ while ( have_posts() ) :
                             <svg class="rsm-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                                 <path d="M17 3H7v4h10V3Zm2 4V2a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v5a3 3 0 0 0-3 3v6a1 1 0 0 0 1 1h3v3a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3h3a1 1 0 0 0 1-1v-6a3 3 0 0 0-3-3h-1Zm-2 12H7v-4h10v4Zm4-9v5h-2v-3a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v3H3v-5a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1Z" />
                             </svg>
+                            <span class="rsm-icon-button__label"><?php esc_html_e( 'Print it', 'race-series-manager' ); ?></span>
                         </button>
                     </div>
 
