@@ -17,7 +17,7 @@ function rsm_register_help_submenu() {
         'rsm_render_help_page'
     );
 }
-add_action( 'admin_menu', 'rsm_register_help_submenu' );
+add_action( 'admin_menu', 'rsm_register_help_submenu', 31 );
 
 /**
  * Render the backend help page populated with inline guidance.

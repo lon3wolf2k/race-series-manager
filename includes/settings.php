@@ -364,7 +364,7 @@ function rsm_register_settings_submenu() {
         'rsm_render_settings_page'
     );
 }
-add_action( 'admin_menu', 'rsm_register_settings_submenu' );
+add_action( 'admin_menu', 'rsm_register_settings_submenu', 30 );
 
 /**
  * Enqueue admin-only styles for the settings screen layout.
