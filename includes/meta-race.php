@@ -43,7 +43,6 @@ function rsm_race_details_meta_box_callback( $post ) {
     $start_time    = get_post_meta( $post->ID, '_rsm_race_start_time', true );
     $start_loc     = get_post_meta( $post->ID, '_rsm_race_start_location', true );
     $finish_loc    = get_post_meta( $post->ID, '_rsm_race_finish_location', true );
-    $fee           = get_post_meta( $post->ID, '_rsm_race_fee', true );
     $cutoff_hours  = get_post_meta( $post->ID, '_rsm_race_cutoff_hours', true );
     $itra_link     = get_post_meta( $post->ID, '_rsm_race_itra_link', true );
     $reg_link      = get_post_meta( $post->ID, '_rsm_race_registration_link', true );
@@ -111,14 +110,6 @@ function rsm_race_details_meta_box_callback( $post ) {
             <th><label for="rsm_race_finish_location"><?php esc_html_e( 'Finish point', 'race-series-manager' ); ?></label></th>
             <td>
                 <input type="text" name="rsm_race_finish_location" id="rsm_race_finish_location" value="<?php echo esc_attr( $finish_loc ); ?>" class="regular-text">
-            </td>
-        </tr>
-
-        <tr>
-            <th><label for="rsm_race_fee"><?php esc_html_e( 'Entry fee', 'race-series-manager' ); ?></label></th>
-            <td>
-                <input type="text" name="rsm_race_fee" id="rsm_race_fee" value="<?php echo esc_attr( $fee ); ?>" class="regular-text">
-                <p class="description"><?php esc_html_e( 'e.g. 40€', 'race-series-manager' ); ?></p>
             </td>
         </tr>
 
@@ -419,7 +410,6 @@ function rsm_save_race_meta( $post_id ) {
         $start_time   = isset( $_POST['rsm_race_start_time'] ) ? sanitize_text_field( $_POST['rsm_race_start_time'] ) : '';
         $start_loc    = isset( $_POST['rsm_race_start_location'] ) ? sanitize_text_field( $_POST['rsm_race_start_location'] ) : '';
         $finish_loc   = isset( $_POST['rsm_race_finish_location'] ) ? sanitize_text_field( $_POST['rsm_race_finish_location'] ) : '';
-        $fee          = isset( $_POST['rsm_race_fee'] ) ? sanitize_text_field( $_POST['rsm_race_fee'] ) : '';
         $cutoff_hours = isset( $_POST['rsm_race_cutoff_hours'] ) ? sanitize_text_field( $_POST['rsm_race_cutoff_hours'] ) : '';
         $itra_link    = isset( $_POST['rsm_race_itra_link'] ) ? esc_url_raw( $_POST['rsm_race_itra_link'] ) : '';
         $reg_link     = isset( $_POST['rsm_race_registration_link'] ) ? esc_url_raw( $_POST['rsm_race_registration_link'] ) : '';
@@ -432,7 +422,6 @@ function rsm_save_race_meta( $post_id ) {
         update_post_meta( $post_id, '_rsm_race_start_time',        $start_time );
         update_post_meta( $post_id, '_rsm_race_start_location',    $start_loc );
         update_post_meta( $post_id, '_rsm_race_finish_location',   $finish_loc );
-        update_post_meta( $post_id, '_rsm_race_fee',               $fee );
         update_post_meta( $post_id, '_rsm_race_cutoff_hours',      $cutoff_hours );
         update_post_meta( $post_id, '_rsm_race_itra_link',         $itra_link );
         update_post_meta( $post_id, '_rsm_race_registration_link', $reg_link );

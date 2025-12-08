@@ -146,7 +146,6 @@ function rsm_build_race_booklet_html( $race_id ) {
     $start_time     = get_post_meta( $race_id, '_rsm_race_start_time', true );
     $start_loc      = get_post_meta( $race_id, '_rsm_race_start_location', true );
     $finish_loc     = get_post_meta( $race_id, '_rsm_race_finish_location', true );
-    $fee            = get_post_meta( $race_id, '_rsm_race_fee', true );
     $cutoff_hours   = get_post_meta( $race_id, '_rsm_race_cutoff_hours', true );
     $aid_stations   = get_post_meta( $race_id, '_rsm_race_aid_stations', true );
     $static_map_id  = get_post_meta( $race_id, '_rsm_race_static_map_id', true );
@@ -354,10 +353,8 @@ function rsm_build_race_booklet_html( $race_id ) {
             <td><?php echo esc_html( $finish_loc ); ?></td>
         </tr>
         <tr>
-            <th><?php esc_html_e( 'Entry fee', 'race-series-manager' ); ?></th>
-            <td><?php echo esc_html( $fee ); ?></td>
             <th><?php esc_html_e( 'Cut-off', 'race-series-manager' ); ?></th>
-            <td><?php echo $cutoff_hours ? esc_html( $cutoff_hours ) . ' ' . esc_html__( 'hours', 'race-series-manager' ) : ''; ?></td>
+            <td colspan="3"><?php echo $cutoff_hours ? esc_html( $cutoff_hours ) . ' ' . esc_html__( 'hours', 'race-series-manager' ) : ''; ?></td>
         </tr>
         <?php if ( $route_url ) : ?>
         <tr>

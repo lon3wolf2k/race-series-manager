@@ -22,7 +22,6 @@ while ( have_posts() ) :
     $start_time     = get_post_meta( $race_id, '_rsm_race_start_time', true );
     $start_point    = get_post_meta( $race_id, '_rsm_race_start_location', true );
     $finish_point   = get_post_meta( $race_id, '_rsm_race_finish_location', true );
-    $fee            = get_post_meta( $race_id, '_rsm_race_fee', true );
 
     // Race-level ITRA link
     $itra_link      = get_post_meta( $race_id, '_rsm_race_itra_link', true );
@@ -335,13 +334,6 @@ while ( have_posts() ) :
                         <div class="rsm-summary-row">
                             <dt><?php esc_html_e( 'Finish point', 'race-series-manager' ); ?>:</dt>
                             <dd><?php echo esc_html( $finish_point ); ?></dd>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ( $fee ) : ?>
-                        <div class="rsm-summary-row">
-                            <dt><?php esc_html_e( 'Entry fee', 'race-series-manager' ); ?>:</dt>
-                            <dd><?php echo esc_html( $fee ); ?></dd>
                         </div>
                     <?php endif; ?>
 

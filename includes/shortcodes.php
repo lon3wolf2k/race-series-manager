@@ -149,7 +149,6 @@ function rsm_event_overview_shortcode( $atts ) {
                     <th><?php esc_html_e( 'Date', 'race-series-manager' ); ?></th>
                     <th><?php esc_html_e( 'Start time', 'race-series-manager' ); ?></th>
                     <th><?php esc_html_e( 'Start location', 'race-series-manager' ); ?></th>
-                    <th><?php esc_html_e( 'Entry fee', 'race-series-manager' ); ?></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -162,7 +161,6 @@ function rsm_event_overview_shortcode( $atts ) {
                     $race_date  = get_post_meta( $race_id, '_rsm_race_date', true );
                     $start_time = get_post_meta( $race_id, '_rsm_race_start_time', true );
                     $start_loc  = get_post_meta( $race_id, '_rsm_race_start_location', true );
-                    $fee        = get_post_meta( $race_id, '_rsm_race_fee', true );
 
                     $date_format = get_option( 'date_format' );
                     if ( empty( $date_format ) ) {
@@ -196,7 +194,6 @@ function rsm_event_overview_shortcode( $atts ) {
                         <td><?php echo $race_date_formatted ? esc_html( $race_date_formatted ) : '—'; ?></td>
                         <td><?php echo $start_time_formatted ? esc_html( $start_time_formatted ) : '—'; ?></td>
                         <td><?php echo $start_loc ? esc_html( $start_loc ) : '—'; ?></td>
-                        <td><?php echo $fee ? esc_html( $fee ) : '—'; ?></td>
                     </tr>
                 <?php endwhile; ?>
                 </tbody>

@@ -11,7 +11,7 @@ This plugin lets you create **Events** and add multiple **Races** under each eve
 
 ## Adding races to an event
 - Add a new **Race** (post type `cmt_race`) for each distance.
-- In the **Race Details** box, select the parent event, date, start time, distance, elevation, start location, and entry fee. These values are shown in the shortcode table.
+- In the **Race Details** box, select the parent event, date, start time, distance, elevation, and start location. These values are shown in the shortcode table.
 - Publish/update the race. Repeat for additional distances.
 - Use the **Clone** row action on a race to duplicate details (including media/meta) into a new draft you can edit.
 
@@ -24,7 +24,7 @@ The plugin provides a single shortcode to list all races of an event with action
 
 - Replace `EVENT_SLUG_OR_ID` with either the event slug (preferred) or the numeric event ID.
 - Place the shortcode in any page/post or in a block’s shortcode block.
-- The table is automatically ordered by race date and shows the race title, distance, elevation, date, start time, start location, and entry fee.
+- The table is automatically ordered by race date and shows the race title, distance, elevation, date, start time, and start location.
 - Buttons appear only when the related event URLs (registration/participants/live) are filled. A **Results** button shows when a results page exists for the event.
 
 ### Finding the event slug or ID
