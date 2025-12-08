@@ -20,8 +20,10 @@ while ( have_posts() ) :
     $cutoff_hours   = get_post_meta( $race_id, '_rsm_race_cutoff_hours', true );
     $start_datetime = get_post_meta( $race_id, '_rsm_race_date', true );
     $start_time     = get_post_meta( $race_id, '_rsm_race_start_time', true );
-    $start_point    = get_post_meta( $race_id, '_rsm_race_start_location', true );
-    $finish_point   = get_post_meta( $race_id, '_rsm_race_finish_location', true );
+    $start_point      = get_post_meta( $race_id, '_rsm_race_start_location', true );
+    $start_point_link = get_post_meta( $race_id, '_rsm_race_start_location_link', true );
+    $finish_point     = get_post_meta( $race_id, '_rsm_race_finish_location', true );
+    $finish_point_link = get_post_meta( $race_id, '_rsm_race_finish_location_link', true );
 
     // Race-level ITRA link
     $itra_link      = get_post_meta( $race_id, '_rsm_race_itra_link', true );
@@ -427,14 +429,30 @@ while ( have_posts() ) :
                     <?php if ( $start_point ) : ?>
                         <div class="rsm-summary-row">
                             <dt><?php esc_html_e( 'Start point', 'race-series-manager' ); ?>:</dt>
-                            <dd><?php echo esc_html( $start_point ); ?></dd>
+                            <dd>
+                                <?php if ( $start_point_link ) : ?>
+                                    <a href="<?php echo esc_url( $start_point_link ); ?>" target="_blank" rel="noopener">
+                                        <?php echo esc_html( $start_point ); ?>
+                                    </a>
+                                <?php else : ?>
+                                    <?php echo esc_html( $start_point ); ?>
+                                <?php endif; ?>
+                            </dd>
                         </div>
                     <?php endif; ?>
 
                     <?php if ( $finish_point ) : ?>
                         <div class="rsm-summary-row">
                             <dt><?php esc_html_e( 'Finish point', 'race-series-manager' ); ?>:</dt>
-                            <dd><?php echo esc_html( $finish_point ); ?></dd>
+                            <dd>
+                                <?php if ( $finish_point_link ) : ?>
+                                    <a href="<?php echo esc_url( $finish_point_link ); ?>" target="_blank" rel="noopener">
+                                        <?php echo esc_html( $finish_point ); ?>
+                                    </a>
+                                <?php else : ?>
+                                    <?php echo esc_html( $finish_point ); ?>
+                                <?php endif; ?>
+                            </dd>
                         </div>
                     <?php endif; ?>
 

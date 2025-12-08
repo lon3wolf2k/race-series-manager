@@ -60,6 +60,7 @@ function rsm_render_help_page() {
     $content .= '<li>' . esc_html__( 'Race galleries open in a lightbox with previous/next navigation and keyboard support.', 'race-series-manager' ) . '</li>';
     $content .= '<li>' . esc_html__( 'Set the Event date (and optional time) on the event edit screen; banners use it for the countdown and display.', 'race-series-manager' ) . '</li>';
     $content .= '<li>' . esc_html__( 'Provide an optional banner date label to override what shows next to the countdown (helpful for multi-day events).', 'race-series-manager' ) . '</li>';
+    $content .= '<li>' . esc_html__( 'Add Google Maps links for race start and finish points to make the labels clickable on the race page.', 'race-series-manager' ) . '</li>';
     $content .= '<li>' . esc_html__( 'Use the Hero image toggle on races to show or hide the featured image banner.', 'race-series-manager' ) . '</li>';
     $content .= '<li>' . esc_html__( 'Event overview tables show races with dates, times, and configured action buttons that honor settings.', 'race-series-manager' ) . '</li>';
     $content .= '</ul>';
