@@ -97,3 +97,21 @@
     font-size: 16px;
     line-height: 1;
 }
+
+.rsm-race-card__cta-button {
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: var(--rsm-button-bg);
+    color: var(--rsm-button-text);
+    border: 2px solid var(--rsm-button-border);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.rsm-race-card:hover .rsm-race-card__cta-button,
+.rsm-race-card__cta-button:focus-visible {
+    background: var(--rsm-link);
+    color: var(--rsm-accent-contrast);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+}

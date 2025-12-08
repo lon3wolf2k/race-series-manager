@@ -121,7 +121,7 @@ function rsm_get_race_showcase_markup( $event_id, $race_count ) {
                                         </span>
                                     <?php endif; ?>
                                 </div>
-                                <span class="rsm-race-card__cta"><?php esc_html_e( 'Race details', 'race-series-manager' ); ?></span>
+                                <span class="rsm-race-card__cta rsm-race-card__cta-button"><?php esc_html_e( 'Race details', 'race-series-manager' ); ?></span>
                             </div>
                         </a>
                     </article>
