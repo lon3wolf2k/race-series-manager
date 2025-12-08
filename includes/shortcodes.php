@@ -55,6 +55,8 @@ function rsm_event_overview_shortcode( $atts ) {
         '0.4.0'
     );
 
+    $settings = rsm_get_settings();
+
     $event_id = rsm_resolve_event_id( $atts['event'] );
 
     if ( ! $event_id ) {
@@ -100,7 +102,7 @@ function rsm_event_overview_shortcode( $atts ) {
                 <h2 class="rsm-event-title">
                     <?php echo esc_html( get_the_title( $event_id ) ); ?>
                 </h2>
-                <?php if ( $event->post_excerpt ) : ?>
+                <?php if ( ! empty( $settings['overview_show_excerpt'] ) && $event->post_excerpt ) : ?>
                     <p class="rsm-event-overview-excerpt"><?php echo esc_html( $event->post_excerpt ); ?></p>
                 <?php endif; ?>
             </div>
@@ -109,19 +111,19 @@ function rsm_event_overview_shortcode( $atts ) {
                 <div class="rsm-event-overview-actions">
                     <?php if ( $reg_url ) : ?>
                         <a class="rsm-summary-btn" href="<?php echo esc_url( $reg_url ); ?>">
-                            <?php esc_html_e( 'Registration', 'race-series-manager' ); ?>
+                            <?php echo esc_html( $settings['overview_registration_label'] ); ?>
                         </a>
                     <?php endif; ?>
 
                     <?php if ( $part_url ) : ?>
                         <a class="rsm-summary-btn" href="<?php echo esc_url( $part_url ); ?>">
-                            <?php esc_html_e( 'Participants', 'race-series-manager' ); ?>
+                            <?php echo esc_html( $settings['overview_participants_label'] ); ?>
                         </a>
                     <?php endif; ?>
 
                     <?php if ( $live_url ) : ?>
                         <a class="rsm-summary-btn" href="<?php echo esc_url( $live_url ); ?>">
-                            <?php esc_html_e( 'Live', 'race-series-manager' ); ?>
+                            <?php echo esc_html( $settings['overview_live_label'] ); ?>
                         </a>
                     <?php endif; ?>
 
@@ -130,7 +132,7 @@ function rsm_event_overview_shortcode( $atts ) {
                            href="<?php echo esc_url( $results_url ); ?>"
                            target="_blank"
                            rel="noopener">
-                            <?php esc_html_e( 'Results', 'race-series-manager' ); ?>
+                            <?php echo esc_html( $settings['overview_results_label'] ); ?>
                         </a>
                     <?php endif; ?>
                 </div>

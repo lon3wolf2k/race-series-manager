@@ -34,3 +34,7 @@ The plugin provides a single shortcode to list all races of an event with action
 - If the shortcode says “Event not found,” confirm the `event` attribute matches an existing event slug/ID and that the event is published.
 - If a race row shows dashes (—), add the missing details in the Race Details box and update the race.
 - If buttons are missing, verify the corresponding event URLs are set in **Registration, participants & live**.
+
+## Configuration
+- Go to **RS Manager → Settings** to adjust the button labels used above the race table and to toggle whether the event excerpt shows above the list.
+- Save changes to immediately update all pages using the shortcode.
