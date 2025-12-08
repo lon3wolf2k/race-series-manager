@@ -130,6 +130,14 @@
     color: var(--rsm-text-primary);
 }
 
+.rsm-section-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
 .rsm-section-subtitle {
     font-size: 16px;
     margin: 24px 0 10px;
@@ -257,6 +265,34 @@
     background: var(--rsm-table-header);
     font-weight: 600;
     color: var(--rsm-text-primary);
+}
+
+.rsm-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    border: 1px solid var(--rsm-border-strong);
+    background: var(--rsm-surface);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    cursor: pointer;
+}
+
+.rsm-icon-button:hover,
+.rsm-icon-button:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+    border-color: var(--rsm-button-border);
+    background: var(--rsm-table-header);
+}
+
+.rsm-icon {
+    width: 18px;
+    height: 18px;
+    fill: var(--rsm-text-primary);
 }
 
 /* Race description

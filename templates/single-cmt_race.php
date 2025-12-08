@@ -183,14 +183,30 @@ while ( have_posts() ) :
             </section>
 
             <!-- 3. AID STATIONS -->
-            <?php if ( ! empty( $aid_stations ) ) : ?>
+            <?php if ( ! empty( $aid_stations ) ) :
+                $aid_table_id  = 'rsm-aid-table-' . $race_id;
+                $aid_title_id  = 'rsm-aid-title-' . $race_id;
+                ?>
                 <section class="rsm-race-section rsm-race-section--aid">
-                    <h2 class="rsm-section-title">
-                        <?php esc_html_e( 'Cut-off times & aid stations', 'race-series-manager' ); ?>
-                    </h2>
+                    <div class="rsm-section-title-row">
+                        <h2 class="rsm-section-title" id="<?php echo esc_attr( $aid_title_id ); ?>">
+                            <?php esc_html_e( 'Cut-off times & aid stations', 'race-series-manager' ); ?>
+                        </h2>
+                        <button
+                            type="button"
+                            class="rsm-icon-button rsm-print-button"
+                            data-rsm-print-target="#<?php echo esc_attr( $aid_table_id ); ?>"
+                            data-rsm-print-title="#<?php echo esc_attr( $aid_title_id ); ?>"
+                            aria-label="<?php esc_attr_e( 'Print cut-off and aid stations table', 'race-series-manager' ); ?>"
+                        >
+                            <svg class="rsm-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path d="M17 3H7v4h10V3Zm2 4V2a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v5a3 3 0 0 0-3 3v6a1 1 0 0 0 1 1h3v3a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3h3a1 1 0 0 0 1-1v-6a3 3 0 0 0-3-3h-1Zm-2 12H7v-4h10v4Zm4-9v5h-2v-3a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v3H3v-5a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1Z" />
+                            </svg>
+                        </button>
+                    </div>
 
                     <div class="rsm-aid-table-wrapper">
-                        <table class="rsm-aid-table">
+                        <table class="rsm-aid-table" id="<?php echo esc_attr( $aid_table_id ); ?>">
                             <thead>
                                 <tr>
                                     <th><?php esc_html_e( 'Station', 'race-series-manager' ); ?></th>

@@ -79,6 +79,14 @@ function rsm_register_frontend_assets() {
         '0.4.0',
         true
     );
+
+    wp_register_script(
+        'rsm-race',
+        RSM_PLUGIN_URL . 'assets/js/rsm-race.js',
+        array(),
+        '0.4.0',
+        true
+    );
 }
 add_action( 'wp_enqueue_scripts', 'rsm_register_frontend_assets', 5 );
 
@@ -151,6 +159,10 @@ function rsm_enqueue_assets() {
 
         if ( is_singular( 'cmt_event' ) ) {
             rsm_enqueue_countdown_assets();
+        }
+
+        if ( is_singular( 'cmt_race' ) ) {
+            wp_enqueue_script( 'rsm-race' );
         }
     }
 }
