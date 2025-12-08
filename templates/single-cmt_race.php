@@ -39,9 +39,11 @@ while ( have_posts() ) :
     $video_embed    = get_post_meta( $race_id, '_rsm_race_video_embed', true );
 
     // Gallery (image IDs)
-    $gallery_meta = get_post_meta( $race_id, '_rsm_race_gallery_ids', true );
-    $gallery_ids  = array();
-    $show_hero    = get_post_meta( $race_id, '_rsm_race_show_hero', true );
+    $gallery_meta   = get_post_meta( $race_id, '_rsm_race_gallery_ids', true );
+    $gallery_ids    = array();
+    $show_hero      = get_post_meta( $race_id, '_rsm_race_show_hero', true );
+    $static_map_id  = get_post_meta( $race_id, '_rsm_race_static_map_id', true );
+    $map_print_wrap = 'rsm-map-print-stack-' . $race_id;
 
     if ( '' === $show_hero ) {
         $show_hero = '1';
@@ -202,7 +204,7 @@ while ( have_posts() ) :
                             <svg class="rsm-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                                 <path d="M17 3H7v4h10V3Zm2 4V2a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v5a3 3 0 0 0-3 3v6a1 1 0 0 0 1 1h3v3a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3h3a1 1 0 0 0 1-1v-6a3 3 0 0 0-3-3h-1Zm-2 12H7v-4h10v4Zm4-9v5h-2v-3a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v3H3v-5a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1Z" />
                             </svg>
-                            <span class="rsm-icon-button__label"><?php esc_html_e( 'Print it', 'race-series-manager' ); ?></span>
+                            <span class="rsm-icon-button__label"><?php esc_html_e( 'Print', 'race-series-manager' ); ?></span>
                         </button>
                     </div>
 
@@ -248,9 +250,29 @@ while ( have_posts() ) :
 
             <!-- 4. ROUTE MAP -->
             <section class="rsm-race-section rsm-race-section--map">
-                <h2 class="rsm-section-title">
-                    <?php esc_html_e( 'Route map', 'race-series-manager' ); ?>
-                </h2>
+                <?php
+                $map_title_id = 'rsm-map-title-' . $race_id;
+                $print_title  = '#' . $map_title_id;
+                ?>
+                <div class="rsm-section-title-row">
+                    <h2 class="rsm-section-title" id="<?php echo esc_attr( $map_title_id ); ?>">
+                        <?php esc_html_e( 'Route map', 'race-series-manager' ); ?>
+                    </h2>
+                    <?php if ( $static_map_id || $elev_chart_id ) : ?>
+                        <button
+                            type="button"
+                            class="rsm-icon-button rsm-print-button"
+                            data-rsm-print-images="#<?php echo esc_attr( $map_print_wrap ); ?>"
+                            data-rsm-print-title="<?php echo esc_attr( $print_title ); ?>"
+                            aria-label="<?php esc_attr_e( 'Print the route map and elevation images', 'race-series-manager' ); ?>"
+                        >
+                            <svg class="rsm-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path d="M17 3H7v4h10V3Zm2 4V2a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v5a3 3 0 0 0-3 3v6a1 1 0 0 0 1 1h3v3a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3h3a1 1 0 0 0 1-1v-6a3 3 0 0 0-3-3h-1Zm-2 12H7v-4h10v4Zm4-9v5h-2v-3a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v3H3v-5a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1Z" />
+                            </svg>
+                            <span class="rsm-icon-button__label"><?php esc_html_e( 'Print', 'race-series-manager' ); ?></span>
+                        </button>
+                    <?php endif; ?>
+                </div>
 
                 <?php if ( ! empty( $plot_embed ) ) : ?>
                     <div class="rsm-race-map-embed">
@@ -260,6 +282,59 @@ while ( have_posts() ) :
                     <p style="font-size:13px;color:#888;">
                         <?php esc_html_e( 'No route map embed has been set for this race yet.', 'race-series-manager' ); ?>
                     </p>
+                <?php endif; ?>
+
+                <?php if ( $static_map_id || $elev_chart_id ) :
+                    $static_map_alt = '';
+                    $static_map_img = '';
+                    if ( $static_map_id ) {
+                        $static_map_alt = get_post_meta( $static_map_id, '_wp_attachment_image_alt', true );
+                        if ( '' === $static_map_alt ) {
+                            $static_map_alt = get_the_title( $static_map_id );
+                        }
+                        $static_map_img = wp_get_attachment_image(
+                            $static_map_id,
+                            'large',
+                            false,
+                            array(
+                                'class' => 'rsm-print-image',
+                                'alt'   => $static_map_alt,
+                            )
+                        );
+                    }
+
+                    $elev_alt = '';
+                    $elev_img = '';
+                    if ( $elev_chart_id ) {
+                        $elev_alt = get_post_meta( $elev_chart_id, '_wp_attachment_image_alt', true );
+                        if ( '' === $elev_alt ) {
+                            $elev_alt = get_the_title( $elev_chart_id );
+                        }
+                        $elev_img = wp_get_attachment_image(
+                            $elev_chart_id,
+                            'large',
+                            false,
+                            array(
+                                'class' => 'rsm-print-image',
+                                'alt'   => $elev_alt,
+                            )
+                        );
+                    }
+                    ?>
+                    <div id="<?php echo esc_attr( $map_print_wrap ); ?>" class="rsm-print-stack" aria-hidden="true" style="display:none;">
+                        <?php if ( $static_map_img ) : ?>
+                            <div class="rsm-print-block">
+                                <h3 class="rsm-print-block__title"><?php esc_html_e( 'Route map', 'race-series-manager' ); ?></h3>
+                                <?php echo $static_map_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                            </div>
+                        <?php endif; ?>
+                        <?php if ( $elev_img ) : ?>
+                            <div class="rsm-print-block">
+                                <h3 class="rsm-print-block__title"><?php esc_html_e( 'Elevation profile', 'race-series-manager' ); ?></h3>
+                                <?php echo $elev_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 <?php endif; ?>
             </section>
 
