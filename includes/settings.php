@@ -367,6 +367,25 @@ function rsm_register_settings_submenu() {
 add_action( 'admin_menu', 'rsm_register_settings_submenu' );
 
 /**
+ * Enqueue admin-only styles for the settings screen layout.
+ *
+ * @param string $hook Current admin page hook suffix.
+ */
+function rsm_enqueue_settings_admin_assets( $hook ) {
+    if ( 'rs_manager_page_rsm-settings' !== $hook ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'rsm-admin-settings',
+        RSM_PLUGIN_URL . 'assets/css/rsm-admin-settings.css',
+        array(),
+        RSM_PLUGIN_VERSION
+    );
+}
+add_action( 'admin_enqueue_scripts', 'rsm_enqueue_settings_admin_assets' );
+
+/**
  * Render the settings page.
  */
 function rsm_render_settings_page() {
@@ -374,51 +393,62 @@ function rsm_render_settings_page() {
         return;
     }
     ?>
-    <div class="wrap">
+    <div class="wrap rsm-settings-wrap">
         <h1><?php esc_html_e( 'RS Manager Settings', 'race-series-manager' ); ?></h1>
         <?php settings_errors( 'rsm_settings' ); ?>
-        <form action="options.php" method="post">
-            <?php
-            settings_fields( 'rsm_settings' );
-            do_settings_sections( 'rsm-settings' );
-            submit_button();
-            ?>
-        </form>
-        <hr />
-        <h2><?php esc_html_e( 'Export / Import', 'race-series-manager' ); ?></h2>
-        <p><?php esc_html_e( 'Back up your RS Manager settings or import them from another site.', 'race-series-manager' ); ?></p>
-        <div class="rsm-export-import">
-            <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-                <?php wp_nonce_field( 'rsm_export_settings' ); ?>
-                <input type="hidden" name="action" value="rsm_export_settings" />
-                <?php submit_button( esc_html__( 'Export settings', 'race-series-manager' ), 'secondary', 'submit', false ); ?>
-            </form>
-            <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" enctype="multipart/form-data">
-                <?php wp_nonce_field( 'rsm_import_settings' ); ?>
-                <input type="hidden" name="action" value="rsm_import_settings" />
-                <label for="rsm_settings_import" class="screen-reader-text"><?php esc_html_e( 'Import settings file', 'race-series-manager' ); ?></label>
-                <input type="file" name="rsm_settings_import" id="rsm_settings_import" accept="application/json" />
-                <?php submit_button( esc_html__( 'Import settings', 'race-series-manager' ), 'secondary', 'submit', false ); ?>
-            </form>
+        <div class="rsm-settings-grid">
+            <div class="rsm-settings-main">
+                <form action="options.php" method="post" class="rsm-settings-card">
+                    <h2 class="title"><?php esc_html_e( 'General options', 'race-series-manager' ); ?></h2>
+                    <?php
+                    settings_fields( 'rsm_settings' );
+                    do_settings_sections( 'rsm-settings' );
+                    submit_button();
+                    ?>
+                </form>
+            </div>
+            <div class="rsm-settings-actions">
+                <div class="rsm-settings-card">
+                    <h2 class="title"><?php esc_html_e( 'Export / Import settings', 'race-series-manager' ); ?></h2>
+                    <p><?php esc_html_e( 'Back up your RS Manager settings or import them from another site.', 'race-series-manager' ); ?></p>
+                    <div class="rsm-export-import">
+                        <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+                            <?php wp_nonce_field( 'rsm_export_settings' ); ?>
+                            <input type="hidden" name="action" value="rsm_export_settings" />
+                            <?php submit_button( esc_html__( 'Export settings', 'race-series-manager' ), 'secondary', 'submit', false ); ?>
+                        </form>
+                        <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" enctype="multipart/form-data">
+                            <?php wp_nonce_field( 'rsm_import_settings' ); ?>
+                            <input type="hidden" name="action" value="rsm_import_settings" />
+                            <label for="rsm_settings_import" class="screen-reader-text"><?php esc_html_e( 'Import settings file', 'race-series-manager' ); ?></label>
+                            <input type="file" name="rsm_settings_import" id="rsm_settings_import" accept="application/json" />
+                            <?php submit_button( esc_html__( 'Import settings', 'race-series-manager' ), 'secondary', 'submit', false ); ?>
+                        </form>
+                    </div>
+                </div>
+                <div class="rsm-settings-card">
+                    <h2 class="title"><?php esc_html_e( 'Export / Import content', 'race-series-manager' ); ?></h2>
+                    <p><?php esc_html_e( 'Download all Events, Races, Results, and settings as a single JSON file or import them from another site.', 'race-series-manager' ); ?></p>
+                    <div class="rsm-export-import">
+                        <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+                            <?php wp_nonce_field( 'rsm_export_data' ); ?>
+                            <input type="hidden" name="action" value="rsm_export_data" />
+                            <?php submit_button( esc_html__( 'Export all data', 'race-series-manager' ), 'primary', 'submit', false ); ?>
+                        </form>
+                        <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" enctype="multipart/form-data">
+                            <?php wp_nonce_field( 'rsm_import_data' ); ?>
+                            <input type="hidden" name="action" value="rsm_import_data" />
+                            <label for="rsm_data_import" class="screen-reader-text"><?php esc_html_e( 'Import RS Manager export', 'race-series-manager' ); ?></label>
+                            <input type="file" name="rsm_data_import" id="rsm_data_import" accept="application/json" />
+                            <?php submit_button( esc_html__( 'Import all data', 'race-series-manager' ), 'primary', 'submit', false ); ?>
+                        </form>
+                    </div>
+                </div>
+                <div class="rsm-settings-card">
+                    <?php rsm_render_dompdf_status_panel(); ?>
+                </div>
+            </div>
         </div>
-        <hr />
-        <h2><?php esc_html_e( 'Export / Import content', 'race-series-manager' ); ?></h2>
-        <p><?php esc_html_e( 'Download all Events, Races, Results, and settings as a single JSON file or import them from another site.', 'race-series-manager' ); ?></p>
-        <div class="rsm-export-import">
-            <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-                <?php wp_nonce_field( 'rsm_export_data' ); ?>
-                <input type="hidden" name="action" value="rsm_export_data" />
-                <?php submit_button( esc_html__( 'Export all data', 'race-series-manager' ), 'primary', 'submit', false ); ?>
-            </form>
-            <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" enctype="multipart/form-data">
-                <?php wp_nonce_field( 'rsm_import_data' ); ?>
-                <input type="hidden" name="action" value="rsm_import_data" />
-                <label for="rsm_data_import" class="screen-reader-text"><?php esc_html_e( 'Import RS Manager export', 'race-series-manager' ); ?></label>
-                <input type="file" name="rsm_data_import" id="rsm_data_import" accept="application/json" />
-                <?php submit_button( esc_html__( 'Import all data', 'race-series-manager' ), 'primary', 'submit', false ); ?>
-            </form>
-        </div>
-        <?php rsm_render_dompdf_status_panel(); ?>
     </div>
     <?php
 }
