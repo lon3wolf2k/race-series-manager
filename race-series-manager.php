@@ -78,6 +78,8 @@ function rsm_enqueue_assets() {
             'rsmLightbox',
             array(
                 'i18nClose' => __( 'Close', 'race-series-manager' ),
+                'i18nPrev'  => __( 'Previous', 'race-series-manager' ),
+                'i18nNext'  => __( 'Next', 'race-series-manager' ),
             )
         );
     }
