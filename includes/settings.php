@@ -401,6 +401,23 @@ function rsm_render_settings_page() {
                 <?php submit_button( esc_html__( 'Import settings', 'race-series-manager' ), 'secondary', 'submit', false ); ?>
             </form>
         </div>
+        <hr />
+        <h2><?php esc_html_e( 'Export / Import content', 'race-series-manager' ); ?></h2>
+        <p><?php esc_html_e( 'Download all Events, Races, Results, and settings as a single JSON file or import them from another site.', 'race-series-manager' ); ?></p>
+        <div class="rsm-export-import">
+            <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+                <?php wp_nonce_field( 'rsm_export_data' ); ?>
+                <input type="hidden" name="action" value="rsm_export_data" />
+                <?php submit_button( esc_html__( 'Export all data', 'race-series-manager' ), 'primary', 'submit', false ); ?>
+            </form>
+            <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" enctype="multipart/form-data">
+                <?php wp_nonce_field( 'rsm_import_data' ); ?>
+                <input type="hidden" name="action" value="rsm_import_data" />
+                <label for="rsm_data_import" class="screen-reader-text"><?php esc_html_e( 'Import RS Manager export', 'race-series-manager' ); ?></label>
+                <input type="file" name="rsm_data_import" id="rsm_data_import" accept="application/json" />
+                <?php submit_button( esc_html__( 'Import all data', 'race-series-manager' ), 'primary', 'submit', false ); ?>
+            </form>
+        </div>
         <?php rsm_render_dompdf_status_panel(); ?>
     </div>
     <?php
@@ -473,3 +490,212 @@ function rsm_handle_settings_import() {
     exit;
 }
 add_action( 'admin_post_rsm_import_settings', 'rsm_handle_settings_import' );
+
+/**
+ * Prepare full data export payload for events, races, results, and settings.
+ */
+function rsm_build_full_export_payload() {
+    $types  = array(
+        'events'  => 'cmt_event',
+        'races'   => 'cmt_race',
+        'results' => 'cmt_result',
+    );
+    $export = array(
+        'type'      => 'rsm_export',
+        'version'   => 1,
+        'generated' => gmdate( 'c' ),
+        'settings'  => rsm_get_settings(),
+    );
+
+    foreach ( $types as $key => $post_type ) {
+        $posts = get_posts(
+            array(
+                'post_type'      => $post_type,
+                'post_status'    => 'any',
+                'posts_per_page' => -1,
+                'orderby'        => 'menu_order',
+                'order'          => 'ASC',
+            )
+        );
+
+        $export[ $key ] = array();
+
+        foreach ( $posts as $post ) {
+            $meta = array();
+            $raw  = get_post_custom( $post->ID );
+
+            foreach ( $raw as $meta_key => $values ) {
+                $meta[ $meta_key ] = array_map( 'maybe_unserialize', $values );
+            }
+
+            $export[ $key ][] = array(
+                'post' => array(
+                    'ID'             => $post->ID,
+                    'post_title'     => $post->post_title,
+                    'post_content'   => $post->post_content,
+                    'post_excerpt'   => $post->post_excerpt,
+                    'post_status'    => $post->post_status,
+                    'post_name'      => $post->post_name,
+                    'menu_order'     => $post->menu_order,
+                    'post_date'      => $post->post_date,
+                    'post_date_gmt'  => $post->post_date_gmt,
+                    'post_author'    => $post->post_author,
+                    'comment_status' => $post->comment_status,
+                ),
+                'meta' => $meta,
+            );
+        }
+    }
+
+    return $export;
+}
+
+/**
+ * Handle exporting full RS Manager data.
+ */
+function rsm_handle_data_export() {
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_die( esc_html__( 'You do not have permission to export data.', 'race-series-manager' ) );
+    }
+
+    check_admin_referer( 'rsm_export_data' );
+
+    $payload  = rsm_build_full_export_payload();
+    $filename = 'rsm-data-' . gmdate( 'Y-m-d' ) . '.json';
+    $json     = wp_json_encode( $payload, JSON_PRETTY_PRINT );
+
+    if ( false === $json ) {
+        wp_die( esc_html__( 'Unable to export data.', 'race-series-manager' ) );
+    }
+
+    nocache_headers();
+    header( 'Content-Type: application/json; charset=utf-8' );
+    header( 'Content-Disposition: attachment; filename=' . $filename );
+    echo $json; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    exit;
+}
+add_action( 'admin_post_rsm_export_data', 'rsm_handle_data_export' );
+
+/**
+ * Import posts and meta, returning map of old to new IDs.
+ *
+ * @param array  $items     Exported items for a post type.
+ * @param string $post_type Target post type.
+ * @param array  $event_map Map of old event IDs to new ones for relationship remapping.
+ *
+ * @return array
+ */
+function rsm_import_posts_from_payload( $items, $post_type, $event_map = array() ) {
+    $id_map = array();
+
+    if ( empty( $items ) || ! is_array( $items ) ) {
+        return $id_map;
+    }
+
+    foreach ( $items as $item ) {
+        if ( empty( $item['post'] ) || ! is_array( $item['post'] ) ) {
+            continue;
+        }
+
+        $post_data = wp_parse_args(
+            $item['post'],
+            array(
+                'post_title'     => '',
+                'post_content'   => '',
+                'post_excerpt'   => '',
+                'post_status'    => 'draft',
+                'post_name'      => '',
+                'menu_order'     => 0,
+                'post_date'      => '',
+                'post_date_gmt'  => '',
+                'post_author'    => get_current_user_id(),
+                'comment_status' => 'closed',
+            )
+        );
+
+        $post_data['post_type'] = $post_type;
+
+        $new_id = wp_insert_post( wp_slash( $post_data ), true );
+
+        if ( is_wp_error( $new_id ) ) {
+            continue;
+        }
+
+        $old_id = isset( $item['post']['ID'] ) ? absint( $item['post']['ID'] ) : 0;
+
+        if ( $old_id ) {
+            $id_map[ $old_id ] = $new_id;
+        }
+
+        if ( ! empty( $item['meta'] ) && is_array( $item['meta'] ) ) {
+            foreach ( $item['meta'] as $meta_key => $values ) {
+                delete_post_meta( $new_id, $meta_key );
+
+                $values = (array) $values;
+
+                foreach ( $values as $value ) {
+                    // Remap related event IDs for races and results.
+                    if ( in_array( $meta_key, array( '_rsm_race_event_id', '_rsm_res_event_id' ), true ) ) {
+                        $old_event_id = absint( $value );
+                        if ( $old_event_id && isset( $event_map[ $old_event_id ] ) ) {
+                            $value = $event_map[ $old_event_id ];
+                        }
+                    }
+
+                    add_post_meta( $new_id, $meta_key, maybe_unserialize( $value ) );
+                }
+            }
+        }
+    }
+
+    return $id_map;
+}
+
+/**
+ * Handle importing full RS Manager data export.
+ */
+function rsm_handle_data_import() {
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_die( esc_html__( 'You do not have permission to import data.', 'race-series-manager' ) );
+    }
+
+    check_admin_referer( 'rsm_import_data' );
+
+    $errors = array();
+    $data   = array();
+
+    if ( empty( $_FILES['rsm_data_import'] ) || UPLOAD_ERR_OK !== $_FILES['rsm_data_import']['error'] ) {
+        $errors[] = esc_html__( 'Upload failed. Please choose a JSON file to import.', 'race-series-manager' );
+    } else {
+        $tmp_name = $_FILES['rsm_data_import']['tmp_name'];
+        $content  = file_get_contents( $tmp_name );
+        $data     = json_decode( $content, true );
+
+        if ( null === $data || ! is_array( $data ) || empty( $data['type'] ) || 'rsm_export' !== $data['type'] ) {
+            $errors[] = esc_html__( 'Invalid JSON file. Please export data from RS Manager and try again.', 'race-series-manager' );
+        }
+    }
+
+    if ( empty( $errors ) ) {
+        if ( ! empty( $data['settings'] ) && is_array( $data['settings'] ) ) {
+            $sanitized = rsm_sanitize_settings( $data['settings'] );
+            update_option( 'rsm_settings', $sanitized );
+        }
+
+        $event_map = rsm_import_posts_from_payload( isset( $data['events'] ) ? $data['events'] : array(), 'cmt_event' );
+        rsm_import_posts_from_payload( isset( $data['races'] ) ? $data['races'] : array(), 'cmt_race', $event_map );
+        rsm_import_posts_from_payload( isset( $data['results'] ) ? $data['results'] : array(), 'cmt_result', $event_map );
+
+        add_settings_error( 'rsm_settings', 'rsm_data_imported', esc_html__( 'Data imported successfully.', 'race-series-manager' ), 'updated' );
+    } else {
+        foreach ( $errors as $error ) {
+            add_settings_error( 'rsm_settings', 'rsm_data_import_error', $error, 'error' );
+        }
+    }
+
+    set_transient( 'settings_errors', get_settings_errors(), 30 );
+
+    wp_safe_redirect( add_query_arg( 'page', 'rsm-settings', admin_url( 'admin.php' ) ) );
+    exit;
+}
+add_action( 'admin_post_rsm_import_data', 'rsm_handle_data_import' );
