@@ -90,6 +90,10 @@
     margin-left: 6px;
 }
 
+.rsm-countdown--hidden {
+    display: none;
+}
+
 .rsm-event-banner__actions {
     display: flex;
     justify-content: flex-end;

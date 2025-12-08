@@ -26,14 +26,7 @@
             var diff = targetDate.getTime() - now.getTime();
 
             if (diff <= 0) {
-                dayEl.textContent = '00';
-                hourEl.textContent = '00';
-                minuteEl.textContent = '00';
-
-                if (status) {
-                    status.textContent = labels.live;
-                }
-
+                container.classList.add('rsm-countdown--hidden');
                 return;
             }
 
