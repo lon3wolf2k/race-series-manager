@@ -21,14 +21,6 @@ function rsm_register_admin_menu() {
 add_action( 'admin_menu', 'rsm_register_admin_menu' );
 
 /**
- * Remove the default submenu that duplicates the parent menu entry.
- */
-function rsm_remove_parent_submenu_duplicate() {
-    remove_submenu_page( 'rsm-manager', 'rsm-manager' );
-}
-add_action( 'admin_menu', 'rsm_remove_parent_submenu_duplicate', 20 );
-
-/**
  * Add submenus for Events, Races, and Results under the RS Manager parent.
  */
 function rsm_register_content_submenus() {
