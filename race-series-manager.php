@@ -59,6 +59,7 @@ function rsm_register_frontend_assets() {
     wp_register_style( 'rsm-core', RSM_PLUGIN_URL . 'assets/css/rsm-core.css', array(), '0.4.0' );
     wp_register_style( 'rsm-event', RSM_PLUGIN_URL . 'assets/css/rsm-event.css', array( 'rsm-core' ), '0.4.0' );
     wp_register_style( 'rsm-showcase', RSM_PLUGIN_URL . 'assets/css/rsm-showcase.css', array( 'rsm-core' ), '0.4.0' );
+    wp_register_style( 'rsm-banner', RSM_PLUGIN_URL . 'assets/css/rsm-banner.css', array( 'rsm-core' ), '0.4.0' );
     wp_register_style( 'rsm-lightbox-style', RSM_PLUGIN_URL . 'assets/css/rsm-lightbox.css', array(), '0.4.0' );
     wp_register_style( 'rsm-theme-light', RSM_PLUGIN_URL . 'assets/css/rsm-theme-light.css', array(), '0.4.0' );
     wp_register_style( 'rsm-theme-dark', RSM_PLUGIN_URL . 'assets/css/rsm-theme-dark.css', array(), '0.4.0' );
@@ -67,6 +68,14 @@ function rsm_register_frontend_assets() {
         'rsm-lightbox',
         RSM_PLUGIN_URL . 'assets/js/rsm-lightbox.js',
         array( 'jquery' ),
+        '0.4.0',
+        true
+    );
+
+    wp_register_script(
+        'rsm-countdown',
+        RSM_PLUGIN_URL . 'assets/js/rsm-countdown.js',
+        array(),
         '0.4.0',
         true
     );
@@ -88,13 +97,33 @@ function rsm_enqueue_style_bundle() {
     wp_enqueue_style( 'rsm-core' );
     wp_enqueue_style( 'rsm-event' );
     wp_enqueue_style( 'rsm-showcase' );
+    wp_enqueue_style( 'rsm-banner' );
     wp_enqueue_style( 'rsm-lightbox-style' );
     rsm_enqueue_theme_style();
 }
 
+function rsm_enqueue_countdown_assets() {
+    wp_enqueue_script( 'rsm-countdown' );
+
+    wp_localize_script(
+        'rsm-countdown',
+        'rsmCountdown',
+        array(
+            'days'        => __( 'Days', 'race-series-manager' ),
+            'hours'       => __( 'Hours', 'race-series-manager' ),
+            'minutes'     => __( 'Minutes', 'race-series-manager' ),
+            'live'        => __( 'Live now', 'race-series-manager' ),
+            'unavailable' => __( 'Countdown unavailable', 'race-series-manager' ),
+        )
+    );
+}
+
 function rsm_enqueue_assets() {
 
-    $widget_active = function_exists( 'is_active_widget' ) && is_active_widget( false, false, 'rsm_race_showcase_widget', true );
+    $widget_active = function_exists( 'is_active_widget' ) && (
+        is_active_widget( false, false, 'rsm_race_showcase_widget', true ) ||
+        is_active_widget( false, false, 'rsm_event_banner_widget', true )
+    );
 
     if (
         $widget_active ||
@@ -115,6 +144,14 @@ function rsm_enqueue_assets() {
                 'i18nNext'  => __( 'Next', 'race-series-manager' ),
             )
         );
+
+        if ( $widget_active ) {
+            rsm_enqueue_countdown_assets();
+        }
+
+        if ( is_singular( 'cmt_event' ) ) {
+            rsm_enqueue_countdown_assets();
+        }
     }
 }
 add_action( 'wp_enqueue_scripts', 'rsm_enqueue_assets' );

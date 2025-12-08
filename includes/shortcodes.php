@@ -276,6 +276,29 @@ function rsm_race_showcase_shortcode( $atts ) {
 add_shortcode( 'rsm_race_showcase', 'rsm_race_showcase_shortcode' );
 
 /**
+ * SHORTCODE: [rsm_event_banner event="123" title="Event banner title"]
+ */
+function rsm_event_banner_shortcode( $atts ) {
+    $atts = shortcode_atts(
+        array(
+            'event' => '',
+            'title' => '',
+        ),
+        $atts,
+        'rsm_event_banner'
+    );
+
+    $event_id = rsm_resolve_event_id( $atts['event'] );
+
+    if ( ! $event_id ) {
+        return '<p>' . esc_html__( 'No event selected (invalid event attribute).', 'race-series-manager' ) . '</p>';
+    }
+
+    return rsm_get_event_banner_markup( $event_id, $atts['title'] );
+}
+add_shortcode( 'rsm_event_banner', 'rsm_event_banner_shortcode' );
+
+/**
  * SHORTCODE: [rsm_event_link event="123" label="Custom text"]
  */
 function rsm_event_link_shortcode( $atts ) {

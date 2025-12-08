@@ -32,6 +32,91 @@ function rsm_get_race_showcase_races( $event_id, $limit ) {
 }
 
 /**
+ * Retrieve the next race date/time for an event to power countdowns.
+ *
+ * @param int $event_id
+ *
+ * @return array
+ */
+function rsm_get_event_next_race_datetime( $event_id ) {
+    $result = array(
+        'display'  => '',
+        'iso'      => '',
+        'race_id'  => 0,
+    );
+
+    if ( ! $event_id ) {
+        return $result;
+    }
+
+    $races = get_posts(
+        array(
+            'post_type'      => 'cmt_race',
+            'posts_per_page' => -1,
+            'orderby'        => 'meta_value',
+            'order'          => 'ASC',
+            'meta_key'       => '_rsm_race_date',
+            'meta_query'     => array(
+                array(
+                    'key'   => '_rsm_race_event_id',
+                    'value' => $event_id,
+                ),
+            ),
+        )
+    );
+
+    if ( empty( $races ) ) {
+        return $result;
+    }
+
+    $date_format = get_option( 'date_format' );
+    if ( empty( $date_format ) ) {
+        $date_format = 'd-m-Y';
+    }
+
+    $now          = current_time( 'timestamp' );
+    $fallback     = null;
+    $fallback_id  = 0;
+
+    foreach ( $races as $race ) {
+        $race_date = get_post_meta( $race->ID, '_rsm_race_date', true );
+
+        if ( empty( $race_date ) ) {
+            continue;
+        }
+
+        $start_time = get_post_meta( $race->ID, '_rsm_race_start_time', true );
+        $datetime   = trim( $race_date . ' ' . $start_time );
+        $timestamp  = strtotime( $datetime );
+
+        if ( ! $timestamp ) {
+            continue;
+        }
+
+        if ( $timestamp >= $now ) {
+            $result['display'] = wp_date( $date_format, $timestamp );
+            $result['iso']     = wp_date( 'c', $timestamp );
+            $result['race_id'] = $race->ID;
+
+            break;
+        }
+
+        if ( ! $fallback || $timestamp > $fallback ) {
+            $fallback    = $timestamp;
+            $fallback_id = $race->ID;
+        }
+    }
+
+    if ( empty( $result['iso'] ) && $fallback ) {
+        $result['display'] = wp_date( $date_format, $fallback );
+        $result['iso']     = wp_date( 'c', $fallback );
+        $result['race_id'] = $fallback_id;
+    }
+
+    return $result;
+}
+
+/**
  * Format a race date for the badge.
  *
  * @param string $start_datetime
@@ -130,6 +215,110 @@ function rsm_get_race_showcase_markup( $event_id, $race_count ) {
         </div>
         <?php
     }
+
+    return ob_get_clean();
+}
+
+/**
+ * Render a countdown banner for an event with action buttons.
+ *
+ * @param int    $event_id
+ * @param string $title
+ *
+ * @return string
+ */
+function rsm_get_event_banner_markup( $event_id, $title = '' ) {
+    if ( function_exists( 'rsm_enqueue_style_bundle' ) ) {
+        rsm_enqueue_style_bundle();
+    }
+
+    if ( function_exists( 'rsm_enqueue_countdown_assets' ) ) {
+        rsm_enqueue_countdown_assets();
+    }
+
+    $event_id = absint( $event_id );
+
+    if ( ! $event_id ) {
+        return '<p>' . esc_html__( 'No event selected.', 'race-series-manager' ) . '</p>';
+    }
+
+    $event = get_post( $event_id );
+
+    if ( ! $event || 'cmt_event' !== $event->post_type ) {
+        return '<p>' . esc_html__( 'Event not found.', 'race-series-manager' ) . '</p>';
+    }
+
+    $settings    = function_exists( 'rsm_get_settings' ) ? rsm_get_settings() : array();
+    $reg_label   = isset( $settings['overview_registration_label'] ) ? $settings['overview_registration_label'] : __( 'Registration', 'race-series-manager' );
+    $part_label  = isset( $settings['overview_participants_label'] ) ? $settings['overview_participants_label'] : __( 'Participants', 'race-series-manager' );
+    $live_label  = isset( $settings['overview_live_label'] ) ? $settings['overview_live_label'] : __( 'Live', 'race-series-manager' );
+    $open_tab    = ! empty( $settings['overview_action_new_tab'] );
+    $target_attr = $open_tab ? ' target="_blank" rel="noopener"' : '';
+
+    $reg_url  = get_post_meta( $event_id, '_rsm_event_registration_url', true );
+    $part_url = get_post_meta( $event_id, '_rsm_event_participants_url', true );
+    $live_url = get_post_meta( $event_id, '_rsm_event_live_url', true );
+
+    $datetime      = rsm_get_event_next_race_datetime( $event_id );
+    $background_id = $datetime['race_id'] ? $datetime['race_id'] : 0;
+    $bg_url        = rsm_get_race_showcase_image_url( $background_id );
+    $heading       = $title ? $title : get_the_title( $event_id );
+
+    ob_start();
+    ?>
+    <div class="rsm-event-banner">
+        <div class="rsm-event-banner__media" style="background-image: url('<?php echo esc_url( $bg_url ); ?>');"></div>
+        <div class="rsm-event-banner__inner">
+            <div class="rsm-event-banner__info">
+                <span class="rsm-event-banner__eyebrow"><?php esc_html_e( 'Upcoming event', 'race-series-manager' ); ?></span>
+                <h3 class="rsm-event-banner__title"><?php echo esc_html( $heading ); ?></h3>
+                <?php if ( $datetime['display'] ) : ?>
+                    <p class="rsm-event-banner__date"><?php echo esc_html( $datetime['display'] ); ?></p>
+                <?php endif; ?>
+
+                <?php if ( $datetime['iso'] ) : ?>
+                    <div class="rsm-countdown" data-rsm-countdown="<?php echo esc_attr( $datetime['iso'] ); ?>" aria-live="polite">
+                        <div class="rsm-countdown__segment">
+                            <span class="rsm-countdown__number" data-countdown-unit="days">--</span>
+                            <span class="rsm-countdown__label"><?php esc_html_e( 'Days', 'race-series-manager' ); ?></span>
+                        </div>
+                        <div class="rsm-countdown__segment">
+                            <span class="rsm-countdown__number" data-countdown-unit="hours">--</span>
+                            <span class="rsm-countdown__label"><?php esc_html_e( 'Hours', 'race-series-manager' ); ?></span>
+                        </div>
+                        <div class="rsm-countdown__segment">
+                            <span class="rsm-countdown__number" data-countdown-unit="minutes">--</span>
+                            <span class="rsm-countdown__label"><?php esc_html_e( 'Minutes', 'race-series-manager' ); ?></span>
+                        </div>
+                        <span class="rsm-countdown__status"></span>
+                    </div>
+                <?php else : ?>
+                    <p class="rsm-countdown__status"><?php esc_html_e( 'Countdown unavailable', 'race-series-manager' ); ?></p>
+                <?php endif; ?>
+            </div>
+
+            <?php if ( $reg_url || $part_url || $live_url ) : ?>
+                <div class="rsm-event-banner__actions">
+                    <?php if ( $reg_url ) : ?>
+                        <a class="rsm-banner-btn" href="<?php echo esc_url( $reg_url ); ?>"<?php echo $target_attr; ?>>
+                            <?php echo esc_html( $reg_label ); ?>
+                        </a>
+                    <?php endif; ?>
+                    <?php if ( $part_url ) : ?>
+                        <a class="rsm-banner-btn" href="<?php echo esc_url( $part_url ); ?>"<?php echo $target_attr; ?>>
+                            <?php echo esc_html( $part_label ); ?>
+                        </a>
+                    <?php endif; ?>
+                    <?php if ( $live_url ) : ?>
+                        <a class="rsm-banner-btn" href="<?php echo esc_url( $live_url ); ?>"<?php echo $target_attr; ?>>
+                            <?php echo esc_html( $live_label ); ?>
+                        </a>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php
 
     return ob_get_clean();
 }
@@ -236,9 +425,108 @@ class RSM_Race_Showcase_Widget extends WP_Widget {
 }
 
 /**
+ * Event banner widget with countdown and action buttons.
+ */
+class RSM_Event_Banner_Widget extends WP_Widget {
+
+    public function __construct() {
+        parent::__construct(
+            'rsm_event_banner_widget',
+            __( 'RS Manager: Event Banner', 'race-series-manager' ),
+            array(
+                'description' => __( 'Display a wide banner with event countdown and action buttons.', 'race-series-manager' ),
+            )
+        );
+    }
+
+    /**
+     * Render widget output.
+     *
+     * @param array $args
+     * @param array $instance
+     */
+    public function widget( $args, $instance ) {
+        $event_id = isset( $instance['event_id'] ) ? absint( $instance['event_id'] ) : 0;
+        $title    = isset( $instance['title'] ) ? $instance['title'] : '';
+
+        echo $args['before_widget'];
+
+        if ( ! empty( $instance['heading'] ) ) {
+            echo $args['before_title'] . apply_filters( 'widget_title', $instance['heading'] ) . $args['after_title'];
+        }
+
+        echo rsm_get_event_banner_markup( $event_id, $title );
+
+        echo $args['after_widget'];
+    }
+
+    /**
+     * Save settings.
+     *
+     * @param array $new_instance
+     * @param array $old_instance
+     *
+     * @return array
+     */
+    public function update( $new_instance, $old_instance ) {
+        $instance = $old_instance;
+
+        $instance['heading']  = isset( $new_instance['heading'] ) ? sanitize_text_field( $new_instance['heading'] ) : '';
+        $instance['title']    = isset( $new_instance['title'] ) ? sanitize_text_field( $new_instance['title'] ) : '';
+        $instance['event_id'] = isset( $new_instance['event_id'] ) ? absint( $new_instance['event_id'] ) : 0;
+
+        return $instance;
+    }
+
+    /**
+     * Render form in admin.
+     *
+     * @param array $instance
+     */
+    public function form( $instance ) {
+        $heading  = isset( $instance['heading'] ) ? $instance['heading'] : __( 'Featured event', 'race-series-manager' );
+        $title    = isset( $instance['title'] ) ? $instance['title'] : '';
+        $event_id = isset( $instance['event_id'] ) ? absint( $instance['event_id'] ) : 0;
+
+        $events = get_posts(
+            array(
+                'post_type'      => 'cmt_event',
+                'posts_per_page' => -1,
+                'orderby'        => 'title',
+                'order'          => 'ASC',
+            )
+        );
+        ?>
+        <p>
+            <label for="<?php echo esc_attr( $this->get_field_id( 'heading' ) ); ?>"><?php esc_html_e( 'Widget title:', 'race-series-manager' ); ?></label>
+            <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'heading' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'heading' ) ); ?>" type="text" value="<?php echo esc_attr( $heading ); ?>" />
+            <small><?php esc_html_e( 'Optional heading shown above the banner.', 'race-series-manager' ); ?></small>
+        </p>
+        <p>
+            <label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Banner title:', 'race-series-manager' ); ?></label>
+            <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
+            <small><?php esc_html_e( 'Defaults to the event title if left empty.', 'race-series-manager' ); ?></small>
+        </p>
+        <p>
+            <label for="<?php echo esc_attr( $this->get_field_id( 'event_id' ) ); ?>"><?php esc_html_e( 'Event:', 'race-series-manager' ); ?></label>
+            <select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'event_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'event_id' ) ); ?>">
+                <option value="0" <?php selected( 0, $event_id ); ?>><?php esc_html_e( 'Select an event', 'race-series-manager' ); ?></option>
+                <?php foreach ( $events as $event ) : ?>
+                    <option value="<?php echo esc_attr( $event->ID ); ?>" <?php selected( $event->ID, $event_id ); ?>>
+                        <?php echo esc_html( get_the_title( $event ) ); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </p>
+        <?php
+    }
+}
+
+/**
  * Register the widget.
  */
 function rsm_register_widgets() {
     register_widget( 'RSM_Race_Showcase_Widget' );
+    register_widget( 'RSM_Event_Banner_Widget' );
 }
 add_action( 'widgets_init', 'rsm_register_widgets' );
