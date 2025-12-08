@@ -21,6 +21,9 @@ if ( ! defined( 'RSM_PLUGIN_DIR' ) ) {
 if ( ! defined( 'RSM_PLUGIN_URL' ) ) {
     define( 'RSM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 }
+if ( ! defined( 'RSM_PLUGIN_VERSION' ) ) {
+    define( 'RSM_PLUGIN_VERSION', '0.4.0' );
+}
 
 // -----------------------------------------------------------------------------
 // Load textdomain
