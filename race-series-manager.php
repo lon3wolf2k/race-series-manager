@@ -49,6 +49,7 @@ require_once RSM_PLUGIN_DIR . 'includes/meta-shortcodes.php';
 require_once RSM_PLUGIN_DIR . 'includes/meta-results.php';      // αποτελέσματα (backend)
 require_once RSM_PLUGIN_DIR . 'includes/results-frontend.php';  // αποτελέσματα (frontend)
 require_once RSM_PLUGIN_DIR . 'includes/shortcodes.php';
+require_once RSM_PLUGIN_DIR . 'includes/widgets.php';
 require_once RSM_PLUGIN_DIR . 'includes/pdf-booklet.php';
 
 // -----------------------------------------------------------------------------
@@ -56,7 +57,10 @@ require_once RSM_PLUGIN_DIR . 'includes/pdf-booklet.php';
 // -----------------------------------------------------------------------------
 function rsm_enqueue_assets() {
 
+    $widget_active = function_exists( 'is_active_widget' ) && is_active_widget( false, false, 'rsm_race_showcase_widget', true );
+
     if (
+        $widget_active ||
         is_singular( 'cmt_race' ) ||
         is_singular( 'cmt_event' ) ||
         is_post_type_archive( 'cmt_race' )

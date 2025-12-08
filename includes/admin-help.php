@@ -59,6 +59,13 @@ function rsm_render_help_page() {
     $content .= '<li>' . esc_html__( 'Event overview tables show races with dates, times, and configured action buttons that honor settings.', 'race-series-manager' ) . '</li>';
     $content .= '</ul>';
 
+    $content .= '<h2>' . esc_html__( 'Homepage widgets', 'race-series-manager' ) . '</h2>';
+    $content .= '<ul>';
+    $content .= '<li>' . esc_html__( 'Add the “RS Manager: Race Showcase” widget in Appearance → Widgets to highlight races on your front page.', 'race-series-manager' ) . '</li>';
+    $content .= '<li>' . esc_html__( 'Choose the parent Event from the dropdown and the number of races to show; races follow your manual order.', 'race-series-manager' ) . '</li>';
+    $content .= '<li>' . esc_html__( 'Race cards reuse each race’s featured image (or the default race image) and show distance, elevation, and a details link.', 'race-series-manager' ) . '</li>';
+    $content .= '</ul>';
+
     $content .= '<h2>' . esc_html__( 'PDF Booklet', 'race-series-manager' ) . '</h2>';
     $content .= '<p>' . esc_html__( 'The PDF generator relies on the bundled Dompdf library. If generation fails, check the status panel in settings and reinstall the /lib/dompdf directory if needed.', 'race-series-manager' ) . '</p>';
 
