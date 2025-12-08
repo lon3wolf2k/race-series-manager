@@ -161,6 +161,11 @@ function rsm_race_media_meta_box_callback( $post ) {
     $gallery_ids      = get_post_meta( $post->ID, '_rsm_race_gallery_ids', true );
     $static_map_id    = get_post_meta( $post->ID, '_rsm_race_static_map_id', true );
     $elev_chart_id    = get_post_meta( $post->ID, '_rsm_race_elev_chart_id', true );
+    $show_hero        = get_post_meta( $post->ID, '_rsm_race_show_hero', true );
+
+    if ( '' === $show_hero ) {
+        $show_hero = '1';
+    }
 
     if ( ! is_array( $gallery_ids ) ) {
         $gallery_ids = array();
@@ -183,6 +188,13 @@ function rsm_race_media_meta_box_callback( $post ) {
         <?php esc_html_e( 'Paste a YouTube iframe embed code. It will appear in the Race Video section.', 'race-series-manager' ); ?>
     </p>
     <textarea name="rsm_race_video_embed" id="rsm_race_video_embed" rows="5" class="large-text code"><?php echo esc_textarea( $video_embed ); ?></textarea>
+
+    <h4 style="margin-top:1.5em;"><?php esc_html_e( 'Hero image', 'race-series-manager' ); ?></h4>
+    <label>
+        <input type="checkbox" name="rsm_race_show_hero" value="1" <?php checked( $show_hero, '1' ); ?>>
+        <?php esc_html_e( 'Display the featured image as a hero banner on the race page.', 'race-series-manager' ); ?>
+    </label>
+    <p class="description"><?php esc_html_e( 'Uncheck to hide the featured image on the race frontend.', 'race-series-manager' ); ?></p>
 
     <h4 style="margin-top:1.5em;"><?php esc_html_e( 'Race gallery', 'race-series-manager' ); ?></h4>
     <p class="description">
@@ -465,6 +477,7 @@ function rsm_save_race_meta( $post_id ) {
 
         $static_map  = isset( $_POST['rsm_race_static_map_id'] ) ? intval( $_POST['rsm_race_static_map_id'] ) : 0;
         $elev_chart  = isset( $_POST['rsm_race_elev_chart_id'] ) ? intval( $_POST['rsm_race_elev_chart_id'] ) : 0;
+        $show_hero   = isset( $_POST['rsm_race_show_hero'] ) && '1' === $_POST['rsm_race_show_hero'] ? '1' : '0';
 
         $gallery_array = array();
         if ( ! empty( $gallery_ids ) ) {
@@ -483,6 +496,7 @@ function rsm_save_race_meta( $post_id ) {
         update_post_meta( $post_id, '_rsm_race_gallery_ids',      $gallery_array );
         update_post_meta( $post_id, '_rsm_race_static_map_id',    $static_map );
         update_post_meta( $post_id, '_rsm_race_elev_chart_id',    $elev_chart );
+        update_post_meta( $post_id, '_rsm_race_show_hero',        $show_hero );
     }
 }
 add_action( 'save_post_cmt_race', 'rsm_save_race_meta' );

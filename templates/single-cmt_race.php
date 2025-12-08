@@ -41,6 +41,11 @@ while ( have_posts() ) :
     // Gallery (image IDs)
     $gallery_meta = get_post_meta( $race_id, '_rsm_race_gallery_ids', true );
     $gallery_ids  = array();
+    $show_hero    = get_post_meta( $race_id, '_rsm_race_show_hero', true );
+
+    if ( '' === $show_hero ) {
+        $show_hero = '1';
+    }
 
     if ( is_array( $gallery_meta ) ) {
         $gallery_ids = $gallery_meta;
@@ -106,7 +111,7 @@ while ( have_posts() ) :
         <main class="rsm-race-main">
 
             <!-- HERO IMAGE -->
-            <?php if ( has_post_thumbnail() ) : ?>
+            <?php if ( has_post_thumbnail() && '1' === $show_hero ) : ?>
                 <div class="rsm-hero">
                     <?php the_post_thumbnail( 'large' ); ?>
                 </div>
