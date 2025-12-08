@@ -48,6 +48,16 @@
     color: #fff;
 }
 
+.rsm-event-banner__title-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.rsm-event-banner__title-link:hover,
+.rsm-event-banner__title-link:focus {
+    text-decoration: underline;
+}
+
 .rsm-event-banner__date {
     margin: 0 0 12px;
     font-size: 15px;

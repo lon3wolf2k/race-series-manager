@@ -300,6 +300,7 @@ function rsm_get_event_banner_markup( $event_id, $title = '' ) {
     $background_id = $datetime['race_id'] ? $datetime['race_id'] : 0;
     $bg_url        = rsm_get_race_showcase_image_url( $background_id );
     $heading       = $title ? $title : get_the_title( $event_id );
+    $heading_link  = $event ? get_permalink( $event_id ) : '';
 
     ob_start();
     ?>
@@ -308,7 +309,15 @@ function rsm_get_event_banner_markup( $event_id, $title = '' ) {
         <div class="rsm-event-banner__inner">
             <div class="rsm-event-banner__info">
                 <span class="rsm-event-banner__eyebrow"><?php esc_html_e( 'Upcoming event', 'race-series-manager' ); ?></span>
-                <h3 class="rsm-event-banner__title"><?php echo esc_html( $heading ); ?></h3>
+                <h3 class="rsm-event-banner__title">
+                    <?php if ( $heading_link ) : ?>
+                        <a class="rsm-event-banner__title-link" href="<?php echo esc_url( $heading_link ); ?>"<?php echo $target_attr; ?>>
+                            <?php echo esc_html( $heading ); ?>
+                        </a>
+                    <?php else : ?>
+                        <?php echo esc_html( $heading ); ?>
+                    <?php endif; ?>
+                </h3>
                 <?php if ( $datetime['display'] || $datetime['iso'] ) : ?>
                     <div class="rsm-event-banner__time">
                         <?php if ( $datetime['display'] ) : ?>
