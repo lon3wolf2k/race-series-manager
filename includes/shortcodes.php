@@ -47,15 +47,34 @@ function rsm_event_overview_shortcode( $atts ) {
         'rsm_event_overview'
     );
 
+    // Ensure front-end assets load when shortcode is used outside custom templates.
+    wp_enqueue_style(
+        'rsm-styles',
+        RSM_PLUGIN_URL . 'assets/css/rsm-styles.css',
+        array(),
+        '0.4.0'
+    );
+
+    $settings = rsm_get_settings();
+
     $event_id = rsm_resolve_event_id( $atts['event'] );
 
     if ( ! $event_id ) {
-        return '<p>No event selected (invalid event attribute).</p>';
+        return '<p>' . esc_html__( 'No event selected (invalid event attribute).', 'race-series-manager' ) . '</p>';
     }
 
     $event = get_post( $event_id );
     if ( ! $event || 'cmt_event' !== $event->post_type ) {
-        return '<p>Event not found.</p>';
+        return '<p>' . esc_html__( 'Event not found.', 'race-series-manager' ) . '</p>';
+    }
+
+    $reg_url  = get_post_meta( $event_id, '_rsm_event_registration_url', true );
+    $part_url = get_post_meta( $event_id, '_rsm_event_participants_url', true );
+    $live_url = get_post_meta( $event_id, '_rsm_event_live_url', true );
+
+    $results_url = '';
+    if ( function_exists( 'rsm_get_results_page_url' ) ) {
+        $results_url = rsm_get_results_page_url( $event_id );
     }
 
     // Get all races for this event.
@@ -78,12 +97,50 @@ function rsm_event_overview_shortcode( $atts ) {
     ob_start();
     ?>
     <div class="rsm-event-overview">
-        <h2 class="rsm-event-title">
-            <?php echo esc_html( get_the_title( $event_id ) ); ?>
-        </h2>
+        <div class="rsm-event-overview-header">
+            <div class="rsm-event-overview-heading">
+                <h2 class="rsm-event-title">
+                    <?php echo esc_html( get_the_title( $event_id ) ); ?>
+                </h2>
+                <?php if ( ! empty( $settings['overview_show_excerpt'] ) && $event->post_excerpt ) : ?>
+                    <p class="rsm-event-overview-excerpt"><?php echo esc_html( $event->post_excerpt ); ?></p>
+                <?php endif; ?>
+            </div>
+
+            <?php if ( $reg_url || $part_url || $live_url || $results_url ) : ?>
+                <div class="rsm-event-overview-actions">
+                    <?php if ( $reg_url ) : ?>
+                        <a class="rsm-summary-btn" href="<?php echo esc_url( $reg_url ); ?>">
+                            <?php echo esc_html( $settings['overview_registration_label'] ); ?>
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if ( $part_url ) : ?>
+                        <a class="rsm-summary-btn" href="<?php echo esc_url( $part_url ); ?>">
+                            <?php echo esc_html( $settings['overview_participants_label'] ); ?>
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if ( $live_url ) : ?>
+                        <a class="rsm-summary-btn" href="<?php echo esc_url( $live_url ); ?>">
+                            <?php echo esc_html( $settings['overview_live_label'] ); ?>
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if ( $results_url ) : ?>
+                        <a class="rsm-summary-btn rsm-event-results-btn"
+                           href="<?php echo esc_url( $results_url ); ?>"
+                           target="_blank"
+                           rel="noopener">
+                            <?php echo esc_html( $settings['overview_results_label'] ); ?>
+                        </a>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+        </div>
 
         <?php if ( $races->have_posts() ) : ?>
-            <table class="rsm-races">
+            <table class="rsm-races rsm-event-overview-table">
                 <thead>
                 <tr>
                     <th><?php esc_html_e( 'Race', 'race-series-manager' ); ?></th>
@@ -106,22 +163,47 @@ function rsm_event_overview_shortcode( $atts ) {
                     $start_time = get_post_meta( $race_id, '_rsm_race_start_time', true );
                     $start_loc  = get_post_meta( $race_id, '_rsm_race_start_location', true );
                     $fee        = get_post_meta( $race_id, '_rsm_race_fee', true );
+
+                    $date_format = get_option( 'date_format' );
+                    if ( empty( $date_format ) ) {
+                        $date_format = 'd-m-Y';
+                    }
+
+                    $race_date_formatted = '';
+                    if ( $race_date ) {
+                        $ts = strtotime( $race_date );
+                        if ( $ts ) {
+                            $race_date_formatted = wp_date( $date_format, $ts );
+                        }
+                    }
+
+                    $start_time_formatted = '';
+                    if ( $start_time ) {
+                        $ts = strtotime( $start_time );
+                        if ( $ts ) {
+                            $start_time_formatted = wp_date( get_option( 'time_format' ), $ts );
+                        }
+                    }
                     ?>
                     <tr>
-                        <td><?php the_title(); ?></td>
-                        <td><?php echo esc_html( $distance ); ?></td>
-                        <td><?php echo esc_html( $elevation ); ?></td>
-                        <td><?php echo esc_html( $race_date ); ?></td>
-                        <td><?php echo esc_html( $start_time ); ?></td>
-                        <td><?php echo esc_html( $start_loc ); ?></td>
-                        <td><?php echo esc_html( $fee ); ?></td>
+                        <td>
+                            <a href="<?php echo esc_url( get_permalink() ); ?>" class="rsm-event-overview-race-link">
+                                <?php echo esc_html( get_the_title() ); ?>
+                            </a>
+                        </td>
+                        <td><?php echo $distance ? esc_html( $distance ) : '—'; ?></td>
+                        <td><?php echo $elevation ? esc_html( $elevation ) : '—'; ?></td>
+                        <td><?php echo $race_date_formatted ? esc_html( $race_date_formatted ) : '—'; ?></td>
+                        <td><?php echo $start_time_formatted ? esc_html( $start_time_formatted ) : '—'; ?></td>
+                        <td><?php echo $start_loc ? esc_html( $start_loc ) : '—'; ?></td>
+                        <td><?php echo $fee ? esc_html( $fee ) : '—'; ?></td>
                     </tr>
                 <?php endwhile; ?>
                 </tbody>
             </table>
             <?php wp_reset_postdata(); ?>
         <?php else : ?>
-            <p><?php esc_html_e( 'No races defined for this event yet.', 'race-series-manager' ); ?></p>
+            <p class="rsm-event-overview-empty"><?php esc_html_e( 'No races defined for this event yet.', 'race-series-manager' ); ?></p>
         <?php endif; ?>
     </div>
     <?php

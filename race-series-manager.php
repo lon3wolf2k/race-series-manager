@@ -38,6 +38,9 @@ add_action( 'plugins_loaded', 'rsm_load_textdomain' );
 // Includes
 // -----------------------------------------------------------------------------
 require_once RSM_PLUGIN_DIR . 'includes/post-types.php';
+require_once RSM_PLUGIN_DIR . 'includes/admin-menu.php';
+require_once RSM_PLUGIN_DIR . 'includes/settings.php';
+require_once RSM_PLUGIN_DIR . 'includes/clone.php';
 require_once RSM_PLUGIN_DIR . 'includes/meta-event.php';
 require_once RSM_PLUGIN_DIR . 'includes/meta-race.php';
 require_once RSM_PLUGIN_DIR . 'includes/meta-results.php';      // αποτελέσματα (backend)
