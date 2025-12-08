@@ -279,6 +279,10 @@ while ( have_posts() ) :
                         <?php foreach ( $gallery_ids as $img_id ) :
                             $full  = wp_get_attachment_image_src( $img_id, 'large' );
                             $thumb = wp_get_attachment_image_src( $img_id, 'medium' );
+                            $alt   = get_post_meta( $img_id, '_wp_attachment_image_alt', true );
+                            if ( '' === $alt ) {
+                                $alt = get_the_title( $img_id );
+                            }
                             if ( ! $full || ! $thumb ) {
                                 continue;
                             }
@@ -286,7 +290,7 @@ while ( have_posts() ) :
                             <a href="<?php echo esc_url( $full[0] ); ?>"
                                class="rsm-race-gallery-item"
                                data-rsm-lightbox="race-gallery">
-                                <img src="<?php echo esc_url( $thumb[0] ); ?>" alt="">
+                                <img src="<?php echo esc_url( $thumb[0] ); ?>" alt="<?php echo esc_attr( $alt ); ?>">
                             </a>
                         <?php endforeach; ?>
                     </div>

@@ -72,6 +72,14 @@ function rsm_enqueue_assets() {
             '0.4.0',
             true
         );
+
+        wp_localize_script(
+            'rsm-lightbox',
+            'rsmLightbox',
+            array(
+                'i18nClose' => __( 'Close', 'race-series-manager' ),
+            )
+        );
     }
 }
 add_action( 'wp_enqueue_scripts', 'rsm_enqueue_assets' );
