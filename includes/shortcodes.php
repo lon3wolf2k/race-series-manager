@@ -32,6 +32,31 @@ function rsm_resolve_event_id( $event_attr ) {
 }
 
 /**
+ * Helper: resolve race id from shortcode attr (id or slug)
+ *
+ * [rsm_race_link race="123"]
+ * [rsm_race_link race="sunrise-vertical"]
+ */
+function rsm_resolve_race_id( $race_attr ) {
+    if ( empty( $race_attr ) ) {
+        return 0;
+    }
+
+    if ( is_numeric( $race_attr ) ) {
+        return intval( $race_attr );
+    }
+
+    $slug = sanitize_title( $race_attr );
+    $race = get_page_by_path( $slug, OBJECT, 'cmt_race' );
+
+    if ( $race ) {
+        return $race->ID;
+    }
+
+    return 0;
+}
+
+/**
  * SHORTCODE: [rsm_event_overview event="corfu-mountain-trail"]
  *
  * Output:
@@ -208,3 +233,75 @@ function rsm_event_overview_shortcode( $atts ) {
     return ob_get_clean();
 }
 add_shortcode( 'rsm_event_overview', 'rsm_event_overview_shortcode' );
+
+/**
+ * SHORTCODE: [rsm_event_link event="123" label="Custom text"]
+ */
+function rsm_event_link_shortcode( $atts ) {
+    $atts = shortcode_atts(
+        array(
+            'event' => '',
+            'label' => '',
+        ),
+        $atts,
+        'rsm_event_link'
+    );
+
+    $event_id = rsm_resolve_event_id( $atts['event'] );
+    if ( ! $event_id ) {
+        return '';
+    }
+
+    $event = get_post( $event_id );
+    if ( ! $event || 'cmt_event' !== $event->post_type ) {
+        return '';
+    }
+
+    $label = $atts['label'];
+    if ( '' === $label ) {
+        $label = get_the_title( $event_id );
+    }
+
+    return sprintf(
+        '<a href="%1$s">%2$s</a>',
+        esc_url( get_permalink( $event_id ) ),
+        esc_html( $label )
+    );
+}
+add_shortcode( 'rsm_event_link', 'rsm_event_link_shortcode' );
+
+/**
+ * SHORTCODE: [rsm_race_link race="123" label="Custom text"]
+ */
+function rsm_race_link_shortcode( $atts ) {
+    $atts = shortcode_atts(
+        array(
+            'race'  => '',
+            'label' => '',
+        ),
+        $atts,
+        'rsm_race_link'
+    );
+
+    $race_id = rsm_resolve_race_id( $atts['race'] );
+    if ( ! $race_id ) {
+        return '';
+    }
+
+    $race = get_post( $race_id );
+    if ( ! $race || 'cmt_race' !== $race->post_type ) {
+        return '';
+    }
+
+    $label = $atts['label'];
+    if ( '' === $label ) {
+        $label = get_the_title( $race_id );
+    }
+
+    return sprintf(
+        '<a href="%1$s">%2$s</a>',
+        esc_url( get_permalink( $race_id ) ),
+        esc_html( $label )
+    );
+}
+add_shortcode( 'rsm_race_link', 'rsm_race_link_shortcode' );

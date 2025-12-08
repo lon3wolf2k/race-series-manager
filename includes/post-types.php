@@ -44,7 +44,7 @@ function rsm_register_post_types() {
         'has_archive'        => true,
         'rewrite'            => array( 'slug' => 'events' ),
         'show_in_rest'       => true,
-        'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
+        'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt', 'page-attributes' ),
         'menu_icon'          => 'dashicons-flag',
         'show_in_menu'       => 'rsm-manager',
     );
@@ -85,7 +85,7 @@ function rsm_register_post_types() {
         'has_archive'        => true,
         'rewrite'            => array( 'slug' => 'races' ),
         'show_in_rest'       => true,
-        'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
+        'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt', 'page-attributes' ),
         'menu_icon'          => 'dashicons-location-alt',
         'show_in_menu'       => 'rsm-manager',
     );
@@ -119,7 +119,7 @@ function rsm_register_post_types() {
         'show_ui'            => true,
         'show_in_menu'       => 'rsm-manager',     // nested under RS Manager
         'show_in_rest'       => false,
-        'supports'           => array( 'title' ),  // τίτλος π.χ. “CMT 2023 – Rain Trail 44km”
+        'supports'           => array( 'title', 'page-attributes' ),  // τίτλος π.χ. “CMT 2023 – Rain Trail 44km”
         'menu_icon'          => 'dashicons-analytics',
         'capability_type'    => 'post',
     );

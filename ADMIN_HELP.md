@@ -1,6 +1,6 @@
 # Race Series Manager – Admin Help
 
-This plugin lets you create **Events** and add multiple **Races** under each event. Use the guidance below to manage content in wp-admin and embed race lists on any page with the bundled shortcode.
+This plugin lets you create **Events** and add multiple **Races** under each event. Use the guidance below to manage content in wp-admin and embed race lists on any page with the bundled shortcodes.
 
 ## Creating events
 - Add a new **Event** (post type `cmt_event`).
@@ -15,8 +15,9 @@ This plugin lets you create **Events** and add multiple **Races** under each eve
 - Publish/update the race. Repeat for additional distances.
 - Use the **Clone** row action on a race to duplicate details (including media/meta) into a new draft you can edit.
 
-## Shortcode: Event overview
-The plugin provides a single shortcode to list all races of an event with action buttons for registration, participants, live timing, and results (when configured):
+## Shortcodes
+### Event overview
+List all races of an event with action buttons for registration, participants, live timing, and results (when configured):
 
 ```
 [rsm_event_overview event="EVENT_SLUG_OR_ID"]
@@ -28,9 +29,23 @@ The plugin provides a single shortcode to list all races of an event with action
 - Buttons appear only when the related event URLs (registration/participants/live) are filled. A **Results** button shows when a results page exists for the event.
 
 ### Finding the event slug or ID
-- When editing an event, the sidebar **Shortcode** meta box shows ready-to-copy shortcode examples for both slug and ID.
-- When editing a race, a similar meta box points to its parent event’s shortcode.
+- When editing an event, the sidebar **RS Manager Shortcodes** box shows ready-to-copy shortcode examples for that event.
+- When editing a race, a similar meta box shows the race link shortcode and, when available, the parent event’s overview shortcode.
 - You can also copy the slug from the event permalink or the ID from the URL parameter `post=123` in the admin URL.
+
+### Event and race link shortcodes
+Insert a simple link to a specific event or race anywhere:
+
+```
+[rsm_event_link event="EVENT_SLUG_OR_ID"]
+[rsm_race_link race="RACE_SLUG_OR_ID"]
+```
+
+- Optional `label` attribute overrides the linked text. Without it, the event/race title is used.
+
+## Viewing IDs and ordering
+- The **ID** column now appears in **Events**, **Races**, and **Results** lists for quick reference.
+- An **Order** column is available and sortable; change the number in **Quick Edit** or the **Page Attributes → Order** box on the edit screen to control manual ordering.
 
 ## Troubleshooting
 - If the shortcode says “Event not found,” confirm the `event` attribute matches an existing event slug/ID and that the event is published.
