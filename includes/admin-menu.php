@@ -21,6 +21,70 @@ function rsm_register_admin_menu() {
 add_action( 'admin_menu', 'rsm_register_admin_menu' );
 
 /**
+ * Add submenus for Events, Races, and Results under the RS Manager parent.
+ */
+function rsm_register_content_submenus() {
+    // Keep the dashboard/landing page accessible as the first submenu item.
+    add_submenu_page(
+        'rsm-manager',
+        esc_html__( 'RS Manager', 'race-series-manager' ),
+        esc_html__( 'Dashboard', 'race-series-manager' ),
+        'edit_posts',
+        'rsm-manager',
+        'rsm_render_admin_home'
+    );
+
+    add_submenu_page(
+        'rsm-manager',
+        esc_html__( 'Events', 'race-series-manager' ),
+        esc_html__( 'All Events', 'race-series-manager' ),
+        'edit_posts',
+        'edit.php?post_type=cmt_event'
+    );
+
+    add_submenu_page(
+        'rsm-manager',
+        esc_html__( 'Add New Event', 'race-series-manager' ),
+        esc_html__( 'Add New Event', 'race-series-manager' ),
+        'edit_posts',
+        'post-new.php?post_type=cmt_event'
+    );
+
+    add_submenu_page(
+        'rsm-manager',
+        esc_html__( 'Races', 'race-series-manager' ),
+        esc_html__( 'All Races', 'race-series-manager' ),
+        'edit_posts',
+        'edit.php?post_type=cmt_race'
+    );
+
+    add_submenu_page(
+        'rsm-manager',
+        esc_html__( 'Add New Race', 'race-series-manager' ),
+        esc_html__( 'Add New Race', 'race-series-manager' ),
+        'edit_posts',
+        'post-new.php?post_type=cmt_race'
+    );
+
+    add_submenu_page(
+        'rsm-manager',
+        esc_html__( 'Results', 'race-series-manager' ),
+        esc_html__( 'All Results', 'race-series-manager' ),
+        'edit_posts',
+        'edit.php?post_type=cmt_result'
+    );
+
+    add_submenu_page(
+        'rsm-manager',
+        esc_html__( 'Add New Result', 'race-series-manager' ),
+        esc_html__( 'Add New Result', 'race-series-manager' ),
+        'edit_posts',
+        'post-new.php?post_type=cmt_result'
+    );
+}
+add_action( 'admin_menu', 'rsm_register_content_submenus', 11 );
+
+/**
  * Render a simple landing page for the RS Manager menu.
  */
 function rsm_render_admin_home() {
