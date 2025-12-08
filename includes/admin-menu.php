@@ -32,6 +32,7 @@ function rsm_render_admin_home() {
     $races_url    = admin_url( 'edit.php?post_type=cmt_race' );
     $results_url  = admin_url( 'edit.php?post_type=cmt_result' );
     $settings_url = admin_url( 'admin.php?page=rsm-settings' );
+    $help_url     = admin_url( 'admin.php?page=rsm-help' );
     ?>
     <div class="wrap">
         <h1><?php esc_html_e( 'RS Manager', 'race-series-manager' ); ?></h1>
@@ -48,6 +49,9 @@ function rsm_render_admin_home() {
             </a>
             <a class="button" href="<?php echo esc_url( $settings_url ); ?>">
                 <?php esc_html_e( 'Settings', 'race-series-manager' ); ?>
+            </a>
+            <a class="button" href="<?php echo esc_url( $help_url ); ?>">
+                <?php esc_html_e( 'Help', 'race-series-manager' ); ?>
             </a>
         </p>
     </div>
