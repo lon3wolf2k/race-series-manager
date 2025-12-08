@@ -27,7 +27,7 @@ function rsm_register_post_types() {
         'search_items'          => esc_html__( 'Search Events', 'race-series-manager' ),
         'not_found'             => esc_html__( 'No events found.', 'race-series-manager' ),
         'not_found_in_trash'    => esc_html__( 'No events found in Trash.', 'race-series-manager' ),
-        'all_items'             => esc_html__( 'All Events', 'race-series-manager' ),
+        'all_items'             => esc_html__( 'Events', 'race-series-manager' ),
         'archives'              => esc_html__( 'Event archives', 'race-series-manager' ),
         'attributes'            => esc_html__( 'Event attributes', 'race-series-manager' ),
         'insert_into_item'      => esc_html__( 'Insert into event', 'race-series-manager' ),
@@ -68,7 +68,7 @@ function rsm_register_post_types() {
         'search_items'          => esc_html__( 'Search Races', 'race-series-manager' ),
         'not_found'             => esc_html__( 'No races found.', 'race-series-manager' ),
         'not_found_in_trash'    => esc_html__( 'No races found in Trash.', 'race-series-manager' ),
-        'all_items'             => esc_html__( 'All Races', 'race-series-manager' ),
+        'all_items'             => esc_html__( 'Races', 'race-series-manager' ),
         'archives'              => esc_html__( 'Race archives', 'race-series-manager' ),
         'attributes'            => esc_html__( 'Race attributes', 'race-series-manager' ),
         'insert_into_item'      => esc_html__( 'Insert into race', 'race-series-manager' ),
@@ -109,7 +109,7 @@ function rsm_register_post_types() {
         'search_items'          => esc_html__( 'Search Results', 'race-series-manager' ),
         'not_found'             => esc_html__( 'No results found.', 'race-series-manager' ),
         'not_found_in_trash'    => esc_html__( 'No results found in Trash.', 'race-series-manager' ),
-        'all_items'             => esc_html__( 'All Results', 'race-series-manager' ),
+        'all_items'             => esc_html__( 'Results', 'race-series-manager' ),
         'archives'              => esc_html__( 'Result archives', 'race-series-manager' ),
     );
 
