@@ -15,6 +15,7 @@ function rsm_get_settings_defaults() {
         'overview_results_label'      => esc_html__( 'Results', 'race-series-manager' ),
         'overview_show_excerpt'       => 1,
         'overview_action_new_tab'     => 1,
+        'theme'                       => 'light',
     );
 }
 
@@ -58,6 +59,8 @@ function rsm_sanitize_settings( $input ) {
     $output['overview_show_excerpt'] = empty( $input['overview_show_excerpt'] ) ? 0 : 1;
 
     $output['overview_action_new_tab'] = empty( $input['overview_action_new_tab'] ) ? 0 : 1;
+
+    $output['theme'] = ( isset( $input['theme'] ) && 'dark' === $input['theme'] ) ? 'dark' : 'light';
 
     return $output;
 }
@@ -156,6 +159,30 @@ function rsm_register_settings() {
             'description' => esc_html__( 'Open event-level action buttons (registration, participants, live, results) in a new tab.', 'race-series-manager' ),
         )
     );
+
+    add_settings_section(
+        'rsm_display_settings',
+        esc_html__( 'Display options', 'race-series-manager' ),
+        function() {
+            echo '<p>' . esc_html__( 'Choose whether plugin elements render with the light or dark theme.', 'race-series-manager' ) . '</p>';
+        },
+        'rsm-settings'
+    );
+
+    add_settings_field(
+        'theme',
+        esc_html__( 'Plugin theme', 'race-series-manager' ),
+        'rsm_render_select_setting_field',
+        'rsm-settings',
+        'rsm_display_settings',
+        array(
+            'name'    => 'theme',
+            'options' => array(
+                'light' => esc_html__( 'Light', 'race-series-manager' ),
+                'dark'  => esc_html__( 'Dark', 'race-series-manager' ),
+            ),
+        )
+    );
 }
 add_action( 'admin_init', 'rsm_register_settings' );
 
@@ -203,6 +230,28 @@ function rsm_render_checkbox_setting_field( $args ) {
                value="1" <?php checked( $checked ); ?> />
         <?php echo esc_html( $description ); ?>
     </label>
+    <?php
+}
+
+/**
+ * Render select field for settings.
+ */
+function rsm_render_select_setting_field( $args ) {
+    $settings = rsm_get_settings();
+    $name     = isset( $args['name'] ) ? $args['name'] : '';
+    $options  = isset( $args['options'] ) ? (array) $args['options'] : array();
+
+    if ( ! $name || empty( $options ) ) {
+        return;
+    }
+
+    $value = isset( $settings[ $name ] ) ? $settings[ $name ] : '';
+    ?>
+    <select name="rsm_settings[<?php echo esc_attr( $name ); ?>]" id="rsm_settings_<?php echo esc_attr( $name ); ?>">
+        <?php foreach ( $options as $option_value => $label ) : ?>
+            <option value="<?php echo esc_attr( $option_value ); ?>" <?php selected( $value, $option_value ); ?>><?php echo esc_html( $label ); ?></option>
+        <?php endforeach; ?>
+    </select>
     <?php
 }
 

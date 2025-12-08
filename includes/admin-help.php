@@ -43,6 +43,7 @@ function rsm_render_help_page() {
     $content .= '<li>' . esc_html__( 'Customize event overview button labels (Registration, Participants, Live, Results).', 'race-series-manager' ) . '</li>';
     $content .= '<li>' . esc_html__( 'Toggle showing event excerpts in the overview table.', 'race-series-manager' ) . '</li>';
     $content .= '<li>' . esc_html__( 'Choose whether action links open in a new tab.', 'race-series-manager' ) . '</li>';
+    $content .= '<li>' . esc_html__( 'Pick the plugin theme (light or dark) to match your site.', 'race-series-manager' ) . '</li>';
     $content .= '<li>' . esc_html__( 'Review the “PDF Generator Status” panel to confirm the bundled Dompdf library is available.', 'race-series-manager' ) . '</li>';
     $content .= '</ul>';
 

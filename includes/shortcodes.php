@@ -73,12 +73,9 @@ function rsm_event_overview_shortcode( $atts ) {
     );
 
     // Ensure front-end assets load when shortcode is used outside custom templates.
-    wp_enqueue_style(
-        'rsm-styles',
-        RSM_PLUGIN_URL . 'assets/css/rsm-styles.css',
-        array(),
-        '0.4.0'
-    );
+    if ( function_exists( 'rsm_enqueue_style_bundle' ) ) {
+        rsm_enqueue_style_bundle();
+    }
 
     $settings = rsm_get_settings();
 
@@ -258,12 +255,9 @@ function rsm_race_showcase_shortcode( $atts ) {
 
     $race_count = min( 12, max( 1, absint( $atts['count'] ) ) );
 
-    wp_enqueue_style(
-        'rsm-styles',
-        RSM_PLUGIN_URL . 'assets/css/rsm-styles.css',
-        array(),
-        '0.4.0'
-    );
+    if ( function_exists( 'rsm_enqueue_style_bundle' ) ) {
+        rsm_enqueue_style_bundle();
+    }
 
     ob_start();
 

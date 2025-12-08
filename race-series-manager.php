@@ -55,6 +55,43 @@ require_once RSM_PLUGIN_DIR . 'includes/pdf-booklet.php';
 // -----------------------------------------------------------------------------
 // Front-end assets
 // -----------------------------------------------------------------------------
+function rsm_register_frontend_assets() {
+    wp_register_style( 'rsm-core', RSM_PLUGIN_URL . 'assets/css/rsm-core.css', array(), '0.4.0' );
+    wp_register_style( 'rsm-event', RSM_PLUGIN_URL . 'assets/css/rsm-event.css', array( 'rsm-core' ), '0.4.0' );
+    wp_register_style( 'rsm-showcase', RSM_PLUGIN_URL . 'assets/css/rsm-showcase.css', array( 'rsm-core' ), '0.4.0' );
+    wp_register_style( 'rsm-lightbox-style', RSM_PLUGIN_URL . 'assets/css/rsm-lightbox.css', array(), '0.4.0' );
+    wp_register_style( 'rsm-theme-light', RSM_PLUGIN_URL . 'assets/css/rsm-theme-light.css', array(), '0.4.0' );
+    wp_register_style( 'rsm-theme-dark', RSM_PLUGIN_URL . 'assets/css/rsm-theme-dark.css', array(), '0.4.0' );
+
+    wp_register_script(
+        'rsm-lightbox',
+        RSM_PLUGIN_URL . 'assets/js/rsm-lightbox.js',
+        array( 'jquery' ),
+        '0.4.0',
+        true
+    );
+}
+add_action( 'wp_enqueue_scripts', 'rsm_register_frontend_assets', 5 );
+
+function rsm_enqueue_theme_style() {
+    if ( ! function_exists( 'rsm_get_settings' ) ) {
+        return;
+    }
+
+    $settings = rsm_get_settings();
+    $theme    = ( isset( $settings['theme'] ) && 'dark' === $settings['theme'] ) ? 'dark' : 'light';
+
+    wp_enqueue_style( 'rsm-theme-' . $theme );
+}
+
+function rsm_enqueue_style_bundle() {
+    wp_enqueue_style( 'rsm-core' );
+    wp_enqueue_style( 'rsm-event' );
+    wp_enqueue_style( 'rsm-showcase' );
+    wp_enqueue_style( 'rsm-lightbox-style' );
+    rsm_enqueue_theme_style();
+}
+
 function rsm_enqueue_assets() {
 
     $widget_active = function_exists( 'is_active_widget' ) && is_active_widget( false, false, 'rsm_race_showcase_widget', true );
@@ -65,20 +102,9 @@ function rsm_enqueue_assets() {
         is_singular( 'cmt_event' ) ||
         is_post_type_archive( 'cmt_race' )
     ) {
-        wp_enqueue_style(
-            'rsm-styles',
-            RSM_PLUGIN_URL . 'assets/css/rsm-styles.css',
-            array(),
-            '0.4.0'
-        );
+        rsm_enqueue_style_bundle();
 
-        wp_enqueue_script(
-            'rsm-lightbox',
-            RSM_PLUGIN_URL . 'assets/js/rsm-lightbox.js',
-            array( 'jquery' ),
-            '0.4.0',
-            true
-        );
+        wp_enqueue_script( 'rsm-lightbox' );
 
         wp_localize_script(
             'rsm-lightbox',
@@ -92,6 +118,16 @@ function rsm_enqueue_assets() {
     }
 }
 add_action( 'wp_enqueue_scripts', 'rsm_enqueue_assets' );
+
+function rsm_add_theme_body_class( $classes ) {
+    $settings = rsm_get_settings();
+    $theme    = ( isset( $settings['theme'] ) && 'dark' === $settings['theme'] ) ? 'dark' : 'light';
+
+    $classes[] = 'rsm-theme-' . $theme;
+
+    return $classes;
+}
+add_filter( 'body_class', 'rsm_add_theme_body_class' );
 
 // -----------------------------------------------------------------------------
 // Template loader για Event & Race & Archive Races
