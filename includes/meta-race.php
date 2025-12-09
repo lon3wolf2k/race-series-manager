@@ -25,6 +25,128 @@ function rsm_race_get_allowed_embed_html() {
 }
 
 /**
+ * List of allowed iframe embed hostnames.
+ *
+ * Subdomains of these hosts are also permitted.
+ *
+ * @return string[]
+ */
+function rsm_race_get_allowed_embed_hosts() {
+    return array(
+        'plotaroute.com',
+        'www.plotaroute.com',
+        'www.youtube.com',
+        'youtube.com',
+        'youtu.be',
+        'www.youtube-nocookie.com',
+        'player.vimeo.com',
+        'vimeo.com',
+        'www.google.com',
+        'maps.google.com',
+        'www.openstreetmap.org',
+        'openstreetmap.org',
+    );
+}
+
+/**
+ * Validate embed src against allowed schemes and host list.
+ *
+ * @param string $src Raw src value.
+ * @return string Sanitized https URL or empty string when blocked.
+ */
+function rsm_race_sanitize_embed_src( $src ) {
+    if ( empty( $src ) ) {
+        return '';
+    }
+
+    $src = esc_url_raw( $src, array( 'https' ) );
+    if ( empty( $src ) ) {
+        return '';
+    }
+
+    $parts = wp_parse_url( $src );
+    if ( empty( $parts['host'] ) ) {
+        return '';
+    }
+
+    $host          = strtolower( $parts['host'] );
+    $allowed_hosts = rsm_race_get_allowed_embed_hosts();
+
+    foreach ( $allowed_hosts as $allowed_host ) {
+        $allowed_host = strtolower( $allowed_host );
+
+        if ( $host === $allowed_host ) {
+            return $src;
+        }
+
+        $suffix = '.' . $allowed_host;
+        if ( substr( $host, -strlen( $suffix ) ) === $suffix ) {
+            return $src;
+        }
+    }
+
+    return '';
+}
+
+/**
+ * Rebuild iframe tag with sanitized attributes or drop if invalid.
+ *
+ * @param string $iframe_html Raw iframe markup after kses.
+ * @return string Sanitized iframe markup or empty string.
+ */
+function rsm_race_sanitize_iframe_tag( $iframe_html ) {
+    if ( ! preg_match( '/<iframe\b([^>]*)>/i', $iframe_html, $matches ) ) {
+        return '';
+    }
+
+    $attributes = wp_kses_hair( '<iframe ' . $matches[1] . '>', array( 'https' ) );
+
+    if ( empty( $attributes['src']['value'] ) ) {
+        return '';
+    }
+
+    $safe_src = rsm_race_sanitize_embed_src( $attributes['src']['value'] );
+    if ( ! $safe_src ) {
+        return '';
+    }
+
+    $allowed_keys = array(
+        'src',
+        'width',
+        'height',
+        'frameborder',
+        'allow',
+        'allowfullscreen',
+        'title',
+        'loading',
+        'referrerpolicy',
+        'class',
+    );
+
+    $rebuilt = array();
+
+    foreach ( $attributes as $name => $attribute ) {
+        if ( ! in_array( $name, $allowed_keys, true ) ) {
+            continue;
+        }
+
+        $value = $attribute['value'];
+
+        if ( 'src' === $name ) {
+            $value = $safe_src;
+        }
+
+        $rebuilt[] = $name . '="' . esc_attr( $value ) . '"';
+    }
+
+    if ( empty( $rebuilt ) ) {
+        return '';
+    }
+
+    return '<iframe ' . implode( ' ', $rebuilt ) . '></iframe>';
+}
+
+/**
  * Sanitize iframe embed markup for storage/output.
  *
  * @param string $embed Raw embed HTML.
@@ -35,7 +157,19 @@ function rsm_race_sanitize_embed_html( $embed ) {
         return '';
     }
 
-    return wp_kses( $embed, rsm_race_get_allowed_embed_html() );
+    $clean = wp_kses( $embed, rsm_race_get_allowed_embed_html() );
+
+    if ( false === stripos( $clean, '<iframe' ) ) {
+        return '';
+    }
+
+    $clean = preg_replace_callback(
+        '/<iframe\b[^>]*>.*?<\/iframe>/is',
+        'rsm_race_sanitize_iframe_tag',
+        $clean
+    );
+
+    return trim( $clean );
 }
 
 /**
