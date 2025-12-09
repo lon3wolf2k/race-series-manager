@@ -2,6 +2,68 @@
     max-width: 1180px;
 }
 
+.rsm-branding-card {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+    align-items: center;
+    background: linear-gradient(135deg, #f0f6fc 0%, #ffffff 60%);
+    border: 1px solid #dcdcde;
+    border-radius: 8px;
+    padding: 18px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    margin-top: 16px;
+    margin-bottom: 10px;
+}
+
+.rsm-branding-mark {
+    max-width: 100%;
+    height: auto;
+}
+
+.rsm-branding-copy {
+    font-size: 14px;
+    color: #1d2327;
+}
+
+.rsm-branding-title {
+    margin: 0 0 4px;
+    font-size: 18px;
+}
+
+.rsm-branding-tagline {
+    margin: 0 0 10px;
+    color: #1d2327;
+}
+
+.rsm-branding-list {
+    list-style: disc;
+    margin: 8px 0 0 18px;
+    padding: 0;
+}
+
+.rsm-branding-list li {
+    margin-bottom: 6px;
+}
+
+.rsm-branding-actions {
+    margin-top: 12px;
+}
+
+@media (max-width: 600px) {
+    .rsm-branding-card {
+        grid-template-columns: 1fr;
+    }
+
+    .rsm-branding-copy {
+        font-size: 13px;
+    }
+
+    .rsm-branding-title {
+        font-size: 16px;
+    }
+}
+
 .rsm-dashboard-tabs {
     display: inline-flex;
     gap: 8px;

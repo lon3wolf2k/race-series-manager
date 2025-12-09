@@ -142,6 +142,22 @@ function rsm_render_admin_home() {
         <h1><?php esc_html_e( 'RS Manager Dashboard', 'race-series-manager' ); ?></h1>
         <p class="description"><?php esc_html_e( 'Manage events, races, results, shortcodes, and tools from one place.', 'race-series-manager' ); ?></p>
 
+        <div class="rsm-branding-card">
+            <img src="<?php echo esc_url( RSM_PLUGIN_URL . 'assets/images/rsm-branding.svg' ); ?>" alt="<?php esc_attr_e( 'Race Series Manager logo', 'race-series-manager' ); ?>" class="rsm-branding-mark" />
+            <div class="rsm-branding-copy">
+                <h2 class="rsm-branding-title"><?php esc_html_e( 'Race Series Manager', 'race-series-manager' ); ?></h2>
+                <p class="rsm-branding-tagline"><?php esc_html_e( 'Quick setup, flexible shortcodes, and printable details for race directors.', 'race-series-manager' ); ?></p>
+                <ul class="rsm-branding-list">
+                    <li><?php esc_html_e( 'One dashboard for events, races, and results.', 'race-series-manager' ); ?></li>
+                    <li><?php esc_html_e( 'Widgets and banners that highlight the next start line.', 'race-series-manager' ); ?></li>
+                    <li><?php esc_html_e( 'Export, import, and PDF tools ready for race week.', 'race-series-manager' ); ?></li>
+                </ul>
+                <div class="rsm-branding-actions">
+                    <a class="button button-primary" href="<?php echo esc_url( $help_url ); ?>"><?php esc_html_e( 'View docs & help', 'race-series-manager' ); ?></a>
+                </div>
+            </div>
+        </div>
+
         <div class="rsm-dashboard-tabs" role="tablist">
             <button type="button" class="rsm-tab-button is-active" role="tab" aria-selected="true" data-rsm-tab="overview"><?php esc_html_e( 'Overview', 'race-series-manager' ); ?></button>
             <button type="button" class="rsm-tab-button" role="tab" aria-selected="false" data-rsm-tab="shortcodes"><?php esc_html_e( 'Shortcodes', 'race-series-manager' ); ?></button>

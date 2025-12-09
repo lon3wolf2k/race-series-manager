@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 360" role="img" aria-labelledby="title desc">
+  <title id="title">Race Series Manager logo</title>
+  <desc id="desc">Running figure over a timing arc with Race Series Manager by lon3wolf text.</desc>
+  <defs>
+    <linearGradient id="arcGradient" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#1d2327" />
+      <stop offset="100%" stop-color="#2271b1" />
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="400" height="360" rx="24" fill="#ffffff" stroke="#dcdcde" />
+  <path d="M84 216a116 116 0 0 1 232 0" fill="none" stroke="url(#arcGradient)" stroke-width="16" stroke-linecap="round" />
+  <circle cx="140" cy="216" r="12" fill="#2271b1" />
+  <circle cx="260" cy="216" r="12" fill="#2271b1" />
+  <text x="200" y="150" text-anchor="middle" font-size="70" font-family="'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',sans-serif">🏃‍♂️</text>
+  <text x="200" y="255" text-anchor="middle" font-size="32" font-family="'Montserrat', 'Helvetica Neue', Arial, sans-serif" font-weight="700" fill="#1d2327">RACE SERIES</text>
+  <text x="200" y="290" text-anchor="middle" font-size="32" font-family="'Montserrat', 'Helvetica Neue', Arial, sans-serif" font-weight="700" fill="#2271b1">MANAGER</text>
+  <g transform="translate(140,310)">
+    <circle cx="22" cy="12" r="12" fill="#1d2327" />
+    <text x="22" y="20" text-anchor="middle" font-size="18" font-family="Georgia, serif" font-weight="700" fill="#ffffff">W</text>
+    <text x="52" y="18" font-size="16" font-family="'Helvetica Neue', Arial, sans-serif" fill="#1d2327">by lon3wolf</text>
+  </g>
+</svg>
