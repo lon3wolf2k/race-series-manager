@@ -19,8 +19,13 @@ msgid "Access"
 msgstr "Πρόσβαση"
 
 #: includes/post-types.php:21 includes/post-types.php:61
+␍␊
 msgid "Add New"
+␍␊
 msgstr ""
+#: includes/post-types.php:21 includes/post-types.php:61␊
+msgid "Add New"␊
+msgstr "Προσθήκη νέου"
 
 #: includes/post-types.php:22
 msgid "Add New Event"
@@ -67,13 +72,25 @@ msgstr "Αλλαγή λογότυπου"
 
 #: includes/meta-race.php:198
 msgid ""
+␍␊
 "Choose images for the race gallery. They will appear with lightbox on the "
+␍␊
 "race page."
+␍␊
 msgstr ""
+msgid ""␊
+"Choose images for the race gallery. They will appear with lightbox on the "␊
+"race page."␊
+msgstr "Επιλέξτε εικόνες για τη συλλογή του αγώνα. Θα εμφανίζονται με lightbox στη σελίδα του αγώνα."
 
 #: includes/meta-race.php:203
+␍␊
 msgid "Clear gallery"
+␍␊
 msgstr ""
+#: includes/meta-race.php:203␊
+msgid "Clear gallery"␊
+msgstr "Καθαρισμός συλλογής"
 
 #: race-series-manager.php:61
 msgid "Close image"
@@ -103,6 +120,9 @@ msgstr "Χρονικό όριο"
 #: includes/meta-race.php:126
 #, fuzzy
 #| msgid "Cut-off (hours)"
+msgid "Cut-off time (hours)"
+msgstr "Χρονικό όριο (ώρες)"
+#: includes/meta-race.php:126
 msgid "Cut-off time (hours)"
 msgstr "Χρονικό όριο (ώρες)"
 
@@ -148,16 +168,31 @@ msgid "Download GPX / Route"
 msgstr "Κατεβάστε το GPX / Διαδρομή"
 
 #: includes/meta-race.php:85
+␍␊
 msgid "e.g. 2000m"
+␍␊
 msgstr ""
+#: includes/meta-race.php:85␊
+msgid "e.g. 2000m"␊
+msgstr "π.χ. 2000μ"
 
 #: includes/meta-race.php:121
+␍␊
 msgid "e.g. 40€"
+␍␊
 msgstr ""
+#: includes/meta-race.php:121␊
+msgid "e.g. 40€"␊
+msgstr "π.χ. 40€"
 
 #: includes/meta-race.php:77
+␍␊
 msgid "e.g. 44km"
+␍␊
 msgstr ""
+#: includes/meta-race.php:77␊
+msgid "e.g. 44km"␊
+msgstr "π.χ. 44χλμ"
 
 #: includes/post-types.php:23
 msgid "Edit Event"
@@ -180,6 +215,9 @@ msgstr "Υψομετρικό προφίλ"
 #| msgid "Elevation profile image (for PDF)"
 msgid "Elevation profile image (for PDF only)"
 msgstr "Εικόνα υψομετρικού προφίλ (για PDF)"
+#: includes/meta-race.php:248
+msgid "Elevation profile image (for PDF only)"
+msgstr "Εικόνα υψομετρικού προφίλ (μόνο για PDF)"
 
 #: includes/meta-event.php:148
 msgid ""
@@ -203,16 +241,31 @@ msgid "Event"
 msgstr "Εκδήλωση"
 
 #: includes/post-types.php:31
+␍␊
 msgid "Event archives"
+␍␊
 msgstr ""
+#: includes/post-types.php:31␊
+msgid "Event archives"␊
+msgstr "Αρχεία εκδήλωσης"
 
 #: includes/post-types.php:32
+␍␊
 msgid "Event attributes"
+␍␊
 msgstr ""
+#: includes/post-types.php:32␊
+msgid "Event attributes"␊
+msgstr "Χαρακτηριστικά εκδήλωσης"
 
 #: includes/post-types.php:35
+␍␊
 msgid "Event image"
+␍␊
 msgstr ""
+#: includes/post-types.php:35␊
+msgid "Event image"␊
+msgstr "Εικόνα εκδήλωσης"
 
 #: includes/meta-event.php:52
 msgid "Event logo (for PDFs and branding)"
@@ -225,6 +278,9 @@ msgstr "Αγώνες εκδήλωσης"
 #: includes/meta-event.php:14
 #, fuzzy
 #| msgid "Event Sections"
+msgid "Event sections"
+msgstr "Ενότητες εκδήλωσης"
+#: includes/meta-event.php:14
 msgid "Event sections"
 msgstr "Ενότητες εκδήλωσης"
 
@@ -241,8 +297,13 @@ msgid "Finish point:"
 msgstr "Σημείο τερματισμού:"
 
 #: includes/meta-race.php:186
+␍␊
 msgid "GPX / route download URL"
+␍␊
 msgstr ""
+#: includes/meta-race.php:186␊
+msgid "GPX / route download URL"␊
+msgstr "URL λήψης GPX / διαδρομής"
 
 #: templates/single-cmt_event.php:50 templates/single-cmt_race.php:107
 msgid "Home"
@@ -260,6 +321,8 @@ msgid "How to get to the region, accommodation suggestions and local info."
 msgstr ""
 "Πώς να φτάσετε στην περιοχή, προτάσεις διαμονής και χρήσιμες τοπικές "
 "πληροφορίες."
+msgid "How to get to the region, accommodation suggestions and local info."
+msgstr "Πώς να φτάσετε στην περιοχή, προτάσεις διαμονής και χρήσιμες τοπικές πληροφορίες."
 
 #: includes/meta-event.php:120
 msgid "How to reach the start area, transport routes, parking, shuttles."
@@ -272,12 +335,22 @@ msgid "Info"
 msgstr "Πληροφορίες"
 
 #: includes/post-types.php:33
+␍␊
 msgid "Insert into event"
+␍␊
 msgstr ""
+#: includes/post-types.php:33␊
+msgid "Insert into event"␊
+msgstr "Εισαγωγή σε εκδήλωση"
 
 #: includes/post-types.php:73
+␍␊
 msgid "Insert into race"
+␍␊
 msgstr ""
+#: includes/post-types.php:73␊
+msgid "Insert into race"␊
+msgstr "Εισαγωγή σε αγώνα"
 
 #: includes/meta-event.php:78
 msgid "Introductory text, general info and highlights of the event."
@@ -289,16 +362,26 @@ msgid "ITRA"
 msgstr "ITRA"
 
 #: includes/meta-race.php:133
+␍␊
 msgid "ITRA link"
+␍␊
 msgstr ""
+#: includes/meta-race.php:133␊
+msgid "ITRA link"␊
+msgstr "Σύνδεσμος ITRA"
 
 #: includes/pdf-booklet.php:357 templates/single-cmt_race.php:174
 msgid "KM"
 msgstr "Χλμ"
 
 #: includes/meta-race.php:69
+␍␊
 msgid "Link this race to an event (for schedule, access, logo, etc.)."
+␍␊
 msgstr ""
+#: includes/meta-race.php:69␊
+msgid "Link this race to an event (for schedule, access, logo, etc.)."␊
+msgstr "Συνδέστε αυτόν τον αγώνα με μια εκδήλωση (για πρόγραμμα, πρόσβαση, λογότυπο κ.λπ.)."
 
 #. Description of the plugin
 msgid ""
@@ -325,12 +408,18 @@ msgstr "Νίκος"
 #| msgid "No events found in Trash"
 msgid "No events found in Trash."
 msgstr "Δεν βρέθηκαν εκδηλώσεις στον Κάδο"
+#: includes/post-types.php:29
+msgid "No events found in Trash."
+msgstr "Δεν βρέθηκαν εκδηλώσεις στον Κάδο."
 
 #: includes/post-types.php:28
 #, fuzzy
 #| msgid "No events found"
 msgid "No events found."
 msgstr "Δεν βρέθηκαν εκδηλώσεις"
+#: includes/post-types.php:28
+msgid "No events found."
+msgstr "Δεν βρέθηκαν εκδηλώσεις."
 
 #: templates/single-cmt_event.php:211
 msgid "No races are linked to this event yet."
@@ -345,39 +434,72 @@ msgstr "Δεν έχουν οριστεί ακόμη αγώνες για αυτή
 #| msgid "No races found in Trash"
 msgid "No races found in Trash."
 msgstr "Δεν βρέθηκαν αγώνες στον Κάδο"
+#: includes/post-types.php:69
+msgid "No races found in Trash."
+msgstr "Δεν βρέθηκαν αγώνες στον Κάδο."
 
 #: includes/post-types.php:68
 #, fuzzy
 #| msgid "No races found"
 msgid "No races found."
 msgstr "Δεν βρέθηκαν αγώνες"
+#: includes/post-types.php:68
+msgid "No races found."
+msgstr "Δεν βρέθηκαν αγώνες."
 
 #: includes/meta-event.php:92
 msgid "Official rules, mandatory equipment, terms and conditions."
 msgstr "Επίσημοι κανονισμοί, υποχρεωτικός εξοπλισμός, όροι και προϋποθέσεις."
 
 #: includes/meta-race.php:151
+␍␊
 msgid "One station per line, use pipe-separated fields:"
+␍␊
 msgstr ""
+#: includes/meta-race.php:151␊
+msgid "One station per line, use pipe-separated fields:"␊
+msgstr "Ένας σταθμός ανά γραμμή, χρησιμοποιήστε πεδία χωρισμένα με κάθετο:"
 
 #: includes/meta-race.php:60
+␍␊
 msgid "Parent event"
+␍␊
 msgstr ""
+#: includes/meta-race.php:60␊
+msgid "Parent event"␊
+msgstr "Γονική εκδήλωση"
 
 #: includes/meta-race.php:192
 msgid ""
+␍␊
 "Paste a YouTube iframe embed code. It will appear in the Race Video section."
+␍␊
 msgstr ""
+msgid ""␊
+"Paste a YouTube iframe embed code. It will appear in the Race Video section."␊
+msgstr "Επικολλήστε τον κώδικα ενσωμάτωσης iframe του YouTube. Θα εμφανιστεί στην ενότητα Βίντεο αγώνα."
 
 #: includes/meta-race.php:182
 msgid ""
+␍␊
 "Paste the iframe code from Plotaroute (or similar). It will be embedded on "
+␍␊
 "the race page."
+␍␊
 msgstr ""
+msgid ""␊
+"Paste the iframe code from Plotaroute (or similar). It will be embedded on "␊
+"the race page."␊
+msgstr "Επικολλήστε τον κώδικα iframe από το Plotaroute (ή παρόμοιο). Θα ενσωματωθεί στη σελίδα του αγώνα."
 
 #: includes/meta-race.php:180
+␍␊
 msgid "Plotaroute / route map embed code"
+␍␊
 msgstr ""
+#: includes/meta-race.php:180␊
+msgid "Plotaroute / route map embed code"␊
+msgstr "Κώδικας ενσωμάτωσης χάρτη διαδρομής / Plotaroute"
 
 #: templates/single-cmt_event.php:81
 msgid "Program"
@@ -398,12 +520,22 @@ msgid "Race announcement"
 msgstr "Ανακοίνωση αγώνα"
 
 #: includes/post-types.php:71
+␍␊
 msgid "Race archives"
+␍␊
 msgstr ""
+#: includes/post-types.php:71␊
+msgid "Race archives"␊
+msgstr "Αρχεία αγώνα"
 
 #: includes/post-types.php:72
+␍␊
 msgid "Race attributes"
+␍␊
 msgstr ""
+#: includes/post-types.php:72␊
+msgid "Race attributes"␊
+msgstr "Χαρακτηριστικά αγώνα"
 
 #: templates/single-cmt_race.php:366
 msgid "Race booklet"
@@ -418,18 +550,31 @@ msgstr "Ημερομηνία αγώνα"
 #| msgid "Race Details"
 msgid "Race details"
 msgstr "Λεπτομέρειες αγώνα"
+#: includes/meta-race.php:14
+msgid "Race details"
+msgstr "Λεπτομέρειες αγώνα"
 
 #: includes/meta-race.php:196 templates/single-cmt_race.php:228
 msgid "Race gallery"
 msgstr "Γκαλερί αγώνα"
 
 #: includes/post-types.php:75
+␍␊
 msgid "Race image"
+␍␊
 msgstr ""
+#: includes/post-types.php:75␊
+msgid "Race image"␊
+msgstr "Εικόνα αγώνα"
 
 #: includes/meta-race.php:23
+␍␊
 msgid "Race media & map"
+␍␊
 msgstr ""
+#: includes/meta-race.php:23␊
+msgid "Race media & map"␊
+msgstr "Πολυμέσα & χάρτης αγώνα"
 
 #: includes/pdf-booklet.php:77
 msgid "Race not found for PDF generation."
@@ -452,8 +597,13 @@ msgid "Race video"
 msgstr "Βίντεο αγώνα"
 
 #: includes/meta-race.php:190
+␍␊
 msgid "Race video embed code"
+␍␊
 msgstr ""
+#: includes/meta-race.php:190␊
+msgid "Race video embed code"␊
+msgstr "Κώδικας ενσωμάτωσης βίντεο αγώνα"
 
 #: includes/meta-event.php:106
 msgid "Race weekend schedule, registrations, briefings, bus departures, etc."
@@ -474,6 +624,9 @@ msgstr "Εγγραφή"
 #| msgid "Registration URL"
 msgid "Registration link"
 msgstr "URL εγγραφής"
+#: includes/meta-race.php:140
+msgid "Registration link"
+msgstr "Σύνδεσμος εγγραφής"
 
 #: includes/meta-event.php:65 includes/meta-race.php:233
 #: includes/meta-race.php:257
@@ -481,12 +634,22 @@ msgid "Remove"
 msgstr "Αφαίρεση"
 
 #: includes/post-types.php:37
+␍␊
 msgid "Remove event image"
+␍␊
 msgstr ""
+#: includes/post-types.php:37␊
+msgid "Remove event image"␊
+msgstr "Αφαίρεση εικόνας εκδήλωσης"
 
 #: includes/post-types.php:77
+␍␊
 msgid "Remove race image"
+␍␊
 msgstr ""
+#: includes/post-types.php:77␊
+msgid "Remove race image"␊
+msgstr "Αφαίρεση εικόνας αγώνα"
 
 #: includes/pdf-booklet.php:331
 msgid "Route / GPX"
@@ -521,8 +684,13 @@ msgid "Search Races"
 msgstr "Αναζήτηση αγώνων"
 
 #: includes/meta-race.php:362
+␍␊
 msgid "Select elevation image"
+␍␊
 msgstr ""
+#: includes/meta-race.php:362␊
+msgid "Select elevation image"␊
+msgstr "Επιλέξτε εικόνα υψομετρικού"
 
 #: includes/meta-event.php:168
 msgid "Select event logo"
@@ -538,24 +706,44 @@ msgid "Select image"
 msgstr "Επιλογή εικόνας"
 
 #: includes/meta-race.php:201
+␍␊
 msgid "Select images"
+␍␊
 msgstr ""
+#: includes/meta-race.php:201␊
+msgid "Select images"␊
+msgstr "Επιλέξτε εικόνες"
 
 #: includes/meta-event.php:61 includes/meta-event.php:191
 msgid "Select logo"
 msgstr "Επιλογή λογότυπου"
 
 #: includes/meta-race.php:327
+␍␊
 msgid "Select map image"
+␍␊
 msgstr ""
+#: includes/meta-race.php:327␊
+msgid "Select map image"␊
+msgstr "Επιλέξτε εικόνα χάρτη"
 
 #: includes/post-types.php:36
+␍␊
 msgid "Set event image"
+␍␊
 msgstr ""
+#: includes/post-types.php:36␊
+msgid "Set event image"␊
+msgstr "Ορισμός εικόνας εκδήλωσης"
 
 #: includes/post-types.php:76
+␍␊
 msgid "Set race image"
+␍␊
 msgstr ""
+#: includes/post-types.php:76␊
+msgid "Set race image"␊
+msgstr "Ορισμός εικόνας αγώνα"
 
 #: includes/admin-shortcode-helper.php:14
 #: includes/admin-shortcode-helper.php:24
@@ -587,14 +775,22 @@ msgstr "Εκκίνηση:"
 #| msgid "Static images for PDF only"
 msgid "Static map image (for PDF only)"
 msgstr "Στατικές εικόνες μόνο για PDF"
+#: includes/meta-race.php:224
+msgid "Static map image (for PDF only)"
+msgstr "Στατική εικόνα χάρτη (μόνο για PDF)"
 
 #: includes/pdf-booklet.php:356 templates/single-cmt_race.php:173
 msgid "Station"
 msgstr "Σταθμός"
 
 #: includes/meta-race.php:152
+␍␊
 msgid "Station name | KM | D+ | D- | Cut-off"
+␍␊
 msgstr ""
+#: includes/meta-race.php:152␊
+msgid "Station name | KM | D+ | D- | Cut-off"␊
+msgstr "Όνομα σταθμού | ΧΛΜ | D+ | D- | Χρονικό όριο"
 
 #: includes/admin-shortcode-helper.php:100
 msgid "The linked event could not be found."
@@ -620,18 +816,7 @@ msgstr ""
 #: includes/meta-event.php:53
 msgid ""
 "This logo will be used in generated PDFs. It will not automatically appear "
-"on the event page."
-msgstr ""
-"Το λογότυπο αυτό θα χρησιμοποιείται στα παραγόμενα PDF και δεν θα "
-"εμφανίζεται αυτόματα στη σελίδα της εκδήλωσης."
-
-#. %s: event title
-#: includes/admin-shortcode-helper.php:122
-#, php-format
-msgid "This race belongs to event: %s"
-msgstr "Αυτός ο αγώνας ανήκει στην εκδήλωση: %s"
-
-#: includes/admin-shortcode-helper.php:92
+@@ -635,93 +610,93 @@ msgstr "Αυτός ο αγώνας ανήκει στην εκδήλωση: %s"
 msgid ""
 "This race is not linked to an event yet. Select an event in the Race Details "
 "box, save, and the shortcode will appear here."
@@ -658,31 +843,65 @@ msgstr "Ταξίδι & διαμονή"
 
 #: includes/meta-race.php:250
 msgid ""
+␍␊
 "Upload a static elevation chart image for the race booklet PDF. It will not "
+␍␊
 "appear on the race page."
+␍␊
 msgstr ""
+msgid ""␊
+"Upload a static elevation chart image for the race booklet PDF. It will not "␊
+"appear on the race page."␊
+msgstr "Μεταφορτώστε μια στατική εικόνα υψομετρικού διαγράμματος για το PDF του φυλλαδίου αγώνα. Δεν θα εμφανιστεί στη σελίδα του αγώνα."
 
 #: includes/meta-race.php:226
 msgid ""
+␍␊
 "Upload a static map image to be used in the race booklet PDF. It will not "
+␍␊
 "appear on the race page."
+␍␊
 msgstr ""
+msgid ""␊
+"Upload a static map image to be used in the race booklet PDF. It will not "␊
+"appear on the race page."␊
+msgstr "Μεταφορτώστε μια στατική εικόνα χάρτη για χρήση στο PDF του φυλλαδίου αγώνα. Δεν θα εμφανιστεί στη σελίδα του αγώνα."
 
 #: includes/post-types.php:34
+␍␊
 msgid "Uploaded to this event"
+␍␊
 msgstr ""
+#: includes/post-types.php:34␊
+msgid "Uploaded to this event"␊
+msgstr "Μεταφορτωμένο σε αυτή την εκδήλωση"
 
 #: includes/post-types.php:74
+␍␊
 msgid "Uploaded to this race"
+␍␊
 msgstr ""
+#: includes/post-types.php:74␊
+msgid "Uploaded to this race"␊
+msgstr "Μεταφορτωμένο σε αυτόν τον αγώνα"
 
 #: includes/post-types.php:38
+␍␊
 msgid "Use as event image"
+␍␊
 msgstr ""
+#: includes/post-types.php:38␊
+msgid "Use as event image"␊
+msgstr "Χρήση ως εικόνα εκδήλωσης"
 
 #: includes/post-types.php:78
+␍␊
 msgid "Use as race image"
+␍␊
 msgstr ""
+#: includes/post-types.php:78␊
+msgid "Use as race image"␊
+msgstr "Χρήση ως εικόνα αγώνα"
 
 #: includes/meta-race.php:286
 msgid "Use these images"
@@ -703,25 +922,45 @@ msgstr ""
 "εκδήλωσης σε μία σελίδα."
 
 #: includes/meta-race.php:188
+␍␊
 msgid "Used for the “Download GPX / Route” button."
+␍␊
 msgstr ""
+#: includes/meta-race.php:188␊
+msgid "Used for the “Download GPX / Route” button."␊
+msgstr "Χρησιμοποιείται για το κουμπί «Λήψη GPX / Διαδρομή»."
 
 #: includes/post-types.php:25
 msgid "View Event"
 msgstr "Προβολή εκδήλωσης"
 
 #: includes/post-types.php:26
+␍␊
 msgid "View Events"
+␍␊
 msgstr ""
+#: includes/post-types.php:26␊
+msgid "View Events"␊
+msgstr "Προβολή εκδηλώσεων"
 
 #: includes/post-types.php:65
 msgid "View Race"
 msgstr "Προβολή αγώνα"
 
 #: includes/post-types.php:66
+␍␊
 msgid "View Races"
+␍␊
 msgstr ""
+#: includes/post-types.php:66␊
+msgid "View Races"␊
+msgstr "Προβολή αγώνων"
 
 #: includes/meta-race.php:62
+␍␊
 msgid "— None —"
+␍␊
 msgstr ""
+#: includes/meta-race.php:62␊
+msgid "— None —"␊
+msgstr "— Καμία —"

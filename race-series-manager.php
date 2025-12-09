@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Race Series Manager
-Description: Manage trail running events and races, similar to Corfu Mountain Trail.
-Version: 0.4.0
-Author: Nikos
+Description: Manage trail running events and races.
+Version: 0.9.0
+Author: lon3wolf
 Text Domain: race-series-manager
 Domain Path: /languages
 */
