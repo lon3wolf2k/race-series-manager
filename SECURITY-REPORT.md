@@ -6,8 +6,8 @@ Follow-up review after implementing sanitization and nonce protections shows the
 ## Resolved issues
 
 ### 1) Stored XSS via race embed fields (fixed)
-* **What changed**: Embed HTML for plotaroute/video fields is sanitized through `wp_kses` using a dedicated iframe allow-list before storage and again on output.【F:includes/meta-race.php†L13-L46】【F:templates/single-cmt_race.php†L33-L44】
-* **Result**: Authors can no longer inject scripts or arbitrary tags through these fields; only iframe markup with safe attributes is persisted/rendered.【F:includes/meta-race.php†L533-L567】【F:templates/single-cmt_race.php†L274-L285】
+* **What changed**: Embed HTML for plotaroute/video fields is sanitized through `wp_kses` using a dedicated iframe allow-list before storage and again on output. Inline `style` attributes are now disallowed to prevent layout takeovers via malicious positioning while still blocking script injection.【F:includes/meta-race.php†L13-L46】【F:templates/single-cmt_race.php†L33-L44】
+* **Result**: Authors can no longer inject scripts or arbitrary tags through these fields; only iframe markup with safe attributes is persisted/rendered without the ability to overlay the page via inline CSS.【F:includes/meta-race.php†L533-L567】【F:templates/single-cmt_race.php†L274-L285】
 
 ### 2) Unauthenticated PDF generation SSRF/resource abuse (fixed)
 * **What changed**: Requests to `?rsm_booklet=1` now require a per-race nonce embedded in the race page link, and Dompdf remote fetching has been disabled.【F:templates/single-cmt_race.php†L26-L37】【F:includes/pdf-booklet.php†L92-L139】

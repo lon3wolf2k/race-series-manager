@@ -20,7 +20,6 @@ function rsm_race_get_allowed_embed_html() {
             'loading'         => true,
             'referrerpolicy'  => true,
             'class'           => true,
-            'style'           => true,
         ),
     );
 }
