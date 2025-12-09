@@ -36,18 +36,19 @@ function rsm_race_details_meta_box_callback( $post ) {
 
     wp_nonce_field( 'rsm_save_race_details', 'rsm_race_details_nonce' );
 
-    $event_id      = get_post_meta( $post->ID, '_rsm_race_event_id', true );
-    $distance      = get_post_meta( $post->ID, '_rsm_race_distance', true );
-    $elevation     = get_post_meta( $post->ID, '_rsm_race_elevation', true );
-    $date          = get_post_meta( $post->ID, '_rsm_race_date', true );
-    $start_time    = get_post_meta( $post->ID, '_rsm_race_start_time', true );
-    $start_loc     = get_post_meta( $post->ID, '_rsm_race_start_location', true );
-    $finish_loc    = get_post_meta( $post->ID, '_rsm_race_finish_location', true );
-    $fee           = get_post_meta( $post->ID, '_rsm_race_fee', true );
-    $cutoff_hours  = get_post_meta( $post->ID, '_rsm_race_cutoff_hours', true );
-    $itra_link     = get_post_meta( $post->ID, '_rsm_race_itra_link', true );
-    $reg_link      = get_post_meta( $post->ID, '_rsm_race_registration_link', true );
-    $aid_stations  = get_post_meta( $post->ID, '_rsm_race_aid_stations', true );
+    $event_id         = get_post_meta( $post->ID, '_rsm_race_event_id', true );
+    $distance         = get_post_meta( $post->ID, '_rsm_race_distance', true );
+    $elevation        = get_post_meta( $post->ID, '_rsm_race_elevation', true );
+    $date             = get_post_meta( $post->ID, '_rsm_race_date', true );
+    $start_time       = get_post_meta( $post->ID, '_rsm_race_start_time', true );
+    $start_loc        = get_post_meta( $post->ID, '_rsm_race_start_location', true );
+    $start_loc_link   = get_post_meta( $post->ID, '_rsm_race_start_location_link', true );
+    $finish_loc       = get_post_meta( $post->ID, '_rsm_race_finish_location', true );
+    $finish_loc_link  = get_post_meta( $post->ID, '_rsm_race_finish_location_link', true );
+    $cutoff_hours     = get_post_meta( $post->ID, '_rsm_race_cutoff_hours', true );
+    $itra_link        = get_post_meta( $post->ID, '_rsm_race_itra_link', true );
+    $reg_link         = get_post_meta( $post->ID, '_rsm_race_registration_link', true );
+    $aid_stations     = get_post_meta( $post->ID, '_rsm_race_aid_stations', true );
 
     $events = get_posts( array(
         'post_type'      => 'cmt_event',
@@ -104,6 +105,12 @@ function rsm_race_details_meta_box_callback( $post ) {
             <th><label for="rsm_race_start_location"><?php esc_html_e( 'Start point', 'race-series-manager' ); ?></label></th>
             <td>
                 <input type="text" name="rsm_race_start_location" id="rsm_race_start_location" value="<?php echo esc_attr( $start_loc ); ?>" class="regular-text">
+                <p class="description"><?php esc_html_e( 'Optional: provide a label for the start location.', 'race-series-manager' ); ?></p>
+                <p>
+                    <label for="rsm_race_start_location_link"><?php esc_html_e( 'Start point map link (Google Maps)', 'race-series-manager' ); ?></label><br>
+                    <input type="url" name="rsm_race_start_location_link" id="rsm_race_start_location_link" value="<?php echo esc_attr( $start_loc_link ); ?>" class="regular-text">
+                    <span class="description"><?php esc_html_e( 'Paste a Google Maps URL to make the start point clickable.', 'race-series-manager' ); ?></span>
+                </p>
             </td>
         </tr>
 
@@ -111,14 +118,12 @@ function rsm_race_details_meta_box_callback( $post ) {
             <th><label for="rsm_race_finish_location"><?php esc_html_e( 'Finish point', 'race-series-manager' ); ?></label></th>
             <td>
                 <input type="text" name="rsm_race_finish_location" id="rsm_race_finish_location" value="<?php echo esc_attr( $finish_loc ); ?>" class="regular-text">
-            </td>
-        </tr>
-
-        <tr>
-            <th><label for="rsm_race_fee"><?php esc_html_e( 'Entry fee', 'race-series-manager' ); ?></label></th>
-            <td>
-                <input type="text" name="rsm_race_fee" id="rsm_race_fee" value="<?php echo esc_attr( $fee ); ?>" class="regular-text">
-                <p class="description"><?php esc_html_e( 'e.g. 40€', 'race-series-manager' ); ?></p>
+                <p class="description"><?php esc_html_e( 'Optional: provide a label for the finish location.', 'race-series-manager' ); ?></p>
+                <p>
+                    <label for="rsm_race_finish_location_link"><?php esc_html_e( 'Finish point map link (Google Maps)', 'race-series-manager' ); ?></label><br>
+                    <input type="url" name="rsm_race_finish_location_link" id="rsm_race_finish_location_link" value="<?php echo esc_attr( $finish_loc_link ); ?>" class="regular-text">
+                    <span class="description"><?php esc_html_e( 'Paste a Google Maps URL to make the finish point clickable.', 'race-series-manager' ); ?></span>
+                </p>
             </td>
         </tr>
 
@@ -170,6 +175,11 @@ function rsm_race_media_meta_box_callback( $post ) {
     $gallery_ids      = get_post_meta( $post->ID, '_rsm_race_gallery_ids', true );
     $static_map_id    = get_post_meta( $post->ID, '_rsm_race_static_map_id', true );
     $elev_chart_id    = get_post_meta( $post->ID, '_rsm_race_elev_chart_id', true );
+    $show_hero        = get_post_meta( $post->ID, '_rsm_race_show_hero', true );
+
+    if ( '' === $show_hero ) {
+        $show_hero = '1';
+    }
 
     if ( ! is_array( $gallery_ids ) ) {
         $gallery_ids = array();
@@ -192,6 +202,13 @@ function rsm_race_media_meta_box_callback( $post ) {
         <?php esc_html_e( 'Paste a YouTube iframe embed code. It will appear in the Race Video section.', 'race-series-manager' ); ?>
     </p>
     <textarea name="rsm_race_video_embed" id="rsm_race_video_embed" rows="5" class="large-text code"><?php echo esc_textarea( $video_embed ); ?></textarea>
+
+    <h4 style="margin-top:1.5em;"><?php esc_html_e( 'Hero image', 'race-series-manager' ); ?></h4>
+    <label>
+        <input type="checkbox" name="rsm_race_show_hero" value="1" <?php checked( $show_hero, '1' ); ?>>
+        <?php esc_html_e( 'Display the featured image as a hero banner on the race page.', 'race-series-manager' ); ?>
+    </label>
+    <p class="description"><?php esc_html_e( 'Uncheck to hide the featured image on the race frontend.', 'race-series-manager' ); ?></p>
 
     <h4 style="margin-top:1.5em;"><?php esc_html_e( 'Race gallery', 'race-series-manager' ); ?></h4>
     <p class="description">
@@ -412,31 +429,33 @@ function rsm_save_race_meta( $post_id ) {
             return;
         }
 
-        $event_id     = isset( $_POST['rsm_race_event_id'] ) ? intval( $_POST['rsm_race_event_id'] ) : 0;
-        $distance     = isset( $_POST['rsm_race_distance'] ) ? sanitize_text_field( $_POST['rsm_race_distance'] ) : '';
-        $elevation    = isset( $_POST['rsm_race_elevation'] ) ? sanitize_text_field( $_POST['rsm_race_elevation'] ) : '';
-        $date         = isset( $_POST['rsm_race_date'] ) ? sanitize_text_field( $_POST['rsm_race_date'] ) : '';
-        $start_time   = isset( $_POST['rsm_race_start_time'] ) ? sanitize_text_field( $_POST['rsm_race_start_time'] ) : '';
-        $start_loc    = isset( $_POST['rsm_race_start_location'] ) ? sanitize_text_field( $_POST['rsm_race_start_location'] ) : '';
-        $finish_loc   = isset( $_POST['rsm_race_finish_location'] ) ? sanitize_text_field( $_POST['rsm_race_finish_location'] ) : '';
-        $fee          = isset( $_POST['rsm_race_fee'] ) ? sanitize_text_field( $_POST['rsm_race_fee'] ) : '';
-        $cutoff_hours = isset( $_POST['rsm_race_cutoff_hours'] ) ? sanitize_text_field( $_POST['rsm_race_cutoff_hours'] ) : '';
-        $itra_link    = isset( $_POST['rsm_race_itra_link'] ) ? esc_url_raw( $_POST['rsm_race_itra_link'] ) : '';
-        $reg_link     = isset( $_POST['rsm_race_registration_link'] ) ? esc_url_raw( $_POST['rsm_race_registration_link'] ) : '';
-        $aid          = isset( $_POST['rsm_race_aid_stations'] ) ? wp_kses_post( $_POST['rsm_race_aid_stations'] ) : '';
+        $event_id         = isset( $_POST['rsm_race_event_id'] ) ? intval( $_POST['rsm_race_event_id'] ) : 0;
+        $distance         = isset( $_POST['rsm_race_distance'] ) ? sanitize_text_field( $_POST['rsm_race_distance'] ) : '';
+        $elevation        = isset( $_POST['rsm_race_elevation'] ) ? sanitize_text_field( $_POST['rsm_race_elevation'] ) : '';
+        $date             = isset( $_POST['rsm_race_date'] ) ? sanitize_text_field( $_POST['rsm_race_date'] ) : '';
+        $start_time       = isset( $_POST['rsm_race_start_time'] ) ? sanitize_text_field( $_POST['rsm_race_start_time'] ) : '';
+        $start_loc        = isset( $_POST['rsm_race_start_location'] ) ? sanitize_text_field( $_POST['rsm_race_start_location'] ) : '';
+        $start_loc_link   = isset( $_POST['rsm_race_start_location_link'] ) ? esc_url_raw( $_POST['rsm_race_start_location_link'] ) : '';
+        $finish_loc       = isset( $_POST['rsm_race_finish_location'] ) ? sanitize_text_field( $_POST['rsm_race_finish_location'] ) : '';
+        $finish_loc_link  = isset( $_POST['rsm_race_finish_location_link'] ) ? esc_url_raw( $_POST['rsm_race_finish_location_link'] ) : '';
+        $cutoff_hours     = isset( $_POST['rsm_race_cutoff_hours'] ) ? sanitize_text_field( $_POST['rsm_race_cutoff_hours'] ) : '';
+        $itra_link        = isset( $_POST['rsm_race_itra_link'] ) ? esc_url_raw( $_POST['rsm_race_itra_link'] ) : '';
+        $reg_link         = isset( $_POST['rsm_race_registration_link'] ) ? esc_url_raw( $_POST['rsm_race_registration_link'] ) : '';
+        $aid              = isset( $_POST['rsm_race_aid_stations'] ) ? wp_kses_post( $_POST['rsm_race_aid_stations'] ) : '';
 
-        update_post_meta( $post_id, '_rsm_race_event_id',          $event_id );
-        update_post_meta( $post_id, '_rsm_race_distance',          $distance );
-        update_post_meta( $post_id, '_rsm_race_elevation',         $elevation );
-        update_post_meta( $post_id, '_rsm_race_date',              $date );
-        update_post_meta( $post_id, '_rsm_race_start_time',        $start_time );
-        update_post_meta( $post_id, '_rsm_race_start_location',    $start_loc );
-        update_post_meta( $post_id, '_rsm_race_finish_location',   $finish_loc );
-        update_post_meta( $post_id, '_rsm_race_fee',               $fee );
-        update_post_meta( $post_id, '_rsm_race_cutoff_hours',      $cutoff_hours );
-        update_post_meta( $post_id, '_rsm_race_itra_link',         $itra_link );
-        update_post_meta( $post_id, '_rsm_race_registration_link', $reg_link );
-        update_post_meta( $post_id, '_rsm_race_aid_stations',      $aid );
+        update_post_meta( $post_id, '_rsm_race_event_id',               $event_id );
+        update_post_meta( $post_id, '_rsm_race_distance',               $distance );
+        update_post_meta( $post_id, '_rsm_race_elevation',              $elevation );
+        update_post_meta( $post_id, '_rsm_race_date',                   $date );
+        update_post_meta( $post_id, '_rsm_race_start_time',             $start_time );
+        update_post_meta( $post_id, '_rsm_race_start_location',         $start_loc );
+        update_post_meta( $post_id, '_rsm_race_start_location_link',    $start_loc_link );
+        update_post_meta( $post_id, '_rsm_race_finish_location',        $finish_loc );
+        update_post_meta( $post_id, '_rsm_race_finish_location_link',   $finish_loc_link );
+        update_post_meta( $post_id, '_rsm_race_cutoff_hours',           $cutoff_hours );
+        update_post_meta( $post_id, '_rsm_race_itra_link',              $itra_link );
+        update_post_meta( $post_id, '_rsm_race_registration_link',      $reg_link );
+        update_post_meta( $post_id, '_rsm_race_aid_stations',           $aid );
     }
 
     // -----------------------------------------------------------------
@@ -476,6 +495,7 @@ function rsm_save_race_meta( $post_id ) {
 
         $static_map  = isset( $_POST['rsm_race_static_map_id'] ) ? intval( $_POST['rsm_race_static_map_id'] ) : 0;
         $elev_chart  = isset( $_POST['rsm_race_elev_chart_id'] ) ? intval( $_POST['rsm_race_elev_chart_id'] ) : 0;
+        $show_hero   = isset( $_POST['rsm_race_show_hero'] ) && '1' === $_POST['rsm_race_show_hero'] ? '1' : '0';
 
         $gallery_array = array();
         if ( ! empty( $gallery_ids ) ) {
@@ -494,6 +514,7 @@ function rsm_save_race_meta( $post_id ) {
         update_post_meta( $post_id, '_rsm_race_gallery_ids',      $gallery_array );
         update_post_meta( $post_id, '_rsm_race_static_map_id',    $static_map );
         update_post_meta( $post_id, '_rsm_race_elev_chart_id',    $elev_chart );
+        update_post_meta( $post_id, '_rsm_race_show_hero',        $show_hero );
     }
 }
 add_action( 'save_post_cmt_race', 'rsm_save_race_meta' );
