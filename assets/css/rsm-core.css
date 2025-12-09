@@ -1,0 +1,471 @@
+/* ==========================================================
+   RACE SERIES MANAGER - CORE LAYOUT & COMPONENTS
+   ======================================================= */
+
+:root {
+    --rsm-surface: #ffffff;
+    --rsm-surface-alt: #f7f9fc;
+    --rsm-surface-muted: #f4f6fa;
+    --rsm-muted-tint: #e8ecf3;
+    --rsm-border: #e5e7f0;
+    --rsm-border-strong: #e1e1e1;
+    --rsm-text-primary: #111111;
+    --rsm-text-secondary: #4a4a4a;
+    --rsm-text-muted: #7d7d7d;
+    --rsm-text-soft: #6b6b6b;
+    --rsm-accent: #1f3c8a;
+    --rsm-accent-contrast: #ffffff;
+    --rsm-badge: #f05a24;
+    --rsm-shadow: 0 10px 24px rgba(0,0,0,0.08);
+    --rsm-shadow-strong: 0 18px 40px rgba(0, 0, 0, 0.2);
+    --rsm-table-header: #f6f7fb;
+    --rsm-table-row-alt: #fafbff;
+    --rsm-table-row-hover: #eef2ff;
+    --rsm-button-bg: #333333;
+    --rsm-button-text: #ffffff;
+    --rsm-button-border: #333333;
+    --rsm-link: #1f3c8a;
+}
+
+/* Wrapper & layout
+---------------------------------------------------------- */
+
+.rsm-race-wrapper,
+.rsm-event-wrapper,
+.rsm-event-results-page-wrapper {
+    max-width: 1200px;
+    margin: 40px auto 80px;
+    padding: 0 20px;
+    color: var(--rsm-text-secondary);
+}
+
+.rsm-race-layout,
+.rsm-event-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2.2fr) minmax(280px, 0.9fr);
+    gap: 40px;
+}
+
+.rsm-race-main,
+.rsm-event-main {
+    min-width: 0;
+}
+
+.rsm-race-sidebar,
+.rsm-event-sidebar {
+    min-width: 0;
+}
+
+/* Hero image
+---------------------------------------------------------- */
+
+.rsm-hero {
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: var(--rsm-shadow-strong);
+    margin-bottom: 32px;
+}
+
+/* Breadcrumb
+---------------------------------------------------------- */
+
+.rsm-breadcrumb {
+    font-size: 13px;
+    color: var(--rsm-text-muted);
+    margin-bottom: 18px;
+}
+
+.rsm-breadcrumb a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.rsm-breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.rsm-breadcrumb-sep {
+    margin: 0 4px;
+}
+
+/* Headings
+---------------------------------------------------------- */
+
+.rsm-race-event-label {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--rsm-text-muted);
+    margin-bottom: 4px;
+}
+
+.rsm-race-header,
+.rsm-event-header {
+    margin-bottom: 20px;
+}
+
+.rsm-race-title,
+.rsm-event-title {
+    font-size: 32px;
+    margin: 0;
+    font-weight: 700;
+    color: var(--rsm-text-primary);
+}
+
+/* Sections, titles, dividers
+---------------------------------------------------------- */
+
+.rsm-race-section,
+.rsm-event-section {
+    margin-bottom: 36px;
+}
+
+.rsm-section-title,
+.rsm-event-section-title {
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    margin: 0 0 10px;
+    color: var(--rsm-text-primary);
+}
+
+.rsm-section-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.rsm-section-subtitle {
+    font-size: 16px;
+    margin: 24px 0 10px;
+    font-weight: 600;
+    color: var(--rsm-text-primary);
+}
+
+.rsm-section-divider {
+    border: 0;
+    border-bottom: 1px solid var(--rsm-border);
+    margin: 10px 0 18px;
+}
+
+/* Top stats cards (distance / ascent / cutoff)
+---------------------------------------------------------- */
+
+.rsm-race-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.rsm-race-stat-card {
+    background: var(--rsm-surface);
+    border-radius: 18px;
+    padding: 14px 16px;
+    box-shadow: var(--rsm-shadow);
+    border: 1px solid var(--rsm-border);
+}
+
+.rsm-race-stat-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--rsm-text-muted);
+    margin-bottom: 4px;
+}
+
+.rsm-race-stat-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--rsm-text-primary);
+}
+
+/* Map, video, gallery
+---------------------------------------------------------- */
+
+.rsm-race-map-embed,
+.rsm-race-video-embed {
+    background: var(--rsm-surface);
+    border-radius: 18px;
+    padding: 0;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--rsm-border);
+    overflow: hidden;
+}
+
+.rsm-race-map-embed iframe,
+.rsm-race-video-embed iframe {
+    width: 100%;
+    height: 420px;
+    display: block;
+    border: 0;
+}
+
+.rsm-race-video-embed {
+    margin-top: 14px;
+}
+
+/* Gallery grid */
+
+.rsm-race-gallery {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+}
+
+.rsm-race-gallery-item {
+    display: block;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.rsm-race-gallery-item img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform 0.25s ease;
+}
+
+.rsm-race-gallery-item:hover img {
+    transform: scale(1.05);
+}
+
+/* Aid stations table
+---------------------------------------------------------- */
+
+.rsm-aid-table-wrapper {
+    background: var(--rsm-surface);
+    border-radius: 18px;
+    padding: 16px 18px;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.07);
+    border: 1px solid var(--rsm-border);
+    overflow-x: auto;
+}
+
+.rsm-aid-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.rsm-aid-table th,
+.rsm-aid-table td {
+    border: 1px solid var(--rsm-border-strong);
+    padding: 6px 8px;
+    color: var(--rsm-text-secondary);
+}
+
+.rsm-aid-table th {
+    text-transform: uppercase;
+    background: var(--rsm-table-header);
+    font-weight: 600;
+    color: var(--rsm-text-primary);
+}
+
+.rsm-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 46px;
+    padding: 10px 16px;
+    border-radius: 14px;
+    border: 1px solid var(--rsm-border-strong);
+    background: var(--rsm-surface);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--rsm-text-primary);
+}
+
+.rsm-icon-button:hover,
+.rsm-icon-button:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+    border-color: var(--rsm-button-border);
+    background: var(--rsm-table-header);
+}
+
+.rsm-icon-button__label {
+    font-size: 14px;
+    letter-spacing: 0.01em;
+}
+
+.rsm-icon {
+    width: 22px;
+    height: 22px;
+    fill: var(--rsm-text-primary);
+}
+
+/* Race description
+---------------------------------------------------------- */
+
+.rsm-race-description {
+    background: var(--rsm-surface);
+    border-radius: 18px;
+    padding: 20px 22px;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+    border: 1px solid var(--rsm-border);
+    color: var(--rsm-text-secondary);
+}
+
+/* Summary / sidebar card
+---------------------------------------------------------- */
+
+.rsm-race-sidebar {
+    position: relative;
+}
+
+.rsm-race-summary {
+    background: var(--rsm-surface);
+    border-radius: 24px;
+    padding: 22px 22px 26px;
+    box-shadow: 0 14px 34px rgba(0,0,0,0.10);
+    border: 1px solid var(--rsm-border);
+    position: sticky;
+    top: 110px;
+    align-self: flex-start;
+    color: var(--rsm-text-secondary);
+}
+
+.rsm-summary-title {
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin: 0 0 14px;
+    color: var(--rsm-text-primary);
+}
+
+.rsm-summary-list {
+    margin: 0 0 18px;
+}
+
+.rsm-summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.rsm-summary-row dt {
+    font-weight: 600;
+    color: var(--rsm-text-muted);
+}
+
+.rsm-summary-row dd {
+    margin: 0;
+    text-align: right;
+    color: var(--rsm-text-primary);
+}
+
+/* Summary buttons
+---------------------------------------------------------- */
+
+.rsm-summary-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.rsm-summary-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 9px 14px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 2px solid var(--rsm-button-border);
+    background: var(--rsm-surface);
+    color: var(--rsm-text-primary);
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.rsm-summary-btn:hover {
+    background: var(--rsm-button-bg);
+    color: var(--rsm-button-text);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.20);
+    transform: translateY(-1px);
+}
+
+/* Primary style for RESULTS button (used in event & race sidebar) */
+.rsm-event-results-btn {
+    background: var(--rsm-accent);
+    color: var(--rsm-accent-contrast) !important;
+    border-color: transparent;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.rsm-event-results-btn::before {
+    content: "🏁";
+    margin-right: 6px;
+}
+
+.rsm-event-results-btn:hover {
+    background: #2649a5;
+    color: var(--rsm-accent-contrast) !important;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.22);
+}
+
+/* Responsive adjustments
+---------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+    .rsm-race-layout,
+    .rsm-event-layout {
+        grid-template-columns: minmax(0, 1.8fr) minmax(260px, 1fr);
+        gap: 26px;
+    }
+
+    .rsm-race-summary {
+        top: 90px;
+    }
+}
+
+@media (max-width: 960px) {
+    .rsm-race-layout,
+    .rsm-event-layout {
+        display: block;
+    }
+
+    .rsm-race-sidebar,
+    .rsm-event-sidebar {
+        margin-top: 30px;
+    }
+
+    .rsm-race-summary {
+        position: static;
+    }
+
+    .rsm-race-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 680px) {
+    .rsm-race-wrapper,
+    .rsm-event-wrapper,
+    .rsm-event-results-page-wrapper {
+        margin-top: 24px;
+        margin-bottom: 50px;
+    }
+
+    .rsm-race-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .rsm-race-map-embed iframe,
+    .rsm-race-video-embed iframe {
+        height: 260px;
+    }
+}
