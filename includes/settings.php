@@ -15,6 +15,7 @@ function rsm_get_settings_defaults() {
         'overview_results_label'      => esc_html__( 'Results', 'race-series-manager' ),
         'overview_show_excerpt'       => 1,
         'overview_action_new_tab'     => 1,
+        'race_showcase_aspect_ratio'  => '4:3',
         'theme'                       => 'light',
     );
 }
@@ -59,6 +60,11 @@ function rsm_sanitize_settings( $input ) {
     $output['overview_show_excerpt'] = empty( $input['overview_show_excerpt'] ) ? 0 : 1;
 
     $output['overview_action_new_tab'] = empty( $input['overview_action_new_tab'] ) ? 0 : 1;
+
+    $allowed_ratios = array( '4:3', '1:1', '16:9' );
+    $output['race_showcase_aspect_ratio'] = ( isset( $input['race_showcase_aspect_ratio'] ) && in_array( $input['race_showcase_aspect_ratio'], $allowed_ratios, true ) )
+        ? $input['race_showcase_aspect_ratio']
+        : $defaults['race_showcase_aspect_ratio'];
 
     $output['theme'] = ( isset( $input['theme'] ) && 'dark' === $input['theme'] ) ? 'dark' : 'light';
 
@@ -157,6 +163,31 @@ function rsm_register_settings() {
         array(
             'name'        => 'overview_action_new_tab',
             'description' => esc_html__( 'Open event-level action buttons (registration, participants, live, results) in a new tab.', 'race-series-manager' ),
+        )
+    );
+
+    add_settings_section(
+        'rsm_showcase_settings',
+        esc_html__( 'Race showcase', 'race-series-manager' ),
+        function() {
+            echo '<p>' . esc_html__( 'Control how the race showcase widget renders its thumbnail images.', 'race-series-manager' ) . '</p>';
+        },
+        'rsm-settings'
+    );
+
+    add_settings_field(
+        'race_showcase_aspect_ratio',
+        esc_html__( 'Thumbnail aspect ratio', 'race-series-manager' ),
+        'rsm_render_select_setting_field',
+        'rsm-settings',
+        'rsm_showcase_settings',
+        array(
+            'name'    => 'race_showcase_aspect_ratio',
+            'options' => array(
+                '4:3'  => esc_html__( '4:3 (default)', 'race-series-manager' ),
+                '1:1'  => esc_html__( '1:1', 'race-series-manager' ),
+                '16:9' => esc_html__( '16:9', 'race-series-manager' ),
+            ),
         )
     );
 

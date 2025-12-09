@@ -191,7 +191,7 @@ function rsm_get_race_showcase_image_url( $race_id ) {
         }
     }
 
-    $placeholder_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-label="Race placeholder"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="%23f05a24"/><stop offset="100%" stop-color="%2328457a"/></linearGradient></defs><rect width="600" height="600" fill="url(%23g)"/><text x="50%" y="50%" fill="white" font-size="42" font-family="Arial, sans-serif" text-anchor="middle" dominant-baseline="middle">Race</text></svg>';
+    $placeholder_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Race placeholder"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="%23f05a24"/><stop offset="100%" stop-color="%2328457a"/></linearGradient></defs><rect width="800" height="600" fill="url(%23g)"/><text x="50%" y="50%" fill="white" font-size="48" font-family="Arial, sans-serif" text-anchor="middle" dominant-baseline="middle">Race</text></svg>';
 
     return 'data:image/svg+xml;utf8,' . rawurlencode( $placeholder_svg );
 }
@@ -206,6 +206,17 @@ function rsm_get_race_showcase_image_url( $race_id ) {
  */
 function rsm_get_race_showcase_markup( $event_id, $race_count ) {
     $races = rsm_get_race_showcase_races( $event_id, $race_count );
+    $settings = function_exists( 'rsm_get_settings' ) ? rsm_get_settings() : array();
+    $aspect_ratio = isset( $settings['race_showcase_aspect_ratio'] ) ? $settings['race_showcase_aspect_ratio'] : '4:3';
+
+    $aspect_ratio_css = '4 / 3';
+    if ( strpos( $aspect_ratio, ':' ) !== false ) {
+        list( $width, $height ) = array_map( 'floatval', explode( ':', $aspect_ratio ) );
+
+        if ( $width > 0 && $height > 0 ) {
+            $aspect_ratio_css = $width . ' / ' . $height;
+        }
+    }
 
     ob_start();
 
@@ -213,7 +224,7 @@ function rsm_get_race_showcase_markup( $event_id, $race_count ) {
         echo '<p>' . esc_html__( 'No races found for this event yet.', 'race-series-manager' ) . '</p>';
     } else {
         ?>
-        <div class="rsm-race-showcase">
+        <div class="rsm-race-showcase" style="--rsm-race-thumb-aspect: <?php echo esc_attr( $aspect_ratio_css ); ?>;">
             <div class="rsm-race-showcase-grid">
                 <?php foreach ( $races as $race ) :
                     $distance       = get_post_meta( $race->ID, '_rsm_race_distance', true );
