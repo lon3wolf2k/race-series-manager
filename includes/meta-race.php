@@ -91,10 +91,14 @@ function rsm_race_sanitize_embed_src( $src ) {
 /**
  * Rebuild iframe tag with sanitized attributes or drop if invalid.
  *
- * @param string $iframe_html Raw iframe markup after kses.
+ * @param string|array $iframe_html Raw iframe markup after kses or preg_replace_callback match array.
  * @return string Sanitized iframe markup or empty string.
  */
 function rsm_race_sanitize_iframe_tag( $iframe_html ) {
+    if ( is_array( $iframe_html ) ) {
+        $iframe_html = isset( $iframe_html[0] ) ? $iframe_html[0] : '';
+    }
+
     if ( ! preg_match( '/<iframe\b([^>]*)>/i', $iframe_html, $matches ) ) {
         return '';
     }
