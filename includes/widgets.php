@@ -285,16 +285,18 @@ function rsm_get_event_banner_markup( $event_id, $title = '' ) {
         return '<p>' . esc_html__( 'Event not found.', 'race-series-manager' ) . '</p>';
     }
 
-    $settings    = function_exists( 'rsm_get_settings' ) ? rsm_get_settings() : array();
-    $reg_label   = isset( $settings['overview_registration_label'] ) ? $settings['overview_registration_label'] : __( 'Registration', 'race-series-manager' );
-    $part_label  = isset( $settings['overview_participants_label'] ) ? $settings['overview_participants_label'] : __( 'Participants', 'race-series-manager' );
-    $live_label  = isset( $settings['overview_live_label'] ) ? $settings['overview_live_label'] : __( 'Live', 'race-series-manager' );
-    $open_tab    = ! empty( $settings['overview_action_new_tab'] );
-    $target_attr = $open_tab ? ' target="_blank" rel="noopener"' : '';
+    $settings      = function_exists( 'rsm_get_settings' ) ? rsm_get_settings() : array();
+    $reg_label     = isset( $settings['overview_registration_label'] ) ? $settings['overview_registration_label'] : __( 'Registration', 'race-series-manager' );
+    $part_label    = isset( $settings['overview_participants_label'] ) ? $settings['overview_participants_label'] : __( 'Participants', 'race-series-manager' );
+    $live_label    = isset( $settings['overview_live_label'] ) ? $settings['overview_live_label'] : __( 'Live', 'race-series-manager' );
+    $results_label = isset( $settings['overview_results_label'] ) ? $settings['overview_results_label'] : __( 'Results', 'race-series-manager' );
+    $open_tab      = ! empty( $settings['overview_action_new_tab'] );
+    $target_attr   = $open_tab ? ' target="_blank" rel="noopener"' : '';
 
-    $reg_url  = get_post_meta( $event_id, '_rsm_event_registration_url', true );
-    $part_url = get_post_meta( $event_id, '_rsm_event_participants_url', true );
-    $live_url = get_post_meta( $event_id, '_rsm_event_live_url', true );
+    $reg_url     = get_post_meta( $event_id, '_rsm_event_registration_url', true );
+    $part_url    = get_post_meta( $event_id, '_rsm_event_participants_url', true );
+    $live_url    = get_post_meta( $event_id, '_rsm_event_live_url', true );
+    $results_url = function_exists( 'rsm_get_results_page_url' ) ? rsm_get_results_page_url( $event_id ) : '';
 
     $datetime      = rsm_get_event_next_race_datetime( $event_id );
     $background_id = $datetime['race_id'] ? $datetime['race_id'] : 0;
@@ -347,7 +349,7 @@ function rsm_get_event_banner_markup( $event_id, $title = '' ) {
                 <?php endif; ?>
             </div>
 
-            <?php if ( $reg_url || $part_url || $live_url ) : ?>
+            <?php if ( $reg_url || $part_url || $live_url || $results_url ) : ?>
                 <div class="rsm-event-banner__actions">
                     <?php if ( $reg_url ) : ?>
                         <a class="rsm-banner-btn" href="<?php echo esc_url( $reg_url ); ?>"<?php echo $target_attr; ?>>
@@ -362,6 +364,11 @@ function rsm_get_event_banner_markup( $event_id, $title = '' ) {
                     <?php if ( $live_url ) : ?>
                         <a class="rsm-banner-btn" href="<?php echo esc_url( $live_url ); ?>"<?php echo $target_attr; ?>>
                             <?php echo esc_html( $live_label ); ?>
+                        </a>
+                    <?php endif; ?>
+                    <?php if ( $results_url ) : ?>
+                        <a class="rsm-banner-btn" href="<?php echo esc_url( $results_url ); ?>"<?php echo $target_attr; ?>>
+                            <?php echo esc_html( $results_label ); ?>
                         </a>
                     <?php endif; ?>
                 </div>
