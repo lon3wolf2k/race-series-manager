@@ -24,12 +24,9 @@ add_filter( 'single_template', 'rsm_single_race_template' );
  */
 function rsm_enqueue_race_styles() {
     if ( is_singular( 'cmt_race' ) ) {
-        wp_enqueue_style(
-            'rsm-race-styles',
-            RSM_PLUGIN_URL . 'assets/css/rsm-styles.css',
-            array(),
-            '0.1.0'
-        );
+        if ( function_exists( 'rsm_enqueue_style_bundle' ) ) {
+            rsm_enqueue_style_bundle();
+        }
     }
 }
 add_action( 'wp_enqueue_scripts', 'rsm_enqueue_race_styles' );

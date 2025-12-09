@@ -19,6 +19,39 @@ if ( ! class_exists( '\Dompdf\Dompdf' ) ) {
     }
 }
 
+/**
+ * Surface an admin warning when the Dompdf library is still unavailable.
+ */
+function rsm_dompdf_missing_notice() {
+    if ( class_exists( '\Dompdf\Dompdf' ) ) {
+        return;
+    }
+
+    if ( ! current_user_can( 'manage_options' ) ) {
+        return;
+    }
+
+    $autoload_path = RSM_PLUGIN_DIR . 'lib/dompdf/autoload.inc.php';
+    if ( ! file_exists( $autoload_path ) || ! is_readable( $autoload_path ) ) {
+        $message = sprintf(
+            /* translators: %s: plugin-relative Dompdf autoload path */
+            esc_html__( 'Dompdf PDF library is missing. Please ensure %s exists and is readable.', 'race-series-manager' ),
+            esc_html( '/lib/dompdf/autoload.inc.php' )
+        );
+    } else {
+        $message = esc_html__( 'Dompdf PDF library could not be initialized. Please reinstall the Dompdf files bundled with the plugin.', 'race-series-manager' );
+    }
+
+    printf(
+        '<div class="notice notice-error"><p>%s</p></div>',
+        $message
+    );
+}
+
+if ( is_admin() ) {
+    add_action( 'admin_notices', 'rsm_dompdf_missing_notice' );
+}
+
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
@@ -113,7 +146,6 @@ function rsm_build_race_booklet_html( $race_id ) {
     $start_time     = get_post_meta( $race_id, '_rsm_race_start_time', true );
     $start_loc      = get_post_meta( $race_id, '_rsm_race_start_location', true );
     $finish_loc     = get_post_meta( $race_id, '_rsm_race_finish_location', true );
-    $fee            = get_post_meta( $race_id, '_rsm_race_fee', true );
     $cutoff_hours   = get_post_meta( $race_id, '_rsm_race_cutoff_hours', true );
     $aid_stations   = get_post_meta( $race_id, '_rsm_race_aid_stations', true );
     $static_map_id  = get_post_meta( $race_id, '_rsm_race_static_map_id', true );
@@ -321,10 +353,8 @@ function rsm_build_race_booklet_html( $race_id ) {
             <td><?php echo esc_html( $finish_loc ); ?></td>
         </tr>
         <tr>
-            <th><?php esc_html_e( 'Entry fee', 'race-series-manager' ); ?></th>
-            <td><?php echo esc_html( $fee ); ?></td>
             <th><?php esc_html_e( 'Cut-off', 'race-series-manager' ); ?></th>
-            <td><?php echo $cutoff_hours ? esc_html( $cutoff_hours ) . ' ' . esc_html__( 'hours', 'race-series-manager' ) : ''; ?></td>
+            <td colspan="3"><?php echo $cutoff_hours ? esc_html( $cutoff_hours ) . ' ' . esc_html__( 'hours', 'race-series-manager' ) : ''; ?></td>
         </tr>
         <?php if ( $route_url ) : ?>
         <tr>

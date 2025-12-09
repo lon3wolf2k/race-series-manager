@@ -18,7 +18,7 @@ function rsm_register_post_types() {
         'singular_name'         => esc_html__( 'Event', 'race-series-manager' ),
         'menu_name'             => esc_html__( 'Events', 'race-series-manager' ),
         'name_admin_bar'        => esc_html__( 'Event', 'race-series-manager' ),
-        'add_new'               => esc_html__( 'Add New', 'race-series-manager' ),
+        'add_new'               => esc_html__( 'Add New Event', 'race-series-manager' ),
         'add_new_item'          => esc_html__( 'Add New Event', 'race-series-manager' ),
         'edit_item'             => esc_html__( 'Edit Event', 'race-series-manager' ),
         'new_item'              => esc_html__( 'New Event', 'race-series-manager' ),
@@ -44,8 +44,9 @@ function rsm_register_post_types() {
         'has_archive'        => true,
         'rewrite'            => array( 'slug' => 'events' ),
         'show_in_rest'       => true,
-        'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
+        'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt', 'page-attributes' ),
         'menu_icon'          => 'dashicons-flag',
+        'show_in_menu'       => false,
     );
 
     register_post_type( 'cmt_event', $event_args );
@@ -58,7 +59,7 @@ function rsm_register_post_types() {
         'singular_name'         => esc_html__( 'Race', 'race-series-manager' ),
         'menu_name'             => esc_html__( 'Races', 'race-series-manager' ),
         'name_admin_bar'        => esc_html__( 'Race', 'race-series-manager' ),
-        'add_new'               => esc_html__( 'Add New', 'race-series-manager' ),
+        'add_new'               => esc_html__( 'Add New Race', 'race-series-manager' ),
         'add_new_item'          => esc_html__( 'Add New Race', 'race-series-manager' ),
         'edit_item'             => esc_html__( 'Edit Race', 'race-series-manager' ),
         'new_item'              => esc_html__( 'New Race', 'race-series-manager' ),
@@ -84,8 +85,9 @@ function rsm_register_post_types() {
         'has_archive'        => true,
         'rewrite'            => array( 'slug' => 'races' ),
         'show_in_rest'       => true,
-        'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
+        'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt', 'page-attributes' ),
         'menu_icon'          => 'dashicons-location-alt',
+        'show_in_menu'       => false,
     );
 
     register_post_type( 'cmt_race', $race_args );
@@ -98,7 +100,7 @@ function rsm_register_post_types() {
         'singular_name'         => esc_html__( 'Result', 'race-series-manager' ),
         'menu_name'             => esc_html__( 'Results', 'race-series-manager' ),
         'name_admin_bar'        => esc_html__( 'Result', 'race-series-manager' ),
-        'add_new'               => esc_html__( 'Add New', 'race-series-manager' ),
+        'add_new'               => esc_html__( 'Add New Result', 'race-series-manager' ),
         'add_new_item'          => esc_html__( 'Add New Result', 'race-series-manager' ),
         'edit_item'             => esc_html__( 'Edit Result', 'race-series-manager' ),
         'new_item'              => esc_html__( 'New Result', 'race-series-manager' ),
@@ -115,9 +117,9 @@ function rsm_register_post_types() {
         'labels'             => $results_labels,
         'public'             => false,             // δεν χρειάζονται public URLs
         'show_ui'            => true,
-        'show_in_menu'       => true,              // ξεχωριστό menu στο backend
+        'show_in_menu'       => false,
         'show_in_rest'       => false,
-        'supports'           => array( 'title' ),  // τίτλος π.χ. “CMT 2023 – Rain Trail 44km”
+        'supports'           => array( 'title', 'page-attributes' ),  // τίτλος π.χ. “CMT 2023 – Rain Trail 44km”
         'menu_icon'          => 'dashicons-analytics',
         'capability_type'    => 'post',
     );
