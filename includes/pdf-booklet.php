@@ -117,6 +117,15 @@ function rsm_maybe_output_race_booklet_pdf() {
 
     $html = rsm_build_race_booklet_html( $race_id );
 
+    $dompdf_root   = RSM_PLUGIN_DIR . 'lib/dompdf/vendor/dompdf/dompdf';
+    $version_file  = $dompdf_root . '/VERSION';
+
+    if ( ! file_exists( $version_file ) ) {
+        wp_die(
+            esc_html__( 'Dompdf VERSION file is missing. Please reinstall the bundled Dompdf library.', 'race-series-manager' )
+        );
+    }
+
     $options = new Options();
     $options->set( 'isRemoteEnabled', false );
     // Χρησιμοποιούμε DejaVu Sans για υποστήριξη ελληνικών
