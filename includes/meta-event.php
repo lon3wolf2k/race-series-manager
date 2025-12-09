@@ -220,10 +220,34 @@ function rsm_event_registration_meta_box_callback( $post ) {
 
     wp_nonce_field( 'rsm_save_event_registration', 'rsm_event_registration_nonce' );
 
-    $reg_url   = get_post_meta( $post->ID, '_rsm_event_registration_url', true );
-    $part_url  = get_post_meta( $post->ID, '_rsm_event_participants_url', true );
-    $live_url  = get_post_meta( $post->ID, '_rsm_event_live_url', true );
+    $reg_url          = get_post_meta( $post->ID, '_rsm_event_registration_url', true );
+    $part_url         = get_post_meta( $post->ID, '_rsm_event_participants_url', true );
+    $live_url         = get_post_meta( $post->ID, '_rsm_event_live_url', true );
+    $event_date       = get_post_meta( $post->ID, '_rsm_event_date', true );
+    $event_time       = get_post_meta( $post->ID, '_rsm_event_time', true );
+    $display_date_raw = get_post_meta( $post->ID, '_rsm_event_display_date', true );
     ?>
+    <h4><?php esc_html_e( 'Event date & time', 'race-series-manager' ); ?></h4>
+    <p>
+        <label for="rsm_event_date"><strong><?php esc_html_e( 'Event date', 'race-series-manager' ); ?></strong></label><br>
+        <input type="date" name="rsm_event_date" id="rsm_event_date" value="<?php echo esc_attr( $event_date ); ?>" />
+        <label for="rsm_event_time" style="margin-left: 10px;"><strong><?php esc_html_e( 'Time (optional)', 'race-series-manager' ); ?></strong></label>
+        <input type="time" name="rsm_event_time" id="rsm_event_time" value="<?php echo esc_attr( $event_time ); ?>" />
+        <span class="description">
+            <?php esc_html_e( 'This date powers the event banner countdown. If empty, the next race date is used instead.', 'race-series-manager' ); ?>
+        </span>
+    </p>
+
+    <p>
+        <label for="rsm_event_display_date"><strong><?php esc_html_e( 'Banner date label (optional)', 'race-series-manager' ); ?></strong></label><br>
+        <input type="text" name="rsm_event_display_date" id="rsm_event_display_date" class="regular-text" value="<?php echo esc_attr( $display_date_raw ); ?>" placeholder="<?php echo esc_attr( __( 'e.g. 5-7 July 2025', 'race-series-manager' ) ); ?>" />
+        <span class="description">
+            <?php esc_html_e( 'Use this to override the date text shown beside the countdown (helpful for multi-day events).', 'race-series-manager' ); ?>
+        </span>
+    </p>
+
+    <hr>
+
     <h4><?php esc_html_e( 'Registration page', 'race-series-manager' ); ?></h4>
     <p>
         <label for="rsm_event_registration_url"><strong><?php esc_html_e( 'Registration URL', 'race-series-manager' ); ?></strong></label><br>
@@ -306,13 +330,19 @@ function rsm_save_event_meta( $post_id ) {
     if ( isset( $_POST['rsm_event_registration_nonce'] ) &&
          wp_verify_nonce( $_POST['rsm_event_registration_nonce'], 'rsm_save_event_registration' ) ) {
 
-        $reg_url  = isset( $_POST['rsm_event_registration_url'] ) ? esc_url_raw( $_POST['rsm_event_registration_url'] ) : '';
-        $part_url = isset( $_POST['rsm_event_participants_url'] ) ? esc_url_raw( $_POST['rsm_event_participants_url'] ) : '';
-        $live_url = isset( $_POST['rsm_event_live_url'] ) ? esc_url_raw( $_POST['rsm_event_live_url'] ) : '';
+        $reg_url    = isset( $_POST['rsm_event_registration_url'] ) ? esc_url_raw( $_POST['rsm_event_registration_url'] ) : '';
+        $part_url   = isset( $_POST['rsm_event_participants_url'] ) ? esc_url_raw( $_POST['rsm_event_participants_url'] ) : '';
+        $live_url   = isset( $_POST['rsm_event_live_url'] ) ? esc_url_raw( $_POST['rsm_event_live_url'] ) : '';
+        $event_date = isset( $_POST['rsm_event_date'] ) ? sanitize_text_field( $_POST['rsm_event_date'] ) : '';
+        $event_time = isset( $_POST['rsm_event_time'] ) ? sanitize_text_field( $_POST['rsm_event_time'] ) : '';
+        $date_label = isset( $_POST['rsm_event_display_date'] ) ? sanitize_text_field( $_POST['rsm_event_display_date'] ) : '';
 
         update_post_meta( $post_id, '_rsm_event_registration_url', $reg_url );
         update_post_meta( $post_id, '_rsm_event_participants_url', $part_url );
         update_post_meta( $post_id, '_rsm_event_live_url',         $live_url );
+        update_post_meta( $post_id, '_rsm_event_date',             $event_date );
+        update_post_meta( $post_id, '_rsm_event_time',             $event_time );
+        update_post_meta( $post_id, '_rsm_event_display_date',     $date_label );
     }
 }
 add_action( 'save_post_cmt_event', 'rsm_save_event_meta' );

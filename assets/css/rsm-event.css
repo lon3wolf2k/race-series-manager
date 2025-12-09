@@ -1,0 +1,309 @@
+/* ==========================================================
+   RACE SERIES MANAGER - EVENT & RESULTS STYLES
+   ======================================================= */
+
+/* Event overview shortcode */
+.rsm-event-overview {
+    max-width: 1080px;
+    margin: 32px auto;
+    padding: 0 16px;
+    color: var(--rsm-text-secondary);
+}
+
+.rsm-event-overview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.rsm-event-overview-heading {
+    flex: 1 1 340px;
+}
+
+.rsm-event-overview-excerpt {
+    margin: 10px 0 0;
+    color: var(--rsm-text-secondary);
+    font-size: 15px;
+}
+
+.rsm-event-overview-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 8px;
+    flex: 1 1 260px;
+}
+
+.rsm-event-overview-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--rsm-surface);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+}
+
+.rsm-event-overview-table th,
+.rsm-event-overview-table td {
+    padding: 12px 14px;
+    text-align: left;
+    color: var(--rsm-text-secondary);
+}
+
+.rsm-event-overview-table thead th {
+    background: var(--rsm-table-header);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--rsm-text-primary);
+}
+
+.rsm-event-overview-table tbody tr:nth-child(even) {
+    background: var(--rsm-table-row-alt);
+}
+
+.rsm-event-overview-table tbody tr:hover {
+    background: var(--rsm-table-row-hover);
+}
+
+.rsm-event-overview-race-link {
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--rsm-link);
+}
+
+.rsm-event-overview-race-link:hover {
+    text-decoration: underline;
+}
+
+.rsm-event-overview-empty {
+    color: var(--rsm-text-soft);
+    font-style: italic;
+    margin-top: 8px;
+}
+
+/* Generic small buttons (used on results listing) */
+.rsm-btn,
+.rsm-btn-outline {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.rsm-btn {
+    background: var(--rsm-accent);
+    color: var(--rsm-accent-contrast);
+    border: none;
+}
+
+.rsm-btn-outline {
+    background: var(--rsm-surface);
+    color: var(--rsm-accent);
+    border: 2px solid var(--rsm-accent);
+}
+
+/* Event tabs (INFO / ANNOUNCEMENT / RULES / PROGRAM / ACCESS / TRAVEL) */
+.rsm-event-tabs {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 6px 0 18px;
+    border-bottom: 1px solid var(--rsm-border);
+    margin-bottom: 24px;
+}
+
+.rsm-event-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 14px;
+    font-weight: 600;
+    border-radius: 999px;
+    border: 1px solid var(--rsm-border);
+    background: var(--rsm-surface-alt);
+    color: var(--rsm-text-primary);
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.rsm-event-tab:hover,
+.rsm-event-tab.is-active {
+    background: var(--rsm-accent);
+    color: var(--rsm-accent-contrast);
+    border-color: transparent;
+}
+
+.rsm-event-tab-content {
+    display: none;
+}
+
+.rsm-event-tab-content.is-active {
+    display: block;
+}
+
+/* Event results listing */
+.rsm-event-results-page {
+    background: var(--rsm-surface);
+    border-radius: 20px;
+    padding: 32px 26px 36px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    border: 1px solid var(--rsm-border);
+    color: var(--rsm-text-secondary);
+}
+
+.rsm-event-results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+.rsm-event-results-title {
+    margin: 0;
+    font-size: 24px;
+    color: var(--rsm-text-primary);
+}
+
+.rsm-event-results-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.rsm-event-results-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.rsm-event-result-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: var(--rsm-surface);
+    border: 1px solid var(--rsm-border);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.06);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.rsm-event-result-item:hover {
+    background: var(--rsm-table-row-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+}
+
+.rsm-event-result-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.rsm-event-result-edition {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    color: var(--rsm-text-primary);
+}
+
+.rsm-event-result-name {
+    font-size: 14px;
+    color: var(--rsm-text-secondary);
+    margin-top: 2px;
+}
+
+.rsm-event-result-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.rsm-event-result-missing {
+    font-size: 14px;
+    color: var(--rsm-text-soft);
+    font-style: italic;
+}
+
+/* Event sidebar race list */
+.rsm-event-races-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+    display: grid;
+    gap: 10px;
+}
+
+.rsm-event-race-item {
+    margin: 0;
+}
+
+.rsm-event-race-link {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    text-decoration: none;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: var(--rsm-surface);
+    border: 1px solid var(--rsm-border);
+    color: var(--rsm-text-primary);
+    font-weight: 600;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.rsm-event-race-link:hover,
+.rsm-event-race-link:focus-visible {
+    background: var(--rsm-accent);
+    color: var(--rsm-accent-contrast);
+    border-color: transparent;
+    transform: translateY(-1px);
+    box-shadow: 0 12px 22px rgba(0, 0, 0, 0.09);
+}
+
+.rsm-event-race-title {
+    font-size: 15px;
+    line-height: 1.25;
+}
+
+.rsm-event-race-meta {
+    font-size: 13px;
+    color: var(--rsm-text-secondary);
+}
+
+.rsm-event-race-link:hover .rsm-event-race-meta,
+.rsm-event-race-link:focus-visible .rsm-event-race-meta {
+    color: var(--rsm-accent-contrast);
+}
+
+@media (max-width: 680px) {
+    .rsm-event-results-page {
+        padding: 26px 18px 32px;
+    }
+
+    .rsm-event-result-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .rsm-event-result-actions {
+        width: 100%;
+    }
+
+    .rsm-btn,
+    .rsm-btn-outline {
+        width: 100%;
+        text-align: center;
+    }
+}

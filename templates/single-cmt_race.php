@@ -20,9 +20,10 @@ while ( have_posts() ) :
     $cutoff_hours   = get_post_meta( $race_id, '_rsm_race_cutoff_hours', true );
     $start_datetime = get_post_meta( $race_id, '_rsm_race_date', true );
     $start_time     = get_post_meta( $race_id, '_rsm_race_start_time', true );
-    $start_point    = get_post_meta( $race_id, '_rsm_race_start_location', true );
-    $finish_point   = get_post_meta( $race_id, '_rsm_race_finish_location', true );
-    $fee            = get_post_meta( $race_id, '_rsm_race_fee', true );
+    $start_point      = get_post_meta( $race_id, '_rsm_race_start_location', true );
+    $start_point_link = get_post_meta( $race_id, '_rsm_race_start_location_link', true );
+    $finish_point     = get_post_meta( $race_id, '_rsm_race_finish_location', true );
+    $finish_point_link = get_post_meta( $race_id, '_rsm_race_finish_location_link', true );
 
     // Race-level ITRA link
     $itra_link      = get_post_meta( $race_id, '_rsm_race_itra_link', true );
@@ -40,8 +41,15 @@ while ( have_posts() ) :
     $video_embed    = get_post_meta( $race_id, '_rsm_race_video_embed', true );
 
     // Gallery (image IDs)
-    $gallery_meta = get_post_meta( $race_id, '_rsm_race_gallery_ids', true );
-    $gallery_ids  = array();
+    $gallery_meta   = get_post_meta( $race_id, '_rsm_race_gallery_ids', true );
+    $gallery_ids    = array();
+    $show_hero      = get_post_meta( $race_id, '_rsm_race_show_hero', true );
+    $static_map_id  = get_post_meta( $race_id, '_rsm_race_static_map_id', true );
+    $map_print_wrap = 'rsm-map-print-stack-' . $race_id;
+
+    if ( '' === $show_hero ) {
+        $show_hero = '1';
+    }
 
     if ( is_array( $gallery_meta ) ) {
         $gallery_ids = $gallery_meta;
@@ -77,6 +85,25 @@ while ( have_posts() ) :
         $results_url = rsm_get_results_page_url( $event_id );
     }
 
+    // Shared button labels / behaviour from settings so templates match shortcode output.
+    $settings           = function_exists( 'rsm_get_settings' ) ? rsm_get_settings() : array();
+    $registration_label = isset( $settings['overview_registration_label'] )
+        ? $settings['overview_registration_label']
+        : __( 'Registration', 'race-series-manager' );
+    $participants_label = isset( $settings['overview_participants_label'] )
+        ? $settings['overview_participants_label']
+        : __( 'Participants', 'race-series-manager' );
+    $live_label = isset( $settings['overview_live_label'] )
+        ? $settings['overview_live_label']
+        : __( 'Live', 'race-series-manager' );
+    $results_label = isset( $settings['overview_results_label'] )
+        ? $settings['overview_results_label']
+        : __( 'Results', 'race-series-manager' );
+
+    $action_target_attr = ! empty( $settings['overview_action_new_tab'] )
+        ? ' target="_blank" rel="noopener"'
+        : '';
+
     // Buttons logic (registration/participants/live) - μόνο URLs, same tab
     $reg_btn_url   = $event_reg_url ? $event_reg_url : '';
     $part_btn_url  = $event_part_url ? $event_part_url : '';
@@ -107,7 +134,7 @@ while ( have_posts() ) :
         <main class="rsm-race-main">
 
             <!-- HERO IMAGE -->
-            <?php if ( has_post_thumbnail() ) : ?>
+            <?php if ( has_post_thumbnail() && '1' === $show_hero ) : ?>
                 <div class="rsm-hero">
                     <?php the_post_thumbnail( 'large' ); ?>
                 </div>
@@ -179,14 +206,31 @@ while ( have_posts() ) :
             </section>
 
             <!-- 3. AID STATIONS -->
-            <?php if ( ! empty( $aid_stations ) ) : ?>
+            <?php if ( ! empty( $aid_stations ) ) :
+                $aid_table_id  = 'rsm-aid-table-' . $race_id;
+                $aid_title_id  = 'rsm-aid-title-' . $race_id;
+                ?>
                 <section class="rsm-race-section rsm-race-section--aid">
-                    <h2 class="rsm-section-title">
-                        <?php esc_html_e( 'Cut-off times & aid stations', 'race-series-manager' ); ?>
-                    </h2>
+                    <div class="rsm-section-title-row">
+                        <h2 class="rsm-section-title" id="<?php echo esc_attr( $aid_title_id ); ?>">
+                            <?php esc_html_e( 'Cut-off times & aid stations', 'race-series-manager' ); ?>
+                        </h2>
+                        <button
+                            type="button"
+                            class="rsm-icon-button rsm-print-button"
+                            data-rsm-print-target="#<?php echo esc_attr( $aid_table_id ); ?>"
+                            data-rsm-print-title="#<?php echo esc_attr( $aid_title_id ); ?>"
+                            aria-label="<?php esc_attr_e( 'Print cut-off and aid stations table', 'race-series-manager' ); ?>"
+                        >
+                            <svg class="rsm-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path d="M17 3H7v4h10V3Zm2 4V2a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v5a3 3 0 0 0-3 3v6a1 1 0 0 0 1 1h3v3a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3h3a1 1 0 0 0 1-1v-6a3 3 0 0 0-3-3h-1Zm-2 12H7v-4h10v4Zm4-9v5h-2v-3a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v3H3v-5a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1Z" />
+                            </svg>
+                            <span class="rsm-icon-button__label"><?php esc_html_e( 'Print', 'race-series-manager' ); ?></span>
+                        </button>
+                    </div>
 
                     <div class="rsm-aid-table-wrapper">
-                        <table class="rsm-aid-table">
+                        <table class="rsm-aid-table" id="<?php echo esc_attr( $aid_table_id ); ?>">
                             <thead>
                                 <tr>
                                     <th><?php esc_html_e( 'Station', 'race-series-manager' ); ?></th>
@@ -227,9 +271,29 @@ while ( have_posts() ) :
 
             <!-- 4. ROUTE MAP -->
             <section class="rsm-race-section rsm-race-section--map">
-                <h2 class="rsm-section-title">
-                    <?php esc_html_e( 'Route map', 'race-series-manager' ); ?>
-                </h2>
+                <?php
+                $map_title_id = 'rsm-map-title-' . $race_id;
+                $print_title  = '#' . $map_title_id;
+                ?>
+                <div class="rsm-section-title-row">
+                    <h2 class="rsm-section-title" id="<?php echo esc_attr( $map_title_id ); ?>">
+                        <?php esc_html_e( 'Route map', 'race-series-manager' ); ?>
+                    </h2>
+                    <?php if ( $static_map_id || $elev_chart_id ) : ?>
+                        <button
+                            type="button"
+                            class="rsm-icon-button rsm-print-button"
+                            data-rsm-print-images="#<?php echo esc_attr( $map_print_wrap ); ?>"
+                            data-rsm-print-title="<?php echo esc_attr( $print_title ); ?>"
+                            aria-label="<?php esc_attr_e( 'Print the route map and elevation images', 'race-series-manager' ); ?>"
+                        >
+                            <svg class="rsm-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path d="M17 3H7v4h10V3Zm2 4V2a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v5a3 3 0 0 0-3 3v6a1 1 0 0 0 1 1h3v3a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3h3a1 1 0 0 0 1-1v-6a3 3 0 0 0-3-3h-1Zm-2 12H7v-4h10v4Zm4-9v5h-2v-3a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v3H3v-5a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1Z" />
+                            </svg>
+                            <span class="rsm-icon-button__label"><?php esc_html_e( 'Print', 'race-series-manager' ); ?></span>
+                        </button>
+                    <?php endif; ?>
+                </div>
 
                 <?php if ( ! empty( $plot_embed ) ) : ?>
                     <div class="rsm-race-map-embed">
@@ -239,6 +303,59 @@ while ( have_posts() ) :
                     <p style="font-size:13px;color:#888;">
                         <?php esc_html_e( 'No route map embed has been set for this race yet.', 'race-series-manager' ); ?>
                     </p>
+                <?php endif; ?>
+
+                <?php if ( $static_map_id || $elev_chart_id ) :
+                    $static_map_alt = '';
+                    $static_map_img = '';
+                    if ( $static_map_id ) {
+                        $static_map_alt = get_post_meta( $static_map_id, '_wp_attachment_image_alt', true );
+                        if ( '' === $static_map_alt ) {
+                            $static_map_alt = get_the_title( $static_map_id );
+                        }
+                        $static_map_img = wp_get_attachment_image(
+                            $static_map_id,
+                            'large',
+                            false,
+                            array(
+                                'class' => 'rsm-print-image',
+                                'alt'   => $static_map_alt,
+                            )
+                        );
+                    }
+
+                    $elev_alt = '';
+                    $elev_img = '';
+                    if ( $elev_chart_id ) {
+                        $elev_alt = get_post_meta( $elev_chart_id, '_wp_attachment_image_alt', true );
+                        if ( '' === $elev_alt ) {
+                            $elev_alt = get_the_title( $elev_chart_id );
+                        }
+                        $elev_img = wp_get_attachment_image(
+                            $elev_chart_id,
+                            'large',
+                            false,
+                            array(
+                                'class' => 'rsm-print-image',
+                                'alt'   => $elev_alt,
+                            )
+                        );
+                    }
+                    ?>
+                    <div id="<?php echo esc_attr( $map_print_wrap ); ?>" class="rsm-print-stack" aria-hidden="true" style="display:none;">
+                        <?php if ( $static_map_img ) : ?>
+                            <div class="rsm-print-block">
+                                <h3 class="rsm-print-block__title"><?php esc_html_e( 'Route map', 'race-series-manager' ); ?></h3>
+                                <?php echo $static_map_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                            </div>
+                        <?php endif; ?>
+                        <?php if ( $elev_img ) : ?>
+                            <div class="rsm-print-block">
+                                <h3 class="rsm-print-block__title"><?php esc_html_e( 'Elevation profile', 'race-series-manager' ); ?></h3>
+                                <?php echo $elev_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 <?php endif; ?>
             </section>
 
@@ -280,6 +397,10 @@ while ( have_posts() ) :
                         <?php foreach ( $gallery_ids as $img_id ) :
                             $full  = wp_get_attachment_image_src( $img_id, 'large' );
                             $thumb = wp_get_attachment_image_src( $img_id, 'medium' );
+                            $alt   = get_post_meta( $img_id, '_wp_attachment_image_alt', true );
+                            if ( '' === $alt ) {
+                                $alt = get_the_title( $img_id );
+                            }
                             if ( ! $full || ! $thumb ) {
                                 continue;
                             }
@@ -287,7 +408,7 @@ while ( have_posts() ) :
                             <a href="<?php echo esc_url( $full[0] ); ?>"
                                class="rsm-race-gallery-item"
                                data-rsm-lightbox="race-gallery">
-                                <img src="<?php echo esc_url( $thumb[0] ); ?>" alt="">
+                                <img src="<?php echo esc_url( $thumb[0] ); ?>" alt="<?php echo esc_attr( $alt ); ?>">
                             </a>
                         <?php endforeach; ?>
                     </div>
@@ -327,21 +448,30 @@ while ( have_posts() ) :
                     <?php if ( $start_point ) : ?>
                         <div class="rsm-summary-row">
                             <dt><?php esc_html_e( 'Start point', 'race-series-manager' ); ?>:</dt>
-                            <dd><?php echo esc_html( $start_point ); ?></dd>
+                            <dd>
+                                <?php if ( $start_point_link ) : ?>
+                                    <a href="<?php echo esc_url( $start_point_link ); ?>" target="_blank" rel="noopener">
+                                        <?php echo esc_html( $start_point ); ?>
+                                    </a>
+                                <?php else : ?>
+                                    <?php echo esc_html( $start_point ); ?>
+                                <?php endif; ?>
+                            </dd>
                         </div>
                     <?php endif; ?>
 
                     <?php if ( $finish_point ) : ?>
                         <div class="rsm-summary-row">
                             <dt><?php esc_html_e( 'Finish point', 'race-series-manager' ); ?>:</dt>
-                            <dd><?php echo esc_html( $finish_point ); ?></dd>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ( $fee ) : ?>
-                        <div class="rsm-summary-row">
-                            <dt><?php esc_html_e( 'Entry fee', 'race-series-manager' ); ?>:</dt>
-                            <dd><?php echo esc_html( $fee ); ?></dd>
+                            <dd>
+                                <?php if ( $finish_point_link ) : ?>
+                                    <a href="<?php echo esc_url( $finish_point_link ); ?>" target="_blank" rel="noopener">
+                                        <?php echo esc_html( $finish_point ); ?>
+                                    </a>
+                                <?php else : ?>
+                                    <?php echo esc_html( $finish_point ); ?>
+                                <?php endif; ?>
+                            </dd>
                         </div>
                     <?php endif; ?>
 
@@ -371,22 +501,22 @@ while ( have_posts() ) :
 
                     <?php if ( $reg_btn_url ) : ?>
                         <a href="<?php echo esc_url( $reg_btn_url ); ?>"
-                           class="rsm-summary-btn">
-                            <?php esc_html_e( 'Registration', 'race-series-manager' ); ?>
+                           class="rsm-summary-btn"<?php echo $action_target_attr; ?>>
+                            <?php echo esc_html( $registration_label ); ?>
                         </a>
                     <?php endif; ?>
 
                     <?php if ( $part_btn_url ) : ?>
                         <a href="<?php echo esc_url( $part_btn_url ); ?>"
-                           class="rsm-summary-btn">
-                            <?php esc_html_e( 'Participants', 'race-series-manager' ); ?>
+                           class="rsm-summary-btn"<?php echo $action_target_attr; ?>>
+                            <?php echo esc_html( $participants_label ); ?>
                         </a>
                     <?php endif; ?>
 
                     <?php if ( $live_btn_url ) : ?>
                         <a href="<?php echo esc_url( $live_btn_url ); ?>"
-                           class="rsm-summary-btn">
-                            <?php esc_html_e( 'Live', 'race-series-manager' ); ?>
+                           class="rsm-summary-btn"<?php echo $action_target_attr; ?>>
+                            <?php echo esc_html( $live_label ); ?>
                         </a>
                     <?php endif; ?>
 
@@ -419,10 +549,8 @@ while ( have_posts() ) :
 
                     <?php if ( $results_url ) : ?>
                         <a href="<?php echo esc_url( $results_url ); ?>"
-                           class="rsm-summary-btn rsm-event-results-btn"
-                           target="_blank"
-                           rel="noopener">
-                            <?php esc_html_e( 'Results', 'race-series-manager' ); ?>
+                           class="rsm-summary-btn rsm-event-results-btn"<?php echo $action_target_attr; ?>>
+                            <?php echo esc_html( $results_label ); ?>
                         </a>
                     <?php endif; ?>
                 </div>

@@ -41,6 +41,25 @@ while ( have_posts() ) :
     if ( function_exists( 'rsm_get_results_page_url' ) ) {
         $results_url = rsm_get_results_page_url( $event_id );
     }
+
+    // Shared button labels / behaviour from settings so templates match shortcode output.
+    $settings           = function_exists( 'rsm_get_settings' ) ? rsm_get_settings() : array();
+    $registration_label = isset( $settings['overview_registration_label'] )
+        ? $settings['overview_registration_label']
+        : __( 'Registration', 'race-series-manager' );
+    $participants_label = isset( $settings['overview_participants_label'] )
+        ? $settings['overview_participants_label']
+        : __( 'Participants', 'race-series-manager' );
+    $live_label = isset( $settings['overview_live_label'] )
+        ? $settings['overview_live_label']
+        : __( 'Live', 'race-series-manager' );
+    $results_label = isset( $settings['overview_results_label'] )
+        ? $settings['overview_results_label']
+        : __( 'Results', 'race-series-manager' );
+
+    $action_target_attr = ! empty( $settings['overview_action_new_tab'] )
+        ? ' target="_blank" rel="noopener"'
+        : '';
     ?>
 
 <div class="rsm-race-wrapper rsm-event-wrapper">
@@ -195,31 +214,29 @@ while ( have_posts() ) :
 
                     <?php if ( $reg_url ) : ?>
                         <a href="<?php echo esc_url( $reg_url ); ?>"
-                           class="rsm-summary-btn">
-                            <?php esc_html_e( 'Registration', 'race-series-manager' ); ?>
+                           class="rsm-summary-btn"<?php echo $action_target_attr; ?>>
+                            <?php echo esc_html( $registration_label ); ?>
                         </a>
                     <?php endif; ?>
 
                     <?php if ( $part_url ) : ?>
                         <a href="<?php echo esc_url( $part_url ); ?>"
-                           class="rsm-summary-btn">
-                            <?php esc_html_e( 'Participants', 'race-series-manager' ); ?>
+                           class="rsm-summary-btn"<?php echo $action_target_attr; ?>>
+                            <?php echo esc_html( $participants_label ); ?>
                         </a>
                     <?php endif; ?>
 
                     <?php if ( $live_url ) : ?>
                         <a href="<?php echo esc_url( $live_url ); ?>"
-                           class="rsm-summary-btn">
-                            <?php esc_html_e( 'Live', 'race-series-manager' ); ?>
+                           class="rsm-summary-btn"<?php echo $action_target_attr; ?>>
+                            <?php echo esc_html( $live_label ); ?>
                         </a>
                     <?php endif; ?>
 
                     <?php if ( $results_url ) : ?>
                         <a href="<?php echo esc_url( $results_url ); ?>"
-                           class="rsm-summary-btn rsm-event-results-btn"
-                           target="_blank"
-                           rel="noopener">
-                            <?php esc_html_e( 'Results', 'race-series-manager' ); ?>
+                           class="rsm-summary-btn rsm-event-results-btn"<?php echo $action_target_attr; ?>>
+                            <?php echo esc_html( $results_label ); ?>
                         </a>
                     <?php endif; ?>
                 </div>
