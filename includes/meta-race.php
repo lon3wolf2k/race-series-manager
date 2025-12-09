@@ -5,6 +5,41 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Allowed HTML for race embed fields (iframe-based providers only).
+ */
+function rsm_race_get_allowed_embed_html() {
+    return array(
+        'iframe' => array(
+            'src'             => true,
+            'width'           => true,
+            'height'          => true,
+            'frameborder'     => true,
+            'allow'           => true,
+            'allowfullscreen' => true,
+            'title'           => true,
+            'loading'         => true,
+            'referrerpolicy'  => true,
+            'class'           => true,
+            'style'           => true,
+        ),
+    );
+}
+
+/**
+ * Sanitize iframe embed markup for storage/output.
+ *
+ * @param string $embed Raw embed HTML.
+ * @return string Sanitized embed HTML.
+ */
+function rsm_race_sanitize_embed_html( $embed ) {
+    if ( empty( $embed ) ) {
+        return '';
+    }
+
+    return wp_kses( $embed, rsm_race_get_allowed_embed_html() );
+}
+
+/**
  * Race meta boxes
  */
 
@@ -538,9 +573,8 @@ function rsm_save_race_meta( $post_id ) {
             return;
         }
 
-        // ΠΡΟΣΟΧΗ: Εδώ ΔΕΝ κάνουμε wp_kses_post, για να μην κόβονται τα iframes
         $plot_embed  = isset( $_POST['rsm_race_plotaroute_embed'] )
-            ? wp_unslash( $_POST['rsm_race_plotaroute_embed'] )
+            ? rsm_race_sanitize_embed_html( wp_unslash( $_POST['rsm_race_plotaroute_embed'] ) )
             : '';
 
         $route_url   = isset( $_POST['rsm_race_route_url'] )
@@ -548,7 +582,7 @@ function rsm_save_race_meta( $post_id ) {
             : '';
 
         $video_embed = isset( $_POST['rsm_race_video_embed'] )
-            ? wp_unslash( $_POST['rsm_race_video_embed'] )
+            ? rsm_race_sanitize_embed_html( wp_unslash( $_POST['rsm_race_video_embed'] ) )
             : '';
 
         $gallery_ids = isset( $_POST['rsm_race_gallery_ids'] )

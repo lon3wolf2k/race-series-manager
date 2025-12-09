@@ -31,14 +31,21 @@ while ( have_posts() ) :
     // GPX / route download
     $gpx_url        = get_post_meta( $race_id, '_rsm_race_route_url', true );
 
-    // Booklet URL
-    $booklet_url    = add_query_arg( 'rsm_booklet', '1', get_permalink( $race_id ) );
+    // Booklet URL (protected by nonce)
+    $booklet_nonce  = wp_create_nonce( 'rsm_booklet_' . $race_id );
+    $booklet_url    = add_query_arg(
+        array(
+            'rsm_booklet'       => '1',
+            'rsm_booklet_nonce' => $booklet_nonce,
+        ),
+        get_permalink( $race_id )
+    );
 
     // Plotaroute / route embed
-    $plot_embed     = get_post_meta( $race_id, '_rsm_race_plotaroute_embed', true );
+    $plot_embed     = rsm_race_sanitize_embed_html( get_post_meta( $race_id, '_rsm_race_plotaroute_embed', true ) );
 
     // Video embed
-    $video_embed    = get_post_meta( $race_id, '_rsm_race_video_embed', true );
+    $video_embed    = rsm_race_sanitize_embed_html( get_post_meta( $race_id, '_rsm_race_video_embed', true ) );
 
     // Gallery (image IDs)
     $gallery_meta   = get_post_meta( $race_id, '_rsm_race_gallery_ids', true );

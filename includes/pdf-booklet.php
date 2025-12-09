@@ -96,6 +96,11 @@ function rsm_maybe_output_race_booklet_pdf() {
         return;
     }
 
+    $nonce = isset( $_GET['rsm_booklet_nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['rsm_booklet_nonce'] ) ) : '';
+    if ( ! $nonce || ! wp_verify_nonce( $nonce, 'rsm_booklet_' . get_queried_object_id() ) ) {
+        wp_die( esc_html__( 'Invalid booklet request.', 'race-series-manager' ) );
+    }
+
     if ( ! class_exists( '\Dompdf\Dompdf' ) ) {
         wp_die(
             esc_html__(
@@ -113,7 +118,7 @@ function rsm_maybe_output_race_booklet_pdf() {
     $html = rsm_build_race_booklet_html( $race_id );
 
     $options = new Options();
-    $options->set( 'isRemoteEnabled', true );
+    $options->set( 'isRemoteEnabled', false );
     // Χρησιμοποιούμε DejaVu Sans για υποστήριξη ελληνικών
     $options->set( 'defaultFont', 'DejaVu Sans' );
     $options->setChroot( ABSPATH );
