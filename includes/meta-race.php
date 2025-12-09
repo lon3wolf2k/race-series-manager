@@ -171,6 +171,7 @@ function rsm_race_media_meta_box_callback( $post ) {
 
     $plotaroute_embed = get_post_meta( $post->ID, '_rsm_race_plotaroute_embed', true );
     $route_url        = get_post_meta( $post->ID, '_rsm_race_route_url', true );
+    $gpx_file_id      = get_post_meta( $post->ID, '_rsm_race_gpx_file_id', true );
     $video_embed      = get_post_meta( $post->ID, '_rsm_race_video_embed', true );
     $gallery_ids      = get_post_meta( $post->ID, '_rsm_race_gallery_ids', true );
     $static_map_id    = get_post_meta( $post->ID, '_rsm_race_static_map_id', true );
@@ -196,6 +197,32 @@ function rsm_race_media_meta_box_callback( $post ) {
     <h4 style="margin-top:1.5em;"><?php esc_html_e( 'GPX / route download URL', 'race-series-manager' ); ?></h4>
     <input type="url" name="rsm_race_route_url" id="rsm_race_route_url" value="<?php echo esc_attr( $route_url ); ?>" class="regular-text">
     <p class="description"><?php esc_html_e( 'Used for the “Download GPX / Route” button.', 'race-series-manager' ); ?></p>
+
+    <h4 style="margin-top:1.5em;"><?php esc_html_e( 'Android app GPX file', 'race-series-manager' ); ?></h4>
+    <p class="description">
+        <?php esc_html_e( 'Upload the official GPX file that will be used by the Android app API.', 'race-series-manager' ); ?>
+    </p>
+    <input type="hidden" id="rsm_race_gpx_file_id" name="rsm_race_gpx_file_id" value="<?php echo esc_attr( $gpx_file_id ); ?>">
+    <button type="button" class="button" id="rsm_race_gpx_file_button">
+        <?php echo $gpx_file_id ? esc_html__( 'Change GPX file', 'race-series-manager' ) : esc_html__( 'Select GPX file', 'race-series-manager' ); ?>
+    </button>
+    <button type="button" class="button" id="rsm_race_gpx_file_remove" <?php echo $gpx_file_id ? '' : 'style="display:none;"'; ?>>
+        <?php esc_html_e( 'Remove', 'race-series-manager' ); ?>
+    </button>
+    <div id="rsm_race_gpx_file_preview" style="margin-top:10px;">
+        <?php
+        if ( $gpx_file_id ) :
+            $gpx_file_url = wp_get_attachment_url( $gpx_file_id );
+            if ( $gpx_file_url ) :
+                ?>
+                <a href="<?php echo esc_url( $gpx_file_url ); ?>" target="_blank" rel="noopener noreferrer">
+                    <?php echo esc_html( basename( $gpx_file_url ) ); ?>
+                </a>
+                <?php
+            endif;
+        endif;
+        ?>
+    </div>
 
     <h4 style="margin-top:1.5em;"><?php esc_html_e( 'Race video embed code', 'race-series-manager' ); ?></h4>
     <p class="description">
@@ -288,7 +315,7 @@ function rsm_race_media_meta_box_callback( $post ) {
 
     <script>
     jQuery(document).ready(function($){
-        var galleryFrame, mapFrame, elevFrame;
+        var galleryFrame, mapFrame, elevFrame, gpxFrame;
 
         $('#rsm_race_gallery_button').on('click', function(e){
             e.preventDefault();
@@ -401,6 +428,41 @@ function rsm_race_media_meta_box_callback( $post ) {
             $('#rsm_race_elev_chart_remove').hide();
             $('#rsm_race_elev_chart_button').text('<?php echo esc_js( __( 'Select image', 'race-series-manager' ) ); ?>');
         });
+
+        $('#rsm_race_gpx_file_button').on('click', function(e){
+            e.preventDefault();
+
+            if (gpxFrame) {
+                gpxFrame.open();
+                return;
+            }
+
+            gpxFrame = wp.media({
+                title: '<?php echo esc_js( __( 'Select GPX file', 'race-series-manager' ) ); ?>',
+                button: { text: '<?php echo esc_js( __( 'Use this file', 'race-series-manager' ) ); ?>' },
+                multiple: false
+            });
+
+            gpxFrame.on('select', function(){
+                var attachment = gpxFrame.state().get('selection').first().toJSON();
+                $('#rsm_race_gpx_file_id').val(attachment.id);
+                $('#rsm_race_gpx_file_preview').html(
+                    '<a href="'+attachment.url+'" target="_blank" rel="noopener noreferrer">'+attachment.filename+'</a>'
+                );
+                $('#rsm_race_gpx_file_remove').show();
+                $('#rsm_race_gpx_file_button').text('<?php echo esc_js( __( 'Change GPX file', 'race-series-manager' ) ); ?>');
+            });
+
+            gpxFrame.open();
+        });
+
+        $('#rsm_race_gpx_file_remove').on('click', function(e){
+            e.preventDefault();
+            $('#rsm_race_gpx_file_id').val('');
+            $('#rsm_race_gpx_file_preview').empty();
+            $('#rsm_race_gpx_file_remove').hide();
+            $('#rsm_race_gpx_file_button').text('<?php echo esc_js( __( 'Select GPX file', 'race-series-manager' ) ); ?>');
+        });
     });
     </script>
     <?php
@@ -495,6 +557,7 @@ function rsm_save_race_meta( $post_id ) {
 
         $static_map  = isset( $_POST['rsm_race_static_map_id'] ) ? intval( $_POST['rsm_race_static_map_id'] ) : 0;
         $elev_chart  = isset( $_POST['rsm_race_elev_chart_id'] ) ? intval( $_POST['rsm_race_elev_chart_id'] ) : 0;
+        $gpx_file_id = isset( $_POST['rsm_race_gpx_file_id'] ) ? intval( $_POST['rsm_race_gpx_file_id'] ) : 0;
         $show_hero   = isset( $_POST['rsm_race_show_hero'] ) && '1' === $_POST['rsm_race_show_hero'] ? '1' : '0';
 
         $gallery_array = array();
@@ -514,6 +577,7 @@ function rsm_save_race_meta( $post_id ) {
         update_post_meta( $post_id, '_rsm_race_gallery_ids',      $gallery_array );
         update_post_meta( $post_id, '_rsm_race_static_map_id',    $static_map );
         update_post_meta( $post_id, '_rsm_race_elev_chart_id',    $elev_chart );
+        update_post_meta( $post_id, '_rsm_race_gpx_file_id',      $gpx_file_id );
         update_post_meta( $post_id, '_rsm_race_show_hero',        $show_hero );
     }
 }
