@@ -191,7 +191,7 @@ function rsm_get_race_showcase_image_url( $race_id ) {
         }
     }
 
-    $placeholder_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360" role="img" aria-label="Race placeholder"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="%23f05a24"/><stop offset="100%" stop-color="%2328457a"/></linearGradient></defs><rect width="600" height="360" fill="url(%23g)"/><text x="50%" y="50%" fill="white" font-size="42" font-family="Arial, sans-serif" text-anchor="middle">Race</text></svg>';
+    $placeholder_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-label="Race placeholder"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="%23f05a24"/><stop offset="100%" stop-color="%2328457a"/></linearGradient></defs><rect width="600" height="600" fill="url(%23g)"/><text x="50%" y="50%" fill="white" font-size="42" font-family="Arial, sans-serif" text-anchor="middle" dominant-baseline="middle">Race</text></svg>';
 
     return 'data:image/svg+xml;utf8,' . rawurlencode( $placeholder_svg );
 }

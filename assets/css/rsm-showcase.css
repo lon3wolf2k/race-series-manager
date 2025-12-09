@@ -34,7 +34,7 @@
 
 .rsm-race-card__thumb {
     position: relative;
-    height: 170px;
+    aspect-ratio: 1 / 1;
     background-size: cover;
     background-position: center;
     background-color: var(--rsm-muted-tint);
