@@ -292,9 +292,10 @@ function rsm_get_event_banner_markup( $event_id, $title = '' ) {
     $open_tab    = ! empty( $settings['overview_action_new_tab'] );
     $target_attr = $open_tab ? ' target="_blank" rel="noopener"' : '';
 
-    $reg_url  = get_post_meta( $event_id, '_rsm_event_registration_url', true );
-    $part_url = get_post_meta( $event_id, '_rsm_event_participants_url', true );
-    $live_url = get_post_meta( $event_id, '_rsm_event_live_url', true );
+    $reg_url   = get_post_meta( $event_id, '_rsm_event_registration_url', true );
+    $part_url  = get_post_meta( $event_id, '_rsm_event_participants_url', true );
+    $live_url  = get_post_meta( $event_id, '_rsm_event_live_url', true );
+    $info_url  = $event ? get_permalink( $event ) : '';
 
     $datetime      = rsm_get_event_next_race_datetime( $event_id );
     $background_id = $datetime['race_id'] ? $datetime['race_id'] : 0;
@@ -347,7 +348,7 @@ function rsm_get_event_banner_markup( $event_id, $title = '' ) {
                 <?php endif; ?>
             </div>
 
-            <?php if ( $reg_url || $part_url || $live_url ) : ?>
+            <?php if ( $reg_url || $part_url || $live_url || $info_url ) : ?>
                 <div class="rsm-event-banner__actions">
                     <?php if ( $reg_url ) : ?>
                         <a class="rsm-banner-btn" href="<?php echo esc_url( $reg_url ); ?>"<?php echo $target_attr; ?>>
@@ -362,6 +363,11 @@ function rsm_get_event_banner_markup( $event_id, $title = '' ) {
                     <?php if ( $live_url ) : ?>
                         <a class="rsm-banner-btn" href="<?php echo esc_url( $live_url ); ?>"<?php echo $target_attr; ?>>
                             <?php echo esc_html( $live_label ); ?>
+                        </a>
+                    <?php endif; ?>
+                    <?php if ( $info_url ) : ?>
+                        <a class="rsm-banner-btn" href="<?php echo esc_url( $info_url ); ?>"<?php echo $target_attr; ?>>
+                            <?php esc_html_e( 'Event info', 'race-series-manager' ); ?>
                         </a>
                     <?php endif; ?>
                 </div>
