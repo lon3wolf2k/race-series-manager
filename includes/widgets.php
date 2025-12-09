@@ -286,6 +286,7 @@ function rsm_get_event_banner_markup( $event_id, $title = '' ) {
     }
 
     $settings      = function_exists( 'rsm_get_settings' ) ? rsm_get_settings() : array();
+    $info_label    = __( 'Event info', 'race-series-manager' );
     $reg_label     = isset( $settings['overview_registration_label'] ) ? $settings['overview_registration_label'] : __( 'Registration', 'race-series-manager' );
     $part_label    = isset( $settings['overview_participants_label'] ) ? $settings['overview_participants_label'] : __( 'Participants', 'race-series-manager' );
     $live_label    = isset( $settings['overview_live_label'] ) ? $settings['overview_live_label'] : __( 'Live', 'race-series-manager' );
@@ -293,6 +294,7 @@ function rsm_get_event_banner_markup( $event_id, $title = '' ) {
     $open_tab      = ! empty( $settings['overview_action_new_tab'] );
     $target_attr   = $open_tab ? ' target="_blank" rel="noopener"' : '';
 
+    $info_url    = $event ? get_permalink( $event_id ) : '';
     $reg_url     = get_post_meta( $event_id, '_rsm_event_registration_url', true );
     $part_url    = get_post_meta( $event_id, '_rsm_event_participants_url', true );
     $live_url    = get_post_meta( $event_id, '_rsm_event_live_url', true );
@@ -349,8 +351,13 @@ function rsm_get_event_banner_markup( $event_id, $title = '' ) {
                 <?php endif; ?>
             </div>
 
-            <?php if ( $reg_url || $part_url || $live_url || $results_url ) : ?>
+            <?php if ( $info_url || $reg_url || $part_url || $live_url || $results_url ) : ?>
                 <div class="rsm-event-banner__actions">
+                    <?php if ( $info_url ) : ?>
+                        <a class="rsm-banner-btn" href="<?php echo esc_url( $info_url ); ?>"<?php echo $target_attr; ?>>
+                            <?php echo esc_html( $info_label ); ?>
+                        </a>
+                    <?php endif; ?>
                     <?php if ( $reg_url ) : ?>
                         <a class="rsm-banner-btn" href="<?php echo esc_url( $reg_url ); ?>"<?php echo $target_attr; ?>>
                             <?php echo esc_html( $reg_label ); ?>
