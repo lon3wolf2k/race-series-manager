@@ -708,7 +708,7 @@ add_action( 'admin_post_rsm_export_data', 'rsm_handle_data_export' );
  *
  * @return array
  */
-function rsm_import_posts_from_payload( $items, $post_type, $event_map = array() ) {
+function rsm_import_posts_from_payload( $items, $post_type, $event_map = array(), &$errors = array() ) {
     $id_map = array();
 
     if ( empty( $items ) || ! is_array( $items ) ) {
@@ -736,15 +736,34 @@ function rsm_import_posts_from_payload( $items, $post_type, $event_map = array()
             )
         );
 
+        $old_id = isset( $post_data['ID'] ) ? absint( $post_data['ID'] ) : 0;
+
+        // Always create new posts on import to avoid collisions with existing IDs.
+        unset( $post_data['ID'] );
+
+        if ( $old_id ) {
+            $post_data['import_id'] = $old_id;
+        }
+
         $post_data['post_type'] = $post_type;
 
         $new_id = wp_insert_post( wp_slash( $post_data ), true );
 
         if ( is_wp_error( $new_id ) ) {
+            $post_type_obj = get_post_type_object( $post_type );
+            $label         = $post_type_obj && ! empty( $post_type_obj->labels->singular_name )
+                ? $post_type_obj->labels->singular_name
+                : $post_type;
+
+            $errors[] = sprintf(
+                /* translators: 1: post type label, 2: post title, 3: error message */
+                esc_html__( 'Unable to import %1$s "%2$s": %3$s', 'race-series-manager' ),
+                $label,
+                isset( $post_data['post_title'] ) ? $post_data['post_title'] : '',
+                $new_id->get_error_message()
+            );
             continue;
         }
-
-        $old_id = isset( $item['post']['ID'] ) ? absint( $item['post']['ID'] ) : 0;
 
         if ( $old_id ) {
             $id_map[ $old_id ] = $new_id;
@@ -784,8 +803,9 @@ function rsm_handle_data_import() {
 
     check_admin_referer( 'rsm_import_data' );
 
-    $errors = array();
-    $data   = array();
+    $errors        = array();
+    $data          = array();
+    $import_errors = array();
 
     if ( empty( $_FILES['rsm_data_import'] ) || UPLOAD_ERR_OK !== $_FILES['rsm_data_import']['error'] ) {
         $errors[] = esc_html__( 'Upload failed. Please choose a JSON file to import.', 'race-series-manager' );
@@ -805,12 +825,20 @@ function rsm_handle_data_import() {
             update_option( 'rsm_settings', $sanitized );
         }
 
-        $event_map = rsm_import_posts_from_payload( isset( $data['events'] ) ? $data['events'] : array(), 'cmt_event' );
-        rsm_import_posts_from_payload( isset( $data['races'] ) ? $data['races'] : array(), 'cmt_race', $event_map );
-        rsm_import_posts_from_payload( isset( $data['results'] ) ? $data['results'] : array(), 'cmt_result', $event_map );
+        $event_map = rsm_import_posts_from_payload( isset( $data['events'] ) ? $data['events'] : array(), 'cmt_event', array(), $import_errors );
+        rsm_import_posts_from_payload( isset( $data['races'] ) ? $data['races'] : array(), 'cmt_race', $event_map, $import_errors );
+        rsm_import_posts_from_payload( isset( $data['results'] ) ? $data['results'] : array(), 'cmt_result', $event_map, $import_errors );
 
-        add_settings_error( 'rsm_settings', 'rsm_data_imported', esc_html__( 'Data imported successfully.', 'race-series-manager' ), 'updated' );
-    } else {
+        if ( empty( $import_errors ) ) {
+            add_settings_error( 'rsm_settings', 'rsm_data_imported', esc_html__( 'Data imported successfully.', 'race-series-manager' ), 'updated' );
+        } else {
+            foreach ( $import_errors as $error ) {
+                add_settings_error( 'rsm_settings', 'rsm_data_import_error', $error, 'error' );
+            }
+        }
+    }
+
+    if ( ! empty( $errors ) ) {
         foreach ( $errors as $error ) {
             add_settings_error( 'rsm_settings', 'rsm_data_import_error', $error, 'error' );
         }
