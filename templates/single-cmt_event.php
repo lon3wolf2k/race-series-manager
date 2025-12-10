@@ -32,7 +32,7 @@ while ( have_posts() ) :
         'posts_per_page' => -1,
         'meta_key'       => '_rsm_race_event_id',
         'meta_value'     => $event_id,
-        'orderby'        => 'title',
+        'orderby'        => 'ID',
         'order'          => 'ASC',
     ) );
 
