@@ -135,26 +135,26 @@ function rsm_event_overview_shortcode( $atts ) {
                 <div class="rsm-event-overview-actions">
                     <?php if ( $reg_url ) : ?>
                         <a class="rsm-summary-btn" href="<?php echo esc_url( $reg_url ); ?>"<?php echo $target_attr; ?>>
-                            <?php echo esc_html( $settings['overview_registration_label'] ); ?>
+                            <?php echo esc_html( rsm_get_setting_label( $settings, 'overview_registration_label', 'Registration' ) ); ?>
                         </a>
                     <?php endif; ?>
 
                     <?php if ( $part_url ) : ?>
                         <a class="rsm-summary-btn" href="<?php echo esc_url( $part_url ); ?>"<?php echo $target_attr; ?>>
-                            <?php echo esc_html( $settings['overview_participants_label'] ); ?>
+                            <?php echo esc_html( rsm_get_setting_label( $settings, 'overview_participants_label', 'Participants' ) ); ?>
                         </a>
                     <?php endif; ?>
 
                     <?php if ( $live_url ) : ?>
                         <a class="rsm-summary-btn" href="<?php echo esc_url( $live_url ); ?>"<?php echo $target_attr; ?>>
-                            <?php echo esc_html( $settings['overview_live_label'] ); ?>
+                            <?php echo esc_html( rsm_get_setting_label( $settings, 'overview_live_label', 'Live' ) ); ?>
                         </a>
                     <?php endif; ?>
 
                     <?php if ( $results_url ) : ?>
                         <a class="rsm-summary-btn rsm-event-results-btn"
                            href="<?php echo esc_url( $results_url ); ?>"<?php echo $target_attr; ?>>
-                            <?php echo esc_html( $settings['overview_results_label'] ); ?>
+                            <?php echo esc_html( rsm_get_setting_label( $settings, 'overview_results_label', 'Results' ) ); ?>
                         </a>
                     <?php endif; ?>
                 </div>

@@ -298,10 +298,10 @@ function rsm_get_event_banner_markup( $event_id, $title = '' ) {
 
     $settings      = function_exists( 'rsm_get_settings' ) ? rsm_get_settings() : array();
     $info_label    = __( 'Event info', 'race-series-manager' );
-    $reg_label     = isset( $settings['overview_registration_label'] ) ? $settings['overview_registration_label'] : __( 'Registration', 'race-series-manager' );
-    $part_label    = isset( $settings['overview_participants_label'] ) ? $settings['overview_participants_label'] : __( 'Participants', 'race-series-manager' );
-    $live_label    = isset( $settings['overview_live_label'] ) ? $settings['overview_live_label'] : __( 'Live', 'race-series-manager' );
-    $results_label = isset( $settings['overview_results_label'] ) ? $settings['overview_results_label'] : __( 'Results', 'race-series-manager' );
+    $reg_label     = rsm_get_setting_label( $settings, 'overview_registration_label', 'Registration' );
+    $part_label    = rsm_get_setting_label( $settings, 'overview_participants_label', 'Participants' );
+    $live_label    = rsm_get_setting_label( $settings, 'overview_live_label', 'Live' );
+    $results_label = rsm_get_setting_label( $settings, 'overview_results_label', 'Results' );
     $open_tab      = ! empty( $settings['overview_action_new_tab'] );
     $target_attr   = $open_tab ? ' target="_blank" rel="noopener"' : '';
 

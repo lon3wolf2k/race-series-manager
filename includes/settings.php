@@ -9,15 +9,34 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function rsm_get_settings_defaults() {
     return array(
-        'overview_registration_label' => esc_html__( 'Registration', 'race-series-manager' ),
-        'overview_participants_label' => esc_html__( 'Participants', 'race-series-manager' ),
-        'overview_live_label'         => esc_html__( 'Live', 'race-series-manager' ),
-        'overview_results_label'      => esc_html__( 'Results', 'race-series-manager' ),
+        'overview_registration_label' => 'Registration',
+        'overview_participants_label' => 'Participants',
+        'overview_live_label'         => 'Live',
+        'overview_results_label'      => 'Results',
         'overview_show_excerpt'       => 1,
         'overview_action_new_tab'     => 1,
         'race_showcase_aspect_ratio'  => '4:3',
         'theme'                       => 'light',
     );
+}
+
+/**
+ * Return a translated label for a settings field.
+ *
+ * @param array  $settings Settings array.
+ * @param string $key      Settings key.
+ * @param string $default  Default (English) label.
+ *
+ * @return string
+ */
+function rsm_get_setting_label( $settings, $key, $default ) {
+    $label = isset( $settings[ $key ] ) ? $settings[ $key ] : '';
+
+    if ( '' === $label ) {
+        $label = $default;
+    }
+
+    return translate( $label, 'race-series-manager' );
 }
 
 /**
@@ -103,6 +122,7 @@ function rsm_register_settings() {
         array(
             'name'        => 'overview_registration_label',
             'placeholder' => esc_html__( 'Registration', 'race-series-manager' ),
+            'default'     => 'Registration',
         )
     );
 
@@ -115,6 +135,7 @@ function rsm_register_settings() {
         array(
             'name'        => 'overview_participants_label',
             'placeholder' => esc_html__( 'Participants', 'race-series-manager' ),
+            'default'     => 'Participants',
         )
     );
 
@@ -127,6 +148,7 @@ function rsm_register_settings() {
         array(
             'name'        => 'overview_live_label',
             'placeholder' => esc_html__( 'Live', 'race-series-manager' ),
+            'default'     => 'Live',
         )
     );
 
@@ -139,6 +161,7 @@ function rsm_register_settings() {
         array(
             'name'        => 'overview_results_label',
             'placeholder' => esc_html__( 'Results', 'race-series-manager' ),
+            'default'     => 'Results',
         )
     );
 
@@ -223,12 +246,13 @@ add_action( 'admin_init', 'rsm_register_settings' );
 function rsm_render_text_setting_field( $args ) {
     $settings = rsm_get_settings();
     $name     = isset( $args['name'] ) ? $args['name'] : '';
+    $default  = isset( $args['default'] ) ? $args['default'] : '';
 
     if ( ! $name ) {
         return;
     }
 
-    $value       = isset( $settings[ $name ] ) ? $settings[ $name ] : '';
+    $value       = rsm_get_setting_label( $settings, $name, $default );
     $placeholder = isset( $args['placeholder'] ) ? $args['placeholder'] : '';
     ?>
     <input type="text"
