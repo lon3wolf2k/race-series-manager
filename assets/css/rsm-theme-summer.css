@@ -1,0 +1,28 @@
+/* ==========================================================
+   RACE SERIES MANAGER - SUMMER THEME
+   ======================================================= */
+
+body.rsm-theme-summer {
+    --rsm-surface: #f2fbff;
+    --rsm-surface-alt: #e6f4ff;
+    --rsm-surface-muted: #d8ecff;
+    --rsm-muted-tint: #c8e3ff;
+    --rsm-border: #c1d9f2;
+    --rsm-border-strong: #9ab6d6;
+    --rsm-text-primary: #0f2233;
+    --rsm-text-secondary: #1f3a52;
+    --rsm-text-muted: #3c5872;
+    --rsm-text-soft: #577390;
+    --rsm-accent: #0ea5e9;
+    --rsm-accent-contrast: #061018;
+    --rsm-badge: #f6c344;
+    --rsm-shadow: 0 10px 24px rgba(12, 66, 104, 0.12);
+    --rsm-shadow-strong: 0 18px 40px rgba(12, 66, 104, 0.18);
+    --rsm-table-header: #e9f5ff;
+    --rsm-table-row-alt: #f5fbff;
+    --rsm-table-row-hover: #d7edff;
+    --rsm-button-bg: #0ea5e9;
+    --rsm-button-text: #061018;
+    --rsm-button-border: #0ea5e9;
+    --rsm-link: #0b78b3;
+}

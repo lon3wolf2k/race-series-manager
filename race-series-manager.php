@@ -66,6 +66,9 @@ function rsm_register_frontend_assets() {
     wp_register_style( 'rsm-lightbox-style', RSM_PLUGIN_URL . 'assets/css/rsm-lightbox.css', array(), '0.4.0' );
     wp_register_style( 'rsm-theme-light', RSM_PLUGIN_URL . 'assets/css/rsm-theme-light.css', array(), '0.4.0' );
     wp_register_style( 'rsm-theme-dark', RSM_PLUGIN_URL . 'assets/css/rsm-theme-dark.css', array(), '0.4.0' );
+    wp_register_style( 'rsm-theme-green', RSM_PLUGIN_URL . 'assets/css/rsm-theme-green.css', array(), '0.4.0' );
+    wp_register_style( 'rsm-theme-autumn', RSM_PLUGIN_URL . 'assets/css/rsm-theme-autumn.css', array(), '0.4.0' );
+    wp_register_style( 'rsm-theme-summer', RSM_PLUGIN_URL . 'assets/css/rsm-theme-summer.css', array(), '0.4.0' );
 
     wp_register_script(
         'rsm-lightbox',
@@ -98,8 +101,13 @@ function rsm_enqueue_theme_style() {
         return;
     }
 
-    $settings = rsm_get_settings();
-    $theme    = ( isset( $settings['theme'] ) && 'dark' === $settings['theme'] ) ? 'dark' : 'light';
+    $settings      = rsm_get_settings();
+    $theme        = isset( $settings['theme'] ) ? $settings['theme'] : 'light';
+    $allowed_theme = array( 'light', 'dark', 'green', 'autumn', 'summer' );
+
+    if ( ! in_array( $theme, $allowed_theme, true ) ) {
+        $theme = 'light';
+    }
 
     wp_enqueue_style( 'rsm-theme-' . $theme );
 }
@@ -172,8 +180,13 @@ function rsm_enqueue_assets() {
 add_action( 'wp_enqueue_scripts', 'rsm_enqueue_assets' );
 
 function rsm_add_theme_body_class( $classes ) {
-    $settings = rsm_get_settings();
-    $theme    = ( isset( $settings['theme'] ) && 'dark' === $settings['theme'] ) ? 'dark' : 'light';
+    $settings      = rsm_get_settings();
+    $theme        = isset( $settings['theme'] ) ? $settings['theme'] : 'light';
+    $allowed_theme = array( 'light', 'dark', 'green', 'autumn', 'summer' );
+
+    if ( ! in_array( $theme, $allowed_theme, true ) ) {
+        $theme = 'light';
+    }
 
     $classes[] = 'rsm-theme-' . $theme;
 

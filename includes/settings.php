@@ -62,6 +62,7 @@ function rsm_sanitize_settings( $input ) {
     $defaults = rsm_get_settings_defaults();
 
     $allowed_ordering = array( 'post_id', 'menu_order', 'distance_desc', 'distance_asc' );
+    $allowed_themes   = array( 'light', 'dark', 'green', 'autumn', 'summer' );
 
     $output['overview_registration_label'] = isset( $input['overview_registration_label'] )
         ? sanitize_text_field( $input['overview_registration_label'] )
@@ -92,7 +93,9 @@ function rsm_sanitize_settings( $input ) {
         ? $input['race_showcase_aspect_ratio']
         : $defaults['race_showcase_aspect_ratio'];
 
-    $output['theme'] = ( isset( $input['theme'] ) && 'dark' === $input['theme'] ) ? 'dark' : 'light';
+    $output['theme'] = ( isset( $input['theme'] ) && in_array( $input['theme'], $allowed_themes, true ) )
+        ? $input['theme']
+        : $defaults['theme'];
 
     return $output;
 }
@@ -317,7 +320,7 @@ function rsm_register_settings() {
         'rsm_display_settings',
         esc_html__( 'Display options', 'race-series-manager' ),
         function() {
-            echo '<p>' . esc_html__( 'Choose whether plugin elements render with the light or dark theme.', 'race-series-manager' ) . '</p>';
+            echo '<p>' . esc_html__( 'Choose which color theme is applied to the plugin elements.', 'race-series-manager' ) . '</p>';
         },
         'rsm-settings'
     );
@@ -331,8 +334,11 @@ function rsm_register_settings() {
         array(
             'name'    => 'theme',
             'options' => array(
-                'light' => esc_html__( 'Light', 'race-series-manager' ),
-                'dark'  => esc_html__( 'Dark', 'race-series-manager' ),
+                'light'  => esc_html__( 'Light', 'race-series-manager' ),
+                'dark'   => esc_html__( 'Dark', 'race-series-manager' ),
+                'green'  => esc_html__( 'Green', 'race-series-manager' ),
+                'autumn' => esc_html__( 'Autumn', 'race-series-manager' ),
+                'summer' => esc_html__( 'Summer', 'race-series-manager' ),
             ),
         )
     );

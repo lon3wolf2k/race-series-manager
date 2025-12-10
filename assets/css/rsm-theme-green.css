@@ -1,0 +1,28 @@
+/* ==========================================================
+   RACE SERIES MANAGER - GREEN THEME
+   ======================================================= */
+
+body.rsm-theme-green {
+    --rsm-surface: #f4f9f4;
+    --rsm-surface-alt: #e8f3e7;
+    --rsm-surface-muted: #d9ebda;
+    --rsm-muted-tint: #c9e3cb;
+    --rsm-border: #c3d9c4;
+    --rsm-border-strong: #9fb9a4;
+    --rsm-text-primary: #0f2415;
+    --rsm-text-secondary: #2f4c34;
+    --rsm-text-muted: #4f6d54;
+    --rsm-text-soft: #62836a;
+    --rsm-accent: #2f855a;
+    --rsm-accent-contrast: #ffffff;
+    --rsm-badge: #3fa34d;
+    --rsm-shadow: 0 10px 24px rgba(16, 65, 35, 0.12);
+    --rsm-shadow-strong: 0 18px 40px rgba(16, 65, 35, 0.18);
+    --rsm-table-header: #e9f2e9;
+    --rsm-table-row-alt: #f0f7f1;
+    --rsm-table-row-hover: #dceee0;
+    --rsm-button-bg: #2f855a;
+    --rsm-button-text: #ffffff;
+    --rsm-button-border: #2f855a;
+    --rsm-link: #2a6f50;
+}
