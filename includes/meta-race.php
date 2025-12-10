@@ -172,12 +172,6 @@ function rsm_race_sanitize_embed_html( $embed ) {
         return '';
     }
 
-    $clean = preg_replace_callback(
-        '/<iframe\b[^>]*>.*?<\/iframe>/is',
-        'rsm_race_sanitize_iframe_tag',
-        $clean
-    );
-
     return trim( $clean );
 }
 
