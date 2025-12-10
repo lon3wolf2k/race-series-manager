@@ -1,18 +1,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: race-series-manager\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 04:48+0000\n"
-"PO-Revision-Date: 2025-12-10 14:51+0200\n"
-"Last-Translator: \n"
-"Language-Team: Greek\n"
 "Language: el\n"
-"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.8\n"
-"X-Loco-Version: 2.8.0; wp-6.9; php-8.2.27\n"
+"Language-Team: Greek\n"
+"PO-Revision-Date: 2025-12-10 12:24+0000\n"
+"X-Generator: Loco https://localise.biz/\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-05 04:48+0000\n"
+"Last-Translator: \n"
+"MIME-Version: 1.0\n"
+"X-Loco-Version: 2.8.0; wp-6.9; php-8.2.27"
 
 #. 1: Post type label, 2: cloned post ID, 3: source post ID.
 #: includes/clone.php:189
@@ -448,8 +448,8 @@ msgid ""
 "Dompdf PDF library is not loaded. Check that /lib/dompdf/autoload.inc.php "
 "exists and is readable."
 msgstr ""
-"Η βιβλιοθήκη Dompdf δεν φορτώθηκε. Ελέγξτε ότι το /lib/dompdf/"
-"autoload.inc.php υπάρχει και είναι προσβάσιμο."
+"Η βιβλιοθήκη Dompdf δεν φορτώθηκε. Ελέγξτε ότι το /lib/dompdf/autoload.inc."
+"php υπάρχει και είναι προσβάσιμο."
 
 #: includes/admin-menu.php:320
 msgid "Dompdf status"
@@ -1053,7 +1053,7 @@ msgstr "Δεν βρέθηκαν αγώνες"
 
 #: includes/results-frontend.php:148
 msgid "No results found for this event yet."
-msgstr "Δεν βρέθηκαν αποτελέσματα ακόμη."
+msgstr ""
 
 #: includes/post-types.php:111
 #, fuzzy
@@ -1444,7 +1444,7 @@ msgstr "Εγγραφή"
 
 #: includes/settings.php:99
 msgid "Registration button label"
-msgstr "Registration button label"
+msgstr ""
 
 #: includes/meta-race.php:317
 #, fuzzy
@@ -1516,7 +1516,7 @@ msgstr ""
 #: includes/results-frontend.php:70
 #, php-format
 msgid "Results for %s"
-msgstr "Αποτελέσματα για %s"
+msgstr ""
 
 #: includes/meta-results.php:99
 msgid "Results PDF (whole event)"
@@ -1938,8 +1938,8 @@ msgstr ""
 
 #: includes/admin-help.php:75
 msgid ""
-"Use the [rsm_race_showcase] shortcode with the same attributes (event, "
-"count, optional title) anywhere a widget is not available."
+"Use the [rsm_race_showcase] shortcode with the same attributes (event, count,"
+" optional title) anywhere a widget is not available."
 msgstr ""
 
 #: includes/admin-help.php:66
