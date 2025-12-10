@@ -60,3 +60,7 @@ body.rsm-theme-dark .rsm-race-card__cta,
 body.rsm-theme-dark .rsm-event-overview-race-link {
     color: var(--rsm-link);
 }
+
+body.rsm-theme-dark .rsm-race-card__cta-button {
+    color: var(--rsm-accent-contrast);
+}
