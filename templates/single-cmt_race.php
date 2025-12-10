@@ -143,6 +143,20 @@ while ( have_posts() ) :
                 <span><?php the_title(); ?></span>
             </nav>
 
+            <!-- ADMIN EDIT LINK -->
+            <?php if ( current_user_can( 'edit_post', $race_id ) ) :
+                $race_edit_url = get_edit_post_link( $race_id );
+                if ( $race_edit_url ) :
+                    ?>
+                    <div class="rsm-admin-edit-link">
+                        <a class="rsm-admin-edit-link__button" href="<?php echo esc_url( $race_edit_url ); ?>">
+                            <span class="rsm-admin-edit-link__icon" aria-hidden="true">✏️</span>
+                            <span><?php esc_html_e( 'Edit race', 'race-series-manager' ); ?></span>
+                        </a>
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
+
             <!-- EVENT NAME ABOVE TITLE (small) -->
             <?php if ( $event_title ) : ?>
                 <div class="rsm-race-event-label">
