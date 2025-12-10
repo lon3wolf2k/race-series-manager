@@ -12,6 +12,12 @@ get_header();
 while ( have_posts() ) :
     the_post();
 
+    $settings      = function_exists( 'rsm_get_settings' ) ? rsm_get_settings() : array();
+    $race_ordering = function_exists( 'rsm_get_race_ordering_args' ) ? rsm_get_race_ordering_args( $settings ) : array(
+        'orderby' => 'ID',
+        'order'   => 'ASC',
+    );
+
     $event_id      = get_the_ID();
 
     // Extra event sections from meta:
@@ -27,14 +33,18 @@ while ( have_posts() ) :
     $live_url      = get_post_meta( $event_id, '_rsm_event_live_url', true );
 
     // Fetch linked races for sidebar list.
-    $linked_races = new WP_Query( array(
+    $linked_races_args = array(
         'post_type'      => 'cmt_race',
         'posts_per_page' => -1,
-        'meta_key'       => '_rsm_race_event_id',
-        'meta_value'     => $event_id,
-        'orderby'        => 'ID',
-        'order'          => 'ASC',
-    ) );
+        'meta_query'     => array(
+            array(
+                'key'   => '_rsm_race_event_id',
+                'value' => $event_id,
+            ),
+        ),
+    );
+
+    $linked_races = new WP_Query( array_merge( $linked_races_args, $race_ordering ) );
 
     // Results page URL if exists helper.
     $results_url = '';

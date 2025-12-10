@@ -78,6 +78,7 @@ function rsm_event_overview_shortcode( $atts ) {
     }
 
     $settings = rsm_get_settings();
+    $race_ordering = rsm_get_race_ordering_args( $settings );
 
     $event_id = rsm_resolve_event_id( $atts['event'] );
 
@@ -103,18 +104,18 @@ function rsm_event_overview_shortcode( $atts ) {
 
     // Get all races for this event.
     $races = new WP_Query(
-        array(
-            'post_type'      => 'cmt_race',
-            'posts_per_page' => -1,
-            'orderby'        => 'meta_value',
-            'order'          => 'ASC',
-            'meta_key'       => '_rsm_race_date',
-            'meta_query'     => array(
-                array(
-                    'key'   => '_rsm_race_event_id',
-                    'value' => $event_id,
+        array_merge(
+            array(
+                'post_type'      => 'cmt_race',
+                'posts_per_page' => -1,
+                'meta_query'     => array(
+                    array(
+                        'key'   => '_rsm_race_event_id',
+                        'value' => $event_id,
+                    ),
                 ),
             ),
+            $race_ordering
         )
     );
 

@@ -58,6 +58,12 @@ function rsm_admin_columns_query( $query ) {
         return;
     }
 
+    if ( 'cmt_race' === $screen->post_type && ! $query->get( 'orderby' ) ) {
+        $query->set( 'orderby', 'menu_order title' );
+        $query->set( 'order', 'ASC' );
+        return;
+    }
+
     $orderby = $query->get( 'orderby' );
     if ( 'menu_order' === $orderby ) {
         $query->set( 'orderby', 'menu_order title' );

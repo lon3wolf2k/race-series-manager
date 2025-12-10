@@ -15,6 +15,7 @@ function rsm_get_settings_defaults() {
         'overview_results_label'      => 'Results',
         'overview_show_excerpt'       => 1,
         'overview_action_new_tab'     => 1,
+        'race_ordering'               => 'post_id',
         'race_showcase_aspect_ratio'  => '4:3',
         'theme'                       => 'light',
     );
@@ -60,6 +61,8 @@ function rsm_sanitize_settings( $input ) {
     $output   = array();
     $defaults = rsm_get_settings_defaults();
 
+    $allowed_ordering = array( 'post_id', 'menu_order', 'distance_desc', 'distance_asc' );
+
     $output['overview_registration_label'] = isset( $input['overview_registration_label'] )
         ? sanitize_text_field( $input['overview_registration_label'] )
         : $defaults['overview_registration_label'];
@@ -80,6 +83,10 @@ function rsm_sanitize_settings( $input ) {
 
     $output['overview_action_new_tab'] = empty( $input['overview_action_new_tab'] ) ? 0 : 1;
 
+    $output['race_ordering'] = ( isset( $input['race_ordering'] ) && in_array( $input['race_ordering'], $allowed_ordering, true ) )
+        ? $input['race_ordering']
+        : $defaults['race_ordering'];
+
     $allowed_ratios = array( '4:3', '1:1', '16:9' );
     $output['race_showcase_aspect_ratio'] = ( isset( $input['race_showcase_aspect_ratio'] ) && in_array( $input['race_showcase_aspect_ratio'], $allowed_ratios, true ) )
         ? $input['race_showcase_aspect_ratio']
@@ -88,6 +95,43 @@ function rsm_sanitize_settings( $input ) {
     $output['theme'] = ( isset( $input['theme'] ) && 'dark' === $input['theme'] ) ? 'dark' : 'light';
 
     return $output;
+}
+
+/**
+ * Map race ordering setting to WP_Query arguments.
+ *
+ * @param array $settings Settings array.
+ *
+ * @return array
+ */
+function rsm_get_race_ordering_args( $settings ) {
+    $ordering = isset( $settings['race_ordering'] ) ? $settings['race_ordering'] : 'post_id';
+
+    switch ( $ordering ) {
+        case 'menu_order':
+            return array(
+                'orderby' => 'menu_order title',
+                'order'   => 'ASC',
+            );
+        case 'distance_desc':
+            return array(
+                'orderby'  => 'meta_value_num',
+                'order'    => 'DESC',
+                'meta_key' => '_rsm_race_distance',
+            );
+        case 'distance_asc':
+            return array(
+                'orderby'  => 'meta_value_num',
+                'order'    => 'ASC',
+                'meta_key' => '_rsm_race_distance',
+            );
+        case 'post_id':
+        default:
+            return array(
+                'orderby' => 'ID',
+                'order'   => 'ASC',
+            );
+    }
 }
 
 /**
@@ -224,6 +268,23 @@ function rsm_register_settings() {
         array(
             'name'        => 'overview_action_new_tab',
             'description' => esc_html__( 'Open event-level action buttons (registration, participants, live, results) in a new tab.', 'race-series-manager' ),
+        )
+    );
+
+    add_settings_field(
+        'race_ordering',
+        esc_html__( 'Race ordering for events', 'race-series-manager' ),
+        'rsm_render_select_setting_field',
+        'rsm-settings',
+        'rsm_overview_settings',
+        array(
+            'name'    => 'race_ordering',
+            'options' => array(
+                'post_id'       => esc_html__( 'By post ID (oldest first)', 'race-series-manager' ),
+                'menu_order'    => esc_html__( 'By order field (manual order)', 'race-series-manager' ),
+                'distance_desc' => esc_html__( 'By distance (longest first)', 'race-series-manager' ),
+                'distance_asc'  => esc_html__( 'By distance (shortest first)', 'race-series-manager' ),
+            ),
         )
     );
 
