@@ -59,6 +59,11 @@ function rsm_race_sanitize_embed_src( $src ) {
         return '';
     }
 
+    // Allow scheme-relative URLs by normalizing them to https for validation.
+    if ( strpos( $src, '//' ) === 0 ) {
+        $src = 'https:' . $src;
+    }
+
     $src = esc_url_raw( $src, array( 'https' ) );
     if ( empty( $src ) ) {
         return '';
