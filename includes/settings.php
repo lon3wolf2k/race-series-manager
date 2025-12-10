@@ -91,6 +91,44 @@ function rsm_sanitize_settings( $input ) {
 }
 
 /**
+ * Register translatable strings with Polylang.
+ */
+function rsm_register_polylang_strings() {
+    if ( ! function_exists( 'pll_register_string' ) ) {
+        return;
+    }
+
+    $settings = rsm_get_settings();
+
+    $labels = array(
+        'overview_registration_label' => array(
+            'name'    => __( 'Registration button label', 'race-series-manager' ),
+            'default' => 'Registration',
+        ),
+        'overview_participants_label' => array(
+            'name'    => __( 'Participants button label', 'race-series-manager' ),
+            'default' => 'Participants',
+        ),
+        'overview_live_label'         => array(
+            'name'    => __( 'Live button label', 'race-series-manager' ),
+            'default' => 'Live',
+        ),
+        'overview_results_label'      => array(
+            'name'    => __( 'Results button label', 'race-series-manager' ),
+            'default' => 'Results',
+        ),
+    );
+
+    foreach ( $labels as $key => $meta ) {
+        $value = isset( $settings[ $key ] ) ? $settings[ $key ] : $meta['default'];
+
+        pll_register_string( $meta['name'], $meta['default'], 'Race Series Manager' );
+        pll_register_string( $meta['name'], $value, 'Race Series Manager' );
+    }
+}
+add_action( 'init', 'rsm_register_polylang_strings' );
+
+/**
  * Register plugin settings.
  */
 function rsm_register_settings() {
