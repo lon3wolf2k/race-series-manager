@@ -18,6 +18,9 @@ function rsm_get_settings_defaults() {
         'race_ordering'               => 'post_id',
         'race_showcase_aspect_ratio'  => '4:3',
         'theme'                       => 'light',
+        'rest_api_events'             => 1,
+        'rest_api_races'              => 1,
+        'rest_api_results'            => 0,
     );
 }
 
@@ -96,6 +99,10 @@ function rsm_sanitize_settings( $input ) {
     $output['theme'] = ( isset( $input['theme'] ) && in_array( $input['theme'], $allowed_themes, true ) )
         ? $input['theme']
         : $defaults['theme'];
+
+    $output['rest_api_events']  = empty( $input['rest_api_events'] ) ? 0 : 1;
+    $output['rest_api_races']   = empty( $input['rest_api_races'] ) ? 0 : 1;
+    $output['rest_api_results'] = empty( $input['rest_api_results'] ) ? 0 : 1;
 
     return $output;
 }
@@ -340,6 +347,51 @@ function rsm_register_settings() {
                 'autumn' => esc_html__( 'Autumn', 'race-series-manager' ),
                 'summer' => esc_html__( 'Summer', 'race-series-manager' ),
             ),
+        )
+    );
+
+    add_settings_section(
+        'rsm_rest_api_settings',
+        esc_html__( 'REST API', 'race-series-manager' ),
+        function() {
+            echo '<p>' . esc_html__( 'Control which post types and fields are exposed over the WordPress REST API.', 'race-series-manager' ) . '</p>';
+        },
+        'rsm-settings'
+    );
+
+    add_settings_field(
+        'rest_api_events',
+        esc_html__( 'Expose Events in REST', 'race-series-manager' ),
+        'rsm_render_checkbox_setting_field',
+        'rsm-settings',
+        'rsm_rest_api_settings',
+        array(
+            'name'        => 'rest_api_events',
+            'description' => esc_html__( 'Enable REST API access for Events and their meta fields.', 'race-series-manager' ),
+        )
+    );
+
+    add_settings_field(
+        'rest_api_races',
+        esc_html__( 'Expose Races in REST', 'race-series-manager' ),
+        'rsm_render_checkbox_setting_field',
+        'rsm-settings',
+        'rsm_rest_api_settings',
+        array(
+            'name'        => 'rest_api_races',
+            'description' => esc_html__( 'Enable REST API access for Races and their meta fields (including GPX links).', 'race-series-manager' ),
+        )
+    );
+
+    add_settings_field(
+        'rest_api_results',
+        esc_html__( 'Expose Results in REST', 'race-series-manager' ),
+        'rsm_render_checkbox_setting_field',
+        'rsm-settings',
+        'rsm_rest_api_settings',
+        array(
+            'name'        => 'rest_api_results',
+            'description' => esc_html__( 'Allow Results custom post type to appear in the REST API.', 'race-series-manager' ),
         )
     );
 }
