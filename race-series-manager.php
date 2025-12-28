@@ -2,8 +2,8 @@
 /*
 Plugin Name: Race Series Manager
 Description: Manage trail running events and races.
-Version: 0.9.0
-Author: lon3wolf
+Version: 1.0
+Author: lon3wolf (lon3wolf2k@gmail.com)
 Text Domain: race-series-manager
 Domain Path: /languages
 */
@@ -22,7 +22,7 @@ if ( ! defined( 'RSM_PLUGIN_URL' ) ) {
     define( 'RSM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 }
 if ( ! defined( 'RSM_PLUGIN_VERSION' ) ) {
-    define( 'RSM_PLUGIN_VERSION', '0.4.0' );
+    define( 'RSM_PLUGIN_VERSION', '1.0' );
 }
 
 // -----------------------------------------------------------------------------
@@ -60,22 +60,22 @@ require_once RSM_PLUGIN_DIR . 'includes/pdf-booklet.php';
 // Front-end assets
 // -----------------------------------------------------------------------------
 function rsm_register_frontend_assets() {
-    wp_register_style( 'rsm-core', RSM_PLUGIN_URL . 'assets/css/rsm-core.css', array(), '0.4.0' );
-    wp_register_style( 'rsm-event', RSM_PLUGIN_URL . 'assets/css/rsm-event.css', array( 'rsm-core' ), '0.4.0' );
-    wp_register_style( 'rsm-showcase', RSM_PLUGIN_URL . 'assets/css/rsm-showcase.css', array( 'rsm-core' ), '0.4.0' );
-    wp_register_style( 'rsm-banner', RSM_PLUGIN_URL . 'assets/css/rsm-banner.css', array( 'rsm-core' ), '0.4.0' );
-    wp_register_style( 'rsm-lightbox-style', RSM_PLUGIN_URL . 'assets/css/rsm-lightbox.css', array(), '0.4.0' );
-    wp_register_style( 'rsm-theme-light', RSM_PLUGIN_URL . 'assets/css/rsm-theme-light.css', array(), '0.4.0' );
-    wp_register_style( 'rsm-theme-dark', RSM_PLUGIN_URL . 'assets/css/rsm-theme-dark.css', array(), '0.4.0' );
-    wp_register_style( 'rsm-theme-green', RSM_PLUGIN_URL . 'assets/css/rsm-theme-green.css', array(), '0.4.0' );
-    wp_register_style( 'rsm-theme-autumn', RSM_PLUGIN_URL . 'assets/css/rsm-theme-autumn.css', array(), '0.4.0' );
-    wp_register_style( 'rsm-theme-summer', RSM_PLUGIN_URL . 'assets/css/rsm-theme-summer.css', array(), '0.4.0' );
+    wp_register_style( 'rsm-core', RSM_PLUGIN_URL . 'assets/css/rsm-core.css', array(), RSM_PLUGIN_VERSION );
+    wp_register_style( 'rsm-event', RSM_PLUGIN_URL . 'assets/css/rsm-event.css', array( 'rsm-core' ), RSM_PLUGIN_VERSION );
+    wp_register_style( 'rsm-showcase', RSM_PLUGIN_URL . 'assets/css/rsm-showcase.css', array( 'rsm-core' ), RSM_PLUGIN_VERSION );
+    wp_register_style( 'rsm-banner', RSM_PLUGIN_URL . 'assets/css/rsm-banner.css', array( 'rsm-core' ), RSM_PLUGIN_VERSION );
+    wp_register_style( 'rsm-lightbox-style', RSM_PLUGIN_URL . 'assets/css/rsm-lightbox.css', array(), RSM_PLUGIN_VERSION );
+    wp_register_style( 'rsm-theme-light', RSM_PLUGIN_URL . 'assets/css/rsm-theme-light.css', array(), RSM_PLUGIN_VERSION );
+    wp_register_style( 'rsm-theme-dark', RSM_PLUGIN_URL . 'assets/css/rsm-theme-dark.css', array(), RSM_PLUGIN_VERSION );
+    wp_register_style( 'rsm-theme-green', RSM_PLUGIN_URL . 'assets/css/rsm-theme-green.css', array(), RSM_PLUGIN_VERSION );
+    wp_register_style( 'rsm-theme-autumn', RSM_PLUGIN_URL . 'assets/css/rsm-theme-autumn.css', array(), RSM_PLUGIN_VERSION );
+    wp_register_style( 'rsm-theme-summer', RSM_PLUGIN_URL . 'assets/css/rsm-theme-summer.css', array(), RSM_PLUGIN_VERSION );
 
     wp_register_script(
         'rsm-lightbox',
         RSM_PLUGIN_URL . 'assets/js/rsm-lightbox.js',
         array( 'jquery' ),
-        '0.4.0',
+        RSM_PLUGIN_VERSION,
         true
     );
 
@@ -83,7 +83,7 @@ function rsm_register_frontend_assets() {
         'rsm-countdown',
         RSM_PLUGIN_URL . 'assets/js/rsm-countdown.js',
         array(),
-        '0.4.0',
+        RSM_PLUGIN_VERSION,
         true
     );
 
@@ -91,7 +91,7 @@ function rsm_register_frontend_assets() {
         'rsm-race',
         RSM_PLUGIN_URL . 'assets/js/rsm-race.js',
         array(),
-        '0.4.0',
+        RSM_PLUGIN_VERSION,
         true
     );
 }
